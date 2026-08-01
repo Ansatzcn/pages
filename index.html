@@ -1,1 +1,1402 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pages 管理工具</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background: #f5f7fa;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+        .container {
+            max-width: 1100px;
+            width: 100%;
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.15);
+            padding: 2rem 1.8rem;
+            transition: 0.2s;
+        }
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: #1e293b;
+            letter-spacing: -0.5px;
+            border-bottom: 2px solid #e9edf4;
+            padding-bottom: 0.6rem;
+            margin-bottom: 1.8rem;
+        }
+        .cloud-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: #475569;
+            padding: 0.3rem 1rem;
+            background: #f1f5f9;
+            border-radius: 40px;
+            float: right;
+            margin-top: -2.8rem;
+        }
+        .cloud-status .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .cloud-status .dot.online {
+            background: #22c55e;
+        }
+        .cloud-status .dot.offline {
+            background: #ef4444;
+        }
+        .cloud-status .dot.syncing {
+            background: #f59e0b;
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        .toolbar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 1.8rem;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #e9edf4;
+            padding-bottom: 1rem;
+        }
+        .toolbar .left-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .toolbar .right-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .toolbar .btn-outline {
+            background: transparent;
+            border: 1px solid #d1d9e6;
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 500;
+            color: #334155;
+            cursor: pointer;
+            transition: 0.15s;
+            font-size: 0.85rem;
+        }
+        .toolbar .btn-outline:hover {
+            background: #f1f5f9;
+            border-color: #94a3b8;
+        }
+        .toolbar .btn-primary-outline {
+            background: #1e293b;
+            border: 1px solid #1e293b;
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 500;
+            color: white;
+            cursor: pointer;
+            transition: 0.15s;
+            font-size: 0.85rem;
+        }
+        .toolbar .btn-primary-outline:hover {
+            background: #0f172a;
+        }
+        .toolbar .btn-sync {
+            background: #2563eb;
+            border: 1px solid #2563eb;
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 500;
+            color: white;
+            cursor: pointer;
+            transition: 0.15s;
+            font-size: 0.85rem;
+        }
+        .toolbar .btn-sync:hover {
+            background: #1d4ed8;
+        }
+        .toolbar .btn-sync:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .add-section {
+            background: #f8fafc;
+            border-radius: 24px;
+            padding: 1.6rem 1.5rem;
+            margin-bottom: 2.2rem;
+            border: 1px solid #e2e8f0;
+        }
+        .add-section h2 {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #0f172a;
+            margin-bottom: 1rem;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem 1.2rem;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+        .form-group label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            color: #475569;
+        }
+        .form-group input,
+        .form-group textarea {
+            background: white;
+            border: 1px solid #d1d9e6;
+            border-radius: 16px;
+            padding: 0.7rem 1rem;
+            font-size: 0.95rem;
+            transition: 0.2s;
+            font-family: inherit;
+            resize: vertical;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: 2px solid #7c9bff;
+            border-color: transparent;
+            box-shadow: 0 0 0 3px rgba(124, 155, 255, 0.2);
+        }
+        .form-group textarea {
+            min-height: 60px;
+        }
+        .form-group .hint {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            margin-top: 4px;
+        }
+        .btn-primary {
+            grid-column: 1 / -1;
+            background: #1e293b;
+            color: white;
+            border: none;
+            border-radius: 40px;
+            padding: 0.85rem 1.5rem;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 0.4rem;
+        }
+        .btn-primary:hover {
+            background: #0f172a;
+            transform: scale(0.98);
+        }
+        .btn-primary:active {
+            transform: scale(0.96);
+        }
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
 
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 20px;
+            border: 1px solid #e9edf4;
+            margin-top: 0.5rem;
+        }
+        .page-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+        .page-table th {
+            background: #f1f5f9;
+            text-align: left;
+            padding: 0.9rem 1.2rem;
+            font-weight: 600;
+            color: #1e293b;
+            border-bottom: 2px solid #d1d9e6;
+            white-space: nowrap;
+        }
+        .page-table th.sortable {
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.15s;
+        }
+        .page-table th.sortable:hover {
+            background: #e2e8f0;
+        }
+        .page-table th.sortable .sort-icon {
+            margin-left: 6px;
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+        .page-table td {
+            padding: 0.8rem 1.2rem;
+            border-bottom: 1px solid #eef2f6;
+            vertical-align: middle;
+            line-height: 1.5;
+        }
+        .page-table tbody tr:hover {
+            background: #fafcff;
+        }
+        .page-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        .page-table .col-title {
+            min-width: 200px;
+        }
+        .page-table .col-title a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .page-table .col-title a:hover {
+            text-decoration: underline;
+        }
+        .page-table .col-note {
+            color: #475569;
+            min-width: 160px;
+        }
+        .page-table .col-action {
+            text-align: center;
+            white-space: nowrap;
+            width: 110px;
+        }
+        .page-table .action-btn {
+            background: none;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: 0.15s;
+            font-size: 0.85rem;
+            font-weight: 500;
+            line-height: 1.4;
+            margin: 0 2px;
+        }
+        .page-table .action-btn.edit-btn {
+            color: #1e3a8a;
+            background: #dbeafe;
+        }
+        .page-table .action-btn.edit-btn:hover {
+            background: #bfdbfe;
+            transform: scale(1.05);
+        }
+        .page-table .action-btn.delete-btn {
+            color: #991b1b;
+            background: #fee2e2;
+        }
+        .page-table .action-btn.delete-btn:hover {
+            background: #fecaca;
+            transform: scale(1.05);
+        }
+        .empty-row td {
+            padding: 2.5rem 1rem;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 1rem;
+            background: #fafcff;
+        }
+
+        .list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin: 1.8rem 0 0.8rem 0;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .list-header h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #0f172a;
+        }
+        .list-header .badge {
+            background: #e9edf4;
+            padding: 0.2rem 1rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #334155;
+        }
+
+        .footer-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 1.2rem;
+            gap: 12px;
+        }
+
+        /* 编辑弹窗 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+            animation: fadeIn 0.2s ease;
+        }
+        .modal-overlay.hidden {
+            display: none;
+        }
+        .modal-box {
+            background: white;
+            border-radius: 28px;
+            padding: 2rem 2rem 1.8rem;
+            max-width: 520px;
+            width: 92%;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.25);
+            animation: slideUp 0.25s ease;
+        }
+        .modal-box h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 0.2rem;
+        }
+        .modal-box .modal-sub {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-bottom: 1.2rem;
+            border-bottom: 1px solid #e9edf4;
+            padding-bottom: 0.8rem;
+        }
+        .modal-box .form-group {
+            margin-bottom: 1rem;
+        }
+        .modal-box .form-group label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #475569;
+        }
+        .modal-box .form-group input,
+        .modal-box .form-group textarea {
+            width: 100%;
+            background: white;
+            border: 1px solid #d1d9e6;
+            border-radius: 14px;
+            padding: 0.6rem 1rem;
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: 0.2s;
+        }
+        .modal-box .form-group input:focus,
+        .modal-box .form-group textarea:focus {
+            outline: 2px solid #7c9bff;
+            border-color: transparent;
+        }
+        .modal-box .form-group textarea {
+            min-height: 56px;
+            resize: vertical;
+        }
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 1.2rem;
+        }
+        .modal-actions .btn-modal {
+            padding: 0.5rem 1.6rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        .modal-actions .btn-modal.cancel {
+            background: #f1f5f9;
+            color: #334155;
+        }
+        .modal-actions .btn-modal.cancel:hover {
+            background: #e2e8f0;
+        }
+        .modal-actions .btn-modal.save {
+            background: #1e293b;
+            color: white;
+        }
+        .modal-actions .btn-modal.save:hover {
+            background: #0f172a;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Toast 消息 */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0.8rem 2rem;
+            border-radius: 40px;
+            color: white;
+            font-weight: 500;
+            font-size: 0.9rem;
+            z-index: 1000;
+            animation: slideUp 0.3s ease;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+            background: #1e293b;
+            max-width: 90%;
+            text-align: center;
+        }
+        .toast.success { background: #16a34a; }
+        .toast.error { background: #dc2626; }
+        .toast.info { background: #2563eb; }
+        .toast.hidden { display: none; }
+
+        /* 配置弹窗 */
+        .config-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeIn 0.25s ease;
+        }
+        .config-overlay.hidden {
+            display: none;
+        }
+        .config-box {
+            background: white;
+            border-radius: 28px;
+            padding: 2rem 2rem 1.8rem;
+            max-width: 560px;
+            width: 94%;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+            animation: slideUp 0.25s ease;
+        }
+        .config-box h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 0.5rem;
+        }
+        .config-box .config-desc {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-bottom: 1.2rem;
+            border-bottom: 1px solid #e9edf4;
+            padding-bottom: 0.8rem;
+        }
+        .config-box .form-group {
+            margin-bottom: 1rem;
+        }
+        .config-box .form-group label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #475569;
+        }
+        .config-box .form-group input {
+            width: 100%;
+            background: white;
+            border: 1px solid #d1d9e6;
+            border-radius: 14px;
+            padding: 0.7rem 1rem;
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: 0.2s;
+        }
+        .config-box .form-group input:focus {
+            outline: 2px solid #7c9bff;
+            border-color: transparent;
+        }
+        .config-box .form-group .hint {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            margin-top: 4px;
+        }
+        .config-box .form-group .hint a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+        .config-box .form-group .hint a:hover {
+            text-decoration: underline;
+        }
+        .config-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 1.2rem;
+        }
+        .config-actions .btn-config {
+            padding: 0.5rem 1.8rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        .config-actions .btn-config.primary {
+            background: #1e293b;
+            color: white;
+        }
+        .config-actions .btn-config.primary:hover {
+            background: #0f172a;
+        }
+        .config-actions .btn-config.secondary {
+            background: #f1f5f9;
+            color: #334155;
+        }
+        .config-actions .btn-config.secondary:hover {
+            background: #e2e8f0;
+        }
+
+        @media (max-width: 700px) {
+            .container { padding: 1.2rem; }
+            .form-grid { grid-template-columns: 1fr; }
+            .page-table th, .page-table td {
+                padding: 0.6rem 0.8rem;
+                font-size: 0.85rem;
+            }
+            .toolbar { flex-direction: column; align-items: stretch; }
+            .toolbar .left-group, .toolbar .right-group { justify-content: center; }
+            .cloud-status { float: none; margin-top: 0; }
+            .config-box { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>
+            Pages
+            <span class="cloud-status" id="cloudStatus">
+                <span class="dot" id="statusDot"></span>
+                <span id="statusText">未配置</span>
+            </span>
+        </h1>
+
+        <div class="toolbar">
+            <div class="left-group">
+                <button class="btn-sync" id="syncBtn">同步</button>
+                <button class="btn-outline" id="configBtn">配置</button>
+                <button class="btn-outline" id="exportBtn">导出</button>
+                <button class="btn-outline" id="importBtn">导入</button>
+                <input type="file" id="fileInput" accept=".json" style="display: none;">
+            </div>
+            <div class="right-group">
+                <span style="font-size:0.8rem;color:#94a3b8;" id="lastSyncTime">未同步</span>
+            </div>
+        </div>
+
+        <div class="add-section">
+            <h2>添加</h2>
+            <div class="form-grid">
+                <div class="form-group full-width">
+                    <label for="pageInput">Page *</label>
+                    <input type="text" id="pageInput" placeholder="[标题](链接)" autofocus>
+                    <div class="hint">格式：[标题](链接)，例如 [GitHub](https://github.com)</div>
+                </div>
+                <div class="form-group full-width">
+                    <label for="noteInput">Note (选填)</label>
+                    <input type="text" id="noteInput" placeholder="可留空，后续可编辑补充">
+                </div>
+                <button class="btn-primary" id="addBtn">添加</button>
+            </div>
+        </div>
+
+        <div class="list-header">
+            <h2>所有页面</h2>
+            <span class="badge" id="countDisplay">0</span>
+        </div>
+        <div class="table-wrapper">
+            <table class="page-table" id="pageTable">
+                <thead>
+                    <tr>
+                        <th class="sortable" id="sortTitleHead">标题 <span class="sort-icon" id="sortIcon">▼</span></th>
+                        <th>备注</th>
+                        <th class="col-action">操作</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <tr class="empty-row">
+                        <td colspan="3">加载中...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="footer-actions">
+            <button class="btn-outline" id="clearAllBtn">清空全部</button>
+        </div>
+    </div>
+
+    <!-- 编辑弹窗 -->
+    <div class="modal-overlay hidden" id="editModal">
+        <div class="modal-box">
+            <h3>编辑条目</h3>
+            <div class="modal-sub" id="editModalTitle">Page：<span id="editTitleDisplay"></span></div>
+            <div class="form-group">
+                <label for="editPageInput">Page</label>
+                <input type="text" id="editPageInput" placeholder="[标题](链接)">
+                <div class="hint">格式：[标题](链接)</div>
+            </div>
+            <div class="form-group">
+                <label for="editNoteInput">备注</label>
+                <input type="text" id="editNoteInput" placeholder="请输入备注">
+            </div>
+            <div class="modal-actions">
+                <button class="btn-modal cancel" id="editCancelBtn">取消</button>
+                <button class="btn-modal save" id="editSaveBtn">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 配置弹窗 -->
+    <div class="config-overlay hidden" id="configModal">
+        <div class="config-box">
+            <h3>GitHub 云端配置</h3>
+            <div class="config-desc">
+                配置后数据将保存到您的 GitHub 仓库，在任何设备上打开都能同步。
+            </div>
+            <div class="form-group">
+                <label for="cfgToken">GitHub Personal Access Token *</label>
+                <input type="password" id="cfgToken" placeholder="ghp_xxxxxxxxxxxx">
+                <div class="hint">
+                    <a href="https://github.com/settings/tokens" target="_blank">创建 Token</a>
+                    （需要勾选 <strong>repo</strong> 权限，有效期建议选择 <strong>No expiration</strong>）
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="cfgOwner">仓库所有者 *</label>
+                <input type="text" id="cfgOwner" placeholder="你的GitHub用户名">
+            </div>
+            <div class="form-group">
+                <label for="cfgRepo">仓库名称 *</label>
+                <input type="text" id="cfgRepo" placeholder="仓库名">
+                <div class="hint">数据将保存在此仓库的 pages_data.json 文件中</div>
+            </div>
+            <div class="form-group">
+                <label for="cfgFile">数据文件名</label>
+                <input type="text" id="cfgFile" placeholder="pages_data.json" value="pages_data.json">
+            </div>
+            <div class="config-actions">
+                <button class="btn-config secondary" id="configCancelBtn">取消</button>
+                <button class="btn-config primary" id="configSaveBtn">保存并连接</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast 消息 -->
+    <div class="toast hidden" id="toast"></div>
+
+    <script>
+        (function() {
+            // ============================================================
+            //  配置存储键名
+            // ============================================================
+            const CONFIG_KEY = 'pages_github_config';
+            const STORAGE_KEY = 'pages_data';
+
+            // ---------- 全局状态 ----------
+            let pages = [];
+            let sortOrder = 'asc';
+            let editingIndex = null;
+            let isSyncing = false;
+
+            let config = {
+                token: '',
+                owner: '',
+                repo: '',
+                file: 'pages_data.json'
+            };
+
+            // ---------- DOM 引用 ----------
+            const pageInput = document.getElementById('pageInput');
+            const noteInput = document.getElementById('noteInput');
+            const addBtn = document.getElementById('addBtn');
+            const tableBody = document.getElementById('tableBody');
+            const countDisplay = document.getElementById('countDisplay');
+            const clearAllBtn = document.getElementById('clearAllBtn');
+            const exportBtn = document.getElementById('exportBtn');
+            const importBtn = document.getElementById('importBtn');
+            const fileInput = document.getElementById('fileInput');
+            const sortTitleHead = document.getElementById('sortTitleHead');
+            const sortIcon = document.getElementById('sortIcon');
+            const syncBtn = document.getElementById('syncBtn');
+            const lastSyncTime = document.getElementById('lastSyncTime');
+            const statusDot = document.getElementById('statusDot');
+            const statusText = document.getElementById('statusText');
+            const configBtn = document.getElementById('configBtn');
+
+            const editModal = document.getElementById('editModal');
+            const editTitleDisplay = document.getElementById('editTitleDisplay');
+            const editPageInput = document.getElementById('editPageInput');
+            const editNoteInput = document.getElementById('editNoteInput');
+            const editCancelBtn = document.getElementById('editCancelBtn');
+            const editSaveBtn = document.getElementById('editSaveBtn');
+
+            const configModal = document.getElementById('configModal');
+            const cfgToken = document.getElementById('cfgToken');
+            const cfgOwner = document.getElementById('cfgOwner');
+            const cfgRepo = document.getElementById('cfgRepo');
+            const cfgFile = document.getElementById('cfgFile');
+            const configCancelBtn = document.getElementById('configCancelBtn');
+            const configSaveBtn = document.getElementById('configSaveBtn');
+
+            const toast = document.getElementById('toast');
+            let toastTimer = null;
+
+            // ---------- 解析 [标题](链接) 格式 ----------
+            function parsePageInput(input) {
+                const match = input.match(/\[([^\]]+)\]\(([^)]+)\)/);
+                if (match) {
+                    return { title: match[1].trim(), url: match[2].trim() };
+                }
+                // 如果格式不匹配，尝试把整个输入当作标题，链接为空
+                return { title: input.trim(), url: '' };
+            }
+
+            function formatPageDisplay(title, url) {
+                if (url) {
+                    return `<a href="${escapeHtml(url)}" target="_blank">${escapeHtml(title)}</a>`;
+                }
+                return escapeHtml(title);
+            }
+
+            // ---------- 配置管理 ----------
+            function loadConfig() {
+                const stored = localStorage.getItem(CONFIG_KEY);
+                if (stored) {
+                    try {
+                        const parsed = JSON.parse(stored);
+                        config = { ...config, ...parsed };
+                        cfgToken.value = config.token || '';
+                        cfgOwner.value = config.owner || '';
+                        cfgRepo.value = config.repo || '';
+                        cfgFile.value = config.file || 'pages_data.json';
+                        return true;
+                    } catch (e) {
+                        return false;
+                    }
+                }
+                return false;
+            }
+
+            function saveConfig() {
+                config.token = cfgToken.value.trim();
+                config.owner = cfgOwner.value.trim();
+                config.repo = cfgRepo.value.trim();
+                config.file = cfgFile.value.trim() || 'pages_data.json';
+                localStorage.setItem(CONFIG_KEY, JSON.stringify(config));
+            }
+
+            function isConfigValid() {
+                return config.token && config.owner && config.repo && config.file;
+            }
+
+            // ---------- GitHub API ----------
+            async function githubApi(method, endpoint, body = null) {
+                const url = `https://api.github.com/repos/${config.owner}/${config.repo}/${endpoint}`;
+                const headers = {
+                    'Authorization': `token ${config.token}`,
+                    'Accept': 'application/vnd.github.v3+json',
+                    'Content-Type': 'application/json'
+                };
+                const options = { method, headers };
+                if (body) {
+                    options.body = JSON.stringify(body);
+                }
+                const response = await fetch(url, options);
+                if (!response.ok) {
+                    const error = await response.json().catch(() => ({}));
+                    throw new Error(error.message || `HTTP ${response.status}`);
+                }
+                return response.json();
+            }
+
+            async function getFileSha() {
+                try {
+                    const data = await githubApi('GET', `contents/${config.file}`);
+                    return data.sha;
+                } catch (e) {
+                    if (e.message.includes('404')) {
+                        return null;
+                    }
+                    throw e;
+                }
+            }
+
+            async function loadFromGitHub() {
+                if (!isConfigValid()) {
+                    throw new Error('请先配置 GitHub 连接');
+                }
+                try {
+                    const data = await githubApi('GET', `contents/${config.file}`);
+                    const content = atob(data.content);
+                    return JSON.parse(content);
+                } catch (e) {
+                    if (e.message.includes('404')) {
+                        return null;
+                    }
+                    throw e;
+                }
+            }
+
+            // ---------- 同步函数 ----------
+            async function syncToCloud(showToastMsg = true) {
+                if (isSyncing) return;
+                if (!isConfigValid()) {
+                    showToast('请先点击 "配置" 按钮设置 GitHub 连接', 'error');
+                    return;
+                }
+                if (pages.length === 0) {
+                    showToast('没有数据需要同步', 'info');
+                    return;
+                }
+
+                isSyncing = true;
+                syncBtn.disabled = true;
+                setCloudStatus('syncing', '同步中...');
+
+                try {
+                    let sha = null;
+                    try {
+                        const res = await fetch(
+                            `https://api.github.com/repos/${config.owner}/${config.repo}/contents/${config.file}`, {
+                                headers: { 'Authorization': `token ${config.token}` }
+                            });
+                        if (res.status === 200) {
+                            const data = await res.json();
+                            sha = data.sha;
+                        }
+                    } catch (e) {}
+
+                    const content = btoa(unescape(encodeURIComponent(JSON.stringify(pages, null, 2))));
+                    const body = {
+                        message: `更新数据 - ${new Date().toLocaleString()}`,
+                        content: content
+                    };
+                    if (sha) body.sha = sha;
+
+                    const res = await fetch(
+                        `https://api.github.com/repos/${config.owner}/${config.repo}/contents/${config.file}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Authorization': `token ${config.token}`,
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(body)
+                        });
+
+                    const result = await res.json();
+                    if (res.status === 200 || res.status === 201) {
+                        const now = new Date();
+                        lastSyncTime.textContent = `已同步 ${now.toLocaleString()}`;
+                        if (showToastMsg) {
+                            showToast(`成功同步 ${pages.length} 个条目到 GitHub`, 'success');
+                        }
+                        setCloudStatus('online', '已连接');
+                    } else {
+                        throw new Error(result.message || '未知错误');
+                    }
+                } catch (e) {
+                    console.error('同步失败:', e);
+                    showToast(`同步失败：${e.message}`, 'error');
+                    setCloudStatus('offline', '同步失败');
+                } finally {
+                    isSyncing = false;
+                    syncBtn.disabled = false;
+                }
+            }
+
+            async function loadFromCloud() {
+                if (!isConfigValid()) {
+                    setCloudStatus('offline', '未配置');
+                    loadFromLocal();
+                    return;
+                }
+                setCloudStatus('syncing', '加载中...');
+
+                try {
+                    const data = await loadFromGitHub();
+                    if (data && Array.isArray(data) && data.length > 0) {
+                        pages = data.filter(item => item.title && item.title.trim() !== '');
+                        applySortAndRender();
+                        const now = new Date();
+                        lastSyncTime.textContent = `已同步 ${now.toLocaleString()}`;
+                        setCloudStatus('online', '已连接');
+                        showToast(`从 GitHub 加载了 ${pages.length} 个条目`, 'success');
+                    } else {
+                        showToast('云端无数据，从本地加载', 'info');
+                        loadFromLocal();
+                        if (pages.length > 0) {
+                            setTimeout(() => syncToCloud(false), 500);
+                        }
+                    }
+                } catch (e) {
+                    console.error('加载云端数据失败:', e);
+                    showToast(`加载云端失败：${e.message}，从本地加载`, 'error');
+                    loadFromLocal();
+                }
+            }
+
+            // ---------- 本地存储 ----------
+            function loadFromLocal() {
+                const stored = localStorage.getItem(STORAGE_KEY);
+                if (stored) {
+                    try {
+                        pages = JSON.parse(stored);
+                        if (!Array.isArray(pages)) pages = [];
+                        pages = pages.filter(item => item.title && item.title.trim() !== '');
+                    } catch (e) {
+                        pages = [];
+                    }
+                } else {
+                    pages = [
+                        { title: 'GitHub', url: 'https://github.com', note: '代码托管平台' },
+                        { title: 'Stack Overflow', url: 'https://stackoverflow.com', note: '技术问答社区' }
+                    ];
+                }
+                applySortAndRender();
+                saveToLocal();
+            }
+
+            function saveToLocal() {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(pages));
+            }
+
+            // ---------- 核心函数 ----------
+            function sortPages(order) {
+                const direction = order || sortOrder;
+                pages.sort((a, b) => {
+                    const titleA = a.title?.toLowerCase() || '';
+                    const titleB = b.title?.toLowerCase() || '';
+                    if (titleA < titleB) return direction === 'asc' ? -1 : 1;
+                    if (titleA > titleB) return direction === 'asc' ? 1 : -1;
+                    return 0;
+                });
+            }
+
+            function applySortAndRender() {
+                sortPages(sortOrder);
+                renderTable();
+                updateSortIcon();
+                saveToLocal();
+            }
+
+            function renderTable() {
+                countDisplay.textContent = pages.length;
+
+                if (pages.length === 0) {
+                    tableBody.innerHTML = `<tr class="empty-row"><td colspan="3">列表为空，添加一个吧！</td></tr>`;
+                    return;
+                }
+
+                let html = '';
+                pages.forEach((item, index) => {
+                    const title = escapeHtml(item.title || '');
+                    const url = escapeHtml(item.url || '');
+                    const note = escapeHtml(item.note || '');
+                    const displayHtml = url ? `<a href="${url}" target="_blank">${title}</a>` : title;
+                    html += `
+                        <tr data-index="${index}">
+                            <td class="col-title">${displayHtml}</td>
+                            <td class="col-note">${note}</td>
+                            <td class="col-action">
+                                <button class="action-btn edit-btn" data-index="${index}" title="编辑">编辑</button>
+                                <button class="action-btn delete-btn" data-index="${index}" title="删除">删除</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                tableBody.innerHTML = html;
+
+                document.querySelectorAll('#tableBody .edit-btn').forEach(btn => {
+                    btn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const index = this.getAttribute('data-index');
+                        if (index !== null) {
+                            const idx = parseInt(index, 10);
+                            if (!isNaN(idx) && idx >= 0 && idx < pages.length) {
+                                openEditModal(idx);
+                            }
+                        }
+                    });
+                });
+
+                document.querySelectorAll('#tableBody .delete-btn').forEach(btn => {
+                    btn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const index = this.getAttribute('data-index');
+                        if (index !== null) {
+                            const idx = parseInt(index, 10);
+                            if (!isNaN(idx) && idx >= 0 && idx < pages.length) {
+                                if (confirm(`确定要删除 "${pages[idx].title}" 吗？`)) {
+                                    pages.splice(idx, 1);
+                                    applySortAndRender();
+                                    if (isConfigValid()) {
+                                        syncToCloud(false);
+                                    }
+                                }
+                            }
+                        }
+                    });
+                });
+            }
+
+            function updateSortIcon() {
+                sortIcon.textContent = sortOrder === 'asc' ? '▼' : '▲';
+            }
+
+            function escapeHtml(text) {
+                if (!text) return '';
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            // ---------- 编辑功能 ----------
+            function openEditModal(index) {
+                editingIndex = index;
+                const item = pages[index];
+                editTitleDisplay.textContent = item.title;
+                editPageInput.value = item.url ? `[${item.title}](${item.url})` : item.title;
+                editNoteInput.value = item.note || '';
+                editModal.classList.remove('hidden');
+                setTimeout(() => editPageInput.focus(), 100);
+            }
+
+            function closeEditModal() {
+                editModal.classList.add('hidden');
+                editingIndex = null;
+            }
+
+            function saveEdit() {
+                if (editingIndex === null || editingIndex < 0 || editingIndex >= pages.length) {
+                    alert('编辑出错，请重试。');
+                    closeEditModal();
+                    return;
+                }
+
+                const raw = editPageInput.value.trim();
+                if (!raw) {
+                    alert('请填写 Page 字段。');
+                    editPageInput.focus();
+                    return;
+                }
+
+                const parsed = parsePageInput(raw);
+                if (!parsed.title) {
+                    alert('请正确填写格式：[标题](链接)');
+                    editPageInput.focus();
+                    return;
+                }
+
+                pages[editingIndex].title = parsed.title;
+                pages[editingIndex].url = parsed.url;
+                pages[editingIndex].note = editNoteInput.value.trim();
+
+                closeEditModal();
+                applySortAndRender();
+                if (isConfigValid()) {
+                    syncToCloud(false);
+                }
+            }
+
+            // ---------- 添加 ----------
+            function addPage() {
+                const raw = pageInput.value.trim();
+                const note = noteInput.value.trim();
+
+                if (!raw) {
+                    alert('请填写 "Page" 字段。');
+                    pageInput.focus();
+                    return;
+                }
+
+                const parsed = parsePageInput(raw);
+                if (!parsed.title) {
+                    alert('请正确填写格式：[标题](链接)');
+                    pageInput.focus();
+                    return;
+                }
+
+                pages.push({ title: parsed.title, url: parsed.url, note: note });
+                applySortAndRender();
+
+                if (isConfigValid()) {
+                    syncToCloud(false);
+                }
+
+                pageInput.value = '';
+                noteInput.value = '';
+                pageInput.focus();
+            }
+
+            // ---------- 排序 ----------
+            function toggleSort() {
+                sortOrder = (sortOrder === 'asc') ? 'desc' : 'asc';
+                applySortAndRender();
+            }
+
+            // ---------- 导出/导入 ----------
+            function exportData() {
+                if (pages.length === 0) {
+                    alert('列表为空，没有什么可导出的。');
+                    return;
+                }
+                const jsonStr = JSON.stringify(pages, null, 2);
+                const blob = new Blob([jsonStr], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `pages_backup_${new Date().toISOString().slice(0, 10)}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                showToast('导出成功', 'success');
+            }
+
+            function importData(file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const imported = JSON.parse(e.target.result);
+                        if (!Array.isArray(imported)) {
+                            alert('文件格式错误：不是一个有效的列表。');
+                            return;
+                        }
+                        const valid = imported.filter(item => item.title && item.title.trim() !== '');
+                        if (valid.length === 0) {
+                            alert('文件中没有找到有效的条目。');
+                            return;
+                        }
+                        if (pages.length > 0) {
+                            if (!confirm(`当前有 ${pages.length} 个条目，导入将完全替换当前列表。确定继续吗？`)) {
+                                return;
+                            }
+                        }
+                        pages = valid;
+                        applySortAndRender();
+                        showToast(`成功导入 ${pages.length} 个条目`, 'success');
+                        if (isConfigValid()) {
+                            syncToCloud(false);
+                        }
+                    } catch (err) {
+                        alert('解析文件失败，请确保是有效的 JSON 文件。');
+                    }
+                };
+                reader.readAsText(file);
+            }
+
+            // ---------- 清空全部 ----------
+            function clearAll() {
+                if (pages.length === 0) {
+                    alert('列表已经是空的。');
+                    return;
+                }
+                if (confirm('确定要删除所有条目吗？此操作不可撤销！')) {
+                    pages = [];
+                    applySortAndRender();
+                    pageInput.focus();
+                    if (isConfigValid()) {
+                        syncToCloud(false);
+                    }
+                }
+            }
+
+            // ---------- Cloud Status ----------
+            function setCloudStatus(status, text) {
+                statusDot.className = 'dot ' + status;
+                statusText.textContent = text;
+            }
+
+            // ---------- Toast ----------
+            function showToast(message, type = 'info') {
+                toast.textContent = message;
+                toast.className = 'toast ' + type;
+                toast.classList.remove('hidden');
+                clearTimeout(toastTimer);
+                toastTimer = setTimeout(() => {
+                    toast.classList.add('hidden');
+                }, 3000);
+            }
+
+            // ---------- 配置弹窗 ----------
+            function openConfigModal() {
+                cfgToken.value = config.token || '';
+                cfgOwner.value = config.owner || '';
+                cfgRepo.value = config.repo || '';
+                cfgFile.value = config.file || 'pages_data.json';
+                configModal.classList.remove('hidden');
+            }
+
+            function closeConfigModal() {
+                configModal.classList.add('hidden');
+            }
+
+            function saveConfigAndConnect() {
+                const token = cfgToken.value.trim();
+                const owner = cfgOwner.value.trim();
+                const repo = cfgRepo.value.trim();
+                const file = cfgFile.value.trim() || 'pages_data.json';
+
+                if (!token) {
+                    showToast('请输入 GitHub Token', 'error');
+                    cfgToken.focus();
+                    return;
+                }
+                if (!owner) {
+                    showToast('请输入仓库所有者', 'error');
+                    cfgOwner.focus();
+                    return;
+                }
+                if (!repo) {
+                    showToast('请输入仓库名称', 'error');
+                    cfgRepo.focus();
+                    return;
+                }
+
+                config.token = token;
+                config.owner = owner;
+                config.repo = repo;
+                config.file = file;
+                saveConfig();
+
+                closeConfigModal();
+                showToast('配置已保存，正在连接...', 'info');
+
+                loadFromCloud();
+            }
+
+            // ---------- 事件绑定 ----------
+            addBtn.addEventListener('click', addPage);
+
+            document.querySelectorAll('.form-group input, .form-group textarea').forEach(input => {
+                input.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter') {
+                        if (this.tagName === 'TEXTAREA') {
+                            if (e.ctrlKey || e.shiftKey) {
+                                e.preventDefault();
+                                addPage();
+                            }
+                        } else {
+                            e.preventDefault();
+                            addPage();
+                        }
+                    }
+                });
+            });
+
+            clearAllBtn.addEventListener('click', clearAll);
+            exportBtn.addEventListener('click', exportData);
+            importBtn.addEventListener('click', function() { fileInput.click(); });
+            fileInput.addEventListener('change', function(e) {
+                if (this.files && this.files.length > 0) {
+                    importData(this.files[0]);
+                    this.value = '';
+                }
+            });
+
+            sortTitleHead.addEventListener('click', toggleSort);
+
+            syncBtn.addEventListener('click', function() {
+                if (pages.length === 0) {
+                    showToast('没有数据需要同步', 'info');
+                    return;
+                }
+                syncToCloud(true);
+            });
+
+            configBtn.addEventListener('click', openConfigModal);
+            configCancelBtn.addEventListener('click', closeConfigModal);
+            configSaveBtn.addEventListener('click', saveConfigAndConnect);
+
+            configModal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeConfigModal();
+                }
+            });
+
+            editCancelBtn.addEventListener('click', closeEditModal);
+            editSaveBtn.addEventListener('click', saveEdit);
+            editModal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeEditModal();
+                }
+            });
+
+            document.querySelectorAll('#editModal .form-group input, #editModal .form-group textarea').forEach(input => {
+                input.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter') {
+                        if (this.tagName === 'TEXTAREA') {
+                            if (e.ctrlKey || e.shiftKey) {
+                                e.preventDefault();
+                                saveEdit();
+                            }
+                        } else {
+                            e.preventDefault();
+                            saveEdit();
+                        }
+                    }
+                });
+            });
+
+            // ---------- 初始化 ----------
+            loadConfig();
+            loadFromCloud();
+
+            document.addEventListener('click', function(e) {
+                const target = e.target;
+                if (target.closest('.container') === null) return;
+                if (!target.closest('input') && !target.closest('textarea') && !target.closest('button') && !target
+                    .closest('th') && !target.closest('.modal-box') && !target.closest('.config-box')) {
+                    pageInput.focus();
+                }
+            });
+        })();
+    </script>
+</body>
+</html>

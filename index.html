@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pages</title>
+    <!-- 引入 pinyin-pro 库 -->
+    <script src="https://cdn.jsdelivr.net/npm/pinyin-pro@3.23.0/dist/index.min.js">
+    </script>
     <style>
         * {
             box-sizing: border-box;
@@ -790,38 +793,38 @@
             const toast = document.getElementById('toast');
             let toastTimer = null;
 
-            // ---------- 拼音首字母映射表 ----------
-            const PINYIN_MAP = {
-                '爱': 'A', '安': 'A', '按': 'A', '奥': 'A',
-                '八': 'B', '巴': 'B', '把': 'B', '白': 'B', '百': 'B', '摆': 'B', '败': 'B', '办': 'B', '半': 'B', '包': 'B', '保': 'B', '报': 'B', '抱': 'B', '暴': 'B', '北': 'B', '备': 'B', '背': 'B', '被': 'B', '本': 'B', '比': 'B', '必': 'B', '毕': 'B', '边': 'B', '变': 'B', '便': 'B', '标': 'B', '表': 'B', '别': 'B', '并': 'B', '病': 'B', '不': 'B', '布': 'B', '步': 'B', '部': 'B',
-                '才': 'C', '材': 'C', '财': 'C', '裁': 'C', '采': 'C', '彩': 'C', '菜': 'C', '参': 'C', '残': 'C', '藏': 'C', '操': 'C', '草': 'C', '册': 'C', '侧': 'C', '测': 'C', '层': 'C', '插': 'C', '查': 'C', '茶': 'C', '察': 'C', '差': 'C', '产': 'C', '长': 'C', '常': 'C', '场': 'C', '厂': 'C', '唱': 'C', '超': 'C', '朝': 'C', '车': 'C', '陈': 'C', '称': 'C', '成': 'C', '呈': 'C', '程': 'C', '吃': 'C', '持': 'C', '池': 'C', '驰': 'C', '充': 'C', '冲': 'C', '虫': 'C', '抽': 'C', '出': 'C', '初': 'C', '除': 'C', '础': 'C', '处': 'C', '川': 'C', '传': 'C', '船': 'C', '窗': 'C', '创': 'C', '吹': 'C', '春': 'C', '词': 'C', '此': 'C', '次': 'C', '从': 'C', '存': 'C', '错': 'C',
-                '打': 'D', '大': 'D', '带': 'D', '代': 'D', '单': 'D', '当': 'D', '党': 'D', '导': 'D', '道': 'D', '得': 'D', '的': 'D', '灯': 'D', '等': 'D', '低': 'D', '底': 'D', '地': 'D', '点': 'D', '电': 'D', '店': 'D', '定': 'D', '东': 'D', '动': 'D', '都': 'D', '读': 'D', '度': 'D', '断': 'D', '对': 'D', '队': 'D', '顿': 'D', '多': 'D',
-                '儿': 'E', '而': 'E', '二': 'E',
-                '发': 'F', '法': 'F', '凡': 'F', '反': 'F', '饭': 'F', '范': 'F', '方': 'F', '防': 'F', '房': 'F', '放': 'F', '非': 'F', '飞': 'F', '费': 'F', '分': 'F', '份': 'F', '丰': 'F', '风': 'F', '封': 'F', '服': 'F', '福': 'F', '府': 'F', '负': 'F', '复': 'F',
-                '改': 'G', '干': 'G', '感': 'G', '刚': 'G', '钢': 'G', '高': 'G', '搞': 'G', '格': 'G', '个': 'G', '各': 'G', '给': 'G', '根': 'G', '更': 'G', '工': 'G', '公': 'G', '功': 'G', '共': 'G', '构': 'G', '够': 'G', '古': 'G', '故': 'G', '观': 'G', '官': 'G', '管': 'G', '光': 'G', '广': 'G', '规': 'G', '贵': 'G', '国': 'G', '过': 'G',
-                '哈': 'H', '海': 'H', '含': 'H', '函': 'H', '寒': 'H', '汉': 'H', '好': 'H', '号': 'H', '合': 'H', '和': 'H', '何': 'H', '河': 'H', '黑': 'H', '很': 'H', '红': 'H', '后': 'H', '候': 'H', '胡': 'H', '护': 'H', '华': 'H', '化': 'H', '画': 'H', '话': 'H', '怀': 'H', '欢': 'H', '还': 'H', '换': 'H', '黄': 'H', '回': 'H', '会': 'H', '活': 'H', '火': 'H', '或': 'H', '货': 'H',
-                '机': 'J', '击': 'J', '基': 'J', '绩': 'J', '积': 'J', '及': 'J', '级': 'J', '即': 'J', '急': 'J', '集': 'J', '几': 'J', '计': 'J', '记': 'J', '纪': 'J', '技': 'J', '系': 'J', '加': 'J', '家': 'J', '价': 'J', '驾': 'J', '架': 'J', '假': 'J', '间': 'J', '检': 'J', '简': 'J', '建': 'J', '健': 'J', '将': 'J', '讲': 'J', '交': 'J', '教': 'J', '接': 'J', '阶': 'J', '节': 'J', '结': 'J', '解': 'J', '界': 'J', '金': 'J', '进': 'J', '近': 'J', '劲': 'J', '经': 'J', '精': 'J', '景': 'J', '警': 'J', '静': 'J', '究': 'J', '九': 'J', '就': 'J', '局': 'J', '具': 'J', '剧': 'J', '据': 'J', '决': 'J', '绝': 'J', '军': 'J',
-                '卡': 'K', '开': 'K', '刊': 'K', '看': 'K', '考': 'K', '科': 'K', '可': 'K', '克': 'K', '刻': 'K', '客': 'K', '课': 'K', '空': 'K', '口': 'K', '苦': 'K', '快': 'K', '矿': 'K', '况': 'K', '困': 'K',
-                '拉': 'L', '来': 'L', '老': 'L', '乐': 'L', '了': 'L', '类': 'L', '冷': 'L', '离': 'L', '理': 'L', '力': 'L', '历': 'L', '利': 'L', '例': 'L', '立': 'L', '连': 'L', '联': 'L', '练': 'L', '量': 'L', '列': 'L', '林': 'L', '领': 'L', '令': 'L', '流': 'L', '留': 'L', '六': 'L', '龙': 'L', '楼': 'L', '录': 'L', '路': 'L', '旅': 'L', '律': 'L', '率': 'L', '绿': 'L', '论': 'L', '落': 'L',
-                '马': 'M', '吗': 'M', '买': 'M', '卖': 'M', '满': 'M', '慢': 'M', '忙': 'M', '毛': 'M', '贸': 'M', '没': 'M', '每': 'M', '美': 'M', '门': 'M', '们': 'M', '梦': 'M', '米': 'M', '密': 'M', '民': 'M', '明': 'M', '名': 'M', '命': 'M', '某': 'M', '目': 'M', '母': 'M',
-                '拿': 'N', '那': 'N', '南': 'N', '难': 'N', '内': 'N', '能': 'N', '你': 'N', '年': 'N', '念': 'N', '娘': 'N', '宁': 'N', '牛': 'N', '农': 'N', '弄': 'N', '努': 'N', '女': 'N', '暖': 'N',
-                '哦': 'O', '欧': 'O',
-                '怕': 'P', '排': 'P', '派': 'P', '旁': 'P', '跑': 'P', '配': 'P', '朋': 'P', '片': 'P', '票': 'P', '品': 'P', '平': 'P', '评': 'P', '破': 'P', '普': 'P',
-                '七': 'Q', '期': 'Q', '其': 'Q', '奇': 'Q', '企': 'Q', '起': 'Q', '气': 'Q', '千': 'Q', '前': 'Q', '钱': 'Q', '强': 'Q', '切': 'Q', '且': 'Q', '情': 'Q', '请': 'Q', '求': 'Q', '区': 'Q', '取': 'Q', '去': 'Q', '全': 'Q', '权': 'Q', '确': 'Q',
-                '然': 'R', '让': 'R', '热': 'R', '人': 'R', '认': 'R', '任': 'R', '仍': 'R', '日': 'R', '入': 'R', '软': 'R',
-                '三': 'S', '色': 'S', '森': 'S', '杀': 'S', '山': 'S', '商': 'S', '上': 'S', '少': 'S', '设': 'S', '社': 'S', '身': 'S', '深': 'S', '生': 'S', '声': 'S', '省': 'S', '胜': 'S', '师': 'S', '施': 'S', '十': 'S', '石': 'S', '时': 'S', '识': 'S', '实': 'S', '史': 'S', '使': 'S', '士': 'S', '世': 'S', '市': 'S', '式': 'S', '事': 'S', '势': 'S', '视': 'S', '是': 'S', '适': 'S', '收': 'S', '手': 'S', '首': 'S', '受': 'S', '书': 'S', '术': 'S', '数': 'S', '树': 'S', '双': 'S', '水': 'S', '睡': 'S', '顺': 'S', '说': 'S', '思': 'S', '斯': 'S', '四': 'S', '速': 'S', '算': 'S', '虽': 'S', '随': 'S', '岁': 'S', '孙': 'S', '损': 'S', '所': 'S', '锁': 'S',
-                '他': 'T', '它': 'T', '她': 'T', '台': 'T', '太': 'T', '态': 'T', '谈': 'T', '探': 'T', '唐': 'T', '堂': 'T', '提': 'T', '题': 'T', '体': 'T', '替': 'T', '天': 'T', '田': 'T', '条': 'T', '铁': 'T', '听': 'T', '停': 'T', '通': 'T', '同': 'T', '统': 'T', '痛': 'T', '头': 'T', '图': 'T', '团': 'T', '推': 'T', '退': 'T', '托': 'T',
-                '外': 'W', '完': 'W', '玩': 'W', '晚': 'W', '万': 'W', '网': 'W', '往': 'W', '望': 'W', '围': 'W', '伟': 'W', '委': 'W', '卫': 'W', '未': 'W', '位': 'W', '味': 'W', '文': 'W', '闻': 'W', '稳': 'W', '问': 'W', '我': 'W', '无': 'W', '五': 'W', '物': 'W', '务': 'W', '武': 'W',
-                '西': 'X', '习': 'X', '系': 'X', '下': 'X', '先': 'X', '现': 'X', '相': 'X', '想': 'X', '向': 'X', '项': 'X', '像': 'X', '消': 'X', '小': 'X', '效': 'X', '校': 'X', '笑': 'X', '些': 'X', '协': 'X', '写': 'X', '谢': 'X', '心': 'X', '新': 'X', '信': 'X', '星': 'X', '行': 'X', '形': 'X', '型': 'X', '性': 'X', '修': 'X', '需': 'X', '许': 'X', '选': 'X', '学': 'X', '雪': 'X', '血': 'X', '寻': 'X',
-                '压': 'Y', '亚': 'Y', '研': 'Y', '严': 'Y', '言': 'Y', '颜': 'Y', '眼': 'Y', '演': 'Y', '验': 'Y', '样': 'Y', '要': 'Y', '业': 'Y', '叶': 'Y', '夜': 'Y', '一': 'Y', '医': 'Y', '依': 'Y', '仪': 'Y', '宜': 'Y', '已': 'Y', '以': 'Y', '易': 'Y', '益': 'Y', '意': 'Y', '义': 'Y', '议': 'Y', '因': 'Y', '音': 'Y', '引': 'Y', '印': 'Y', '应': 'Y', '英': 'Y', '影': 'Y', '映': 'Y', '永': 'Y', '用': 'Y', '优': 'Y', '由': 'Y', '邮': 'Y', '游': 'Y', '有': 'Y', '友': 'Y', '右': 'Y', '于': 'Y', '余': 'Y', '鱼': 'Y', '雨': 'Y', '语': 'Y', '育': 'Y', '元': 'Y', '园': 'Y', '原': 'Y', '员': 'Y', '圆': 'Y', '院': 'Y', '愿': 'Y', '月': 'Y', '运': 'Y',
-                '在': 'Z', '再': 'Z', '则': 'Z', '责': 'Z', '增': 'Z', '展': 'Z', '占': 'Z', '战': 'Z', '张': 'Z', '章': 'Z', '长': 'Z', '招': 'Z', '照': 'Z', '真': 'Z', '针': 'Z', '整': 'Z', '正': 'Z', '证': 'Z', '政': 'Z', '知': 'Z', '织': 'Z', '直': 'Z', '值': 'Z', '职': 'Z', '只': 'Z', '纸': 'Z', '指': 'Z', '至': 'Z', '志': 'Z', '制': 'Z', '治': 'Z', '中': 'Z', '终': 'Z', '众': 'Z', '重': 'Z', '州': 'Z', '周': 'Z', '主': 'Z', '住': 'Z', '助': 'Z', '筑': 'Z', '注': 'Z', '抓': 'Z', '专': 'Z', '转': 'Z', '装': 'Z', '壮': 'Z', '追': 'Z', '准': 'Z', '资': 'Z', '子': 'Z', '字': 'Z', '自': 'Z', '总': 'Z', '走': 'Z', '组': 'Z', '最': 'Z', '尊': 'Z', '作': 'Z', '坐': 'Z', '做': 'Z'
-            };
-
-            // ---------- 工具函数 ----------
-            function getPinyinFirstLetter(char) {
-                if (/[a-zA-Z]/.test(char)) return char.toUpperCase();
+            // ============================================================
+            //  工具函数 - 使用 pinyin-pro 库
+            // ============================================================
+            function getFirstLetter(text) {
+                if (!text) return '';
+                const char = text[0];
+                // 数字
                 if (/[0-9]/.test(char)) return '0';
-                if (/[\u4e00-\u9fa5]/.test(char)) return PINYIN_MAP[char] || 'Z';
+                // 英文字母
+                if (/[a-zA-Z]/.test(char)) return char.toLowerCase();
+                // 中文字符 - 使用 pinyin-pro 获取拼音首字母
+                if (/[\u4e00-\u9fa5]/.test(char)) {
+                    try {
+                        // 检查 pinyin-pro 库是否已加载
+                        if (typeof window.pinyinPro !== 'undefined') {
+                            const result = window.pinyinPro.pinyin(char, { pattern: 'first' });
+                            return result[0]?.toLowerCase() || 'z';
+                        } else {
+                            // 如果库未加载，尝试使用 pinyin 全局变量
+                            if (typeof pinyin !== 'undefined') {
+                                const result = pinyin(char, { pattern: 'first' });
+                                return result[0]?.toLowerCase() || 'z';
+                            }
+                            // 库加载失败时的备用方案
+                            return 'z';
+                        }
+                    } catch (e) {
+                        console.warn('获取拼音失败:', char, e);
+                        return 'z';
+                    }
+                }
+                // 其他字符
                 return '~';
             }
 
@@ -835,13 +838,65 @@
             function getSortKey(title) {
                 const firstChar = title[0] || '';
                 const category = getCharCategory(firstChar);
-                if (category === 'number') return { category: 0, key: firstChar };
-                if (category === 'english') return { category: 1, key: firstChar.toLowerCase() };
-                if (category === 'chinese') return { category: 2, key: getPinyinFirstLetter(firstChar) };
-                return { category: 3, key: firstChar };
+
+                if (category === 'number') {
+                    // 数字：提取完整数字前缀用于正确排序
+                    const match = title.match(/^(\d+)/);
+                    const num = match ? parseInt(match[1], 10) : 0;
+                    return {
+                        category: 0,
+                        key: String(num).padStart(10, '0') // 补零确保数字排序正确
+                    };
+                }
+                if (category === 'english') {
+                    return {
+                        category: 1,
+                        key: firstChar.toLowerCase()
+                    };
+                }
+                if (category === 'chinese') {
+                    return {
+                        category: 2,
+                        key: getFirstLetter(firstChar)
+                    };
+                }
+                return {
+                    category: 3,
+                    key: firstChar
+                };
             }
 
-            // ---------- 解析 [标题](链接) ----------
+            // ============================================================
+            //  排序函数（核心：数字 → 英文 → 中文）
+            // ============================================================
+            function sortPages(order) {
+                const direction = order || sortOrder;
+                pages.sort((a, b) => {
+                    const titleA = a.title || '';
+                    const titleB = b.title || '';
+
+                    const keyA = getSortKey(titleA);
+                    const keyB = getSortKey(titleB);
+
+                    // 先按类别排序（数字 → 英文 → 中文 → 其他）
+                    if (keyA.category !== keyB.category) {
+                        return direction === 'asc' ? keyA.category - keyB.category : keyB.category - keyA.category;
+                    }
+
+                    // 同一类别内按排序键比较
+                    if (keyA.key < keyB.key) return direction === 'asc' ? -1 : 1;
+                    if (keyA.key > keyB.key) return direction === 'asc' ? 1 : -1;
+
+                    // 如果排序键相同，按原始标题比较
+                    if (titleA < titleB) return direction === 'asc' ? -1 : 1;
+                    if (titleA > titleB) return direction === 'asc' ? 1 : -1;
+                    return 0;
+                });
+            }
+
+            // ============================================================
+            //  解析 [标题](链接) 格式
+            // ============================================================
             function parsePageInput(input) {
                 const match = input.match(/\[([^\]]+)\]\(([^)]+)\)/);
                 if (match) {
@@ -857,7 +912,9 @@
                 return div.innerHTML;
             }
 
-            // ---------- 配置管理 ----------
+            // ============================================================
+            //  配置管理
+            // ============================================================
             function loadConfig() {
                 const stored = localStorage.getItem(CONFIG_KEY);
                 if (stored) {
@@ -888,7 +945,9 @@
                 return config.token && config.owner && config.repo && config.file;
             }
 
-            // ---------- GitHub API ----------
+            // ============================================================
+            //  GitHub API
+            // ============================================================
             async function githubApi(method, endpoint, body = null) {
                 const url = `https://api.github.com/repos/${config.owner}/${config.repo}/${endpoint}`;
                 const headers = {
@@ -918,14 +977,12 @@
                 }
             }
 
-            // ✅ 核心修复：正确解码 GitHub 文件内容
             async function loadFromGitHub() {
                 if (!isConfigValid()) {
                     throw new Error('请先配置 GitHub 连接');
                 }
                 try {
                     const data = await githubApi('GET', `contents/${config.file}`);
-                    // 修复：使用 decodeURIComponent(escape(atob(content))) 正确处理 UTF-8
                     const content = data.content;
                     const decoded = decodeURIComponent(escape(atob(content)));
                     return JSON.parse(decoded);
@@ -935,7 +992,9 @@
                 }
             }
 
-            // ---------- 同步函数 ----------
+            // ============================================================
+            //  同步函数
+            // ============================================================
             async function syncToCloud(showToastMsg = true) {
                 if (isSyncing) return;
                 if (!isConfigValid()) {
@@ -964,7 +1023,6 @@
                         }
                     } catch (e) {}
 
-                    // ✅ 核心修复：使用正确的编码方式保存 UTF-8 中文
                     const content = btoa(unescape(encodeURIComponent(JSON.stringify(pages, null, 2))));
                     const body = {
                         message: `更新数据 - ${new Date().toLocaleString()}`,
@@ -1034,7 +1092,9 @@
                 }
             }
 
-            // ---------- 本地存储 ----------
+            // ============================================================
+            //  本地存储
+            // ============================================================
             function loadFromLocal() {
                 const stored = localStorage.getItem(STORAGE_KEY);
                 if (stored) {
@@ -1048,9 +1108,11 @@
                 } else {
                     pages = [
                         { title: '10个必知技巧', url: 'https://example.com/10-tips', note: '数字开头示例' },
-                        { title: '2024年度报告', url: 'https://example.com/2024-report', note: '数字开头示例' },
-                        { title: 'GitHub', url: 'https://github.com', note: '代码托管平台' },
-                        { title: 'Stack Overflow', url: 'https://stackoverflow.com', note: '技术问答社区' },
+                        { title: '2个方法', url: 'https://example.com/2-methods', note: '数字开头示例' },
+                        { title: 'Apple', url: 'https://apple.com', note: '英文开头' },
+                        { title: 'GitHub', url: 'https://github.com', note: '英文开头' },
+                        { title: '访问', url: 'https://example.com/visit', note: '中文示例 - F' },
+                        { title: '苹', url: 'https://example.com/ping', note: '中文示例 - P' },
                         { title: '中国', url: 'https://example.com/china', note: '中文示例 - Z' },
                         { title: '北京', url: 'https://example.com/beijing', note: '中文示例 - B' },
                         { title: '爱', url: 'https://example.com/ai', note: '中文示例 - A' }
@@ -1064,29 +1126,9 @@
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(pages));
             }
 
-            // ---------- 排序 ----------
-            function sortPages(order) {
-                const direction = order || sortOrder;
-                pages.sort((a, b) => {
-                    const titleA = a.title || '';
-                    const titleB = b.title || '';
-
-                    const keyA = getSortKey(titleA);
-                    const keyB = getSortKey(titleB);
-
-                    if (keyA.category !== keyB.category) {
-                        return direction === 'asc' ? keyA.category - keyB.category : keyB.category - keyA.category;
-                    }
-
-                    if (keyA.key < keyB.key) return direction === 'asc' ? -1 : 1;
-                    if (keyA.key > keyB.key) return direction === 'asc' ? 1 : -1;
-
-                    if (titleA < titleB) return direction === 'asc' ? -1 : 1;
-                    if (titleA > titleB) return direction === 'asc' ? 1 : -1;
-                    return 0;
-                });
-            }
-
+            // ============================================================
+            //  渲染
+            // ============================================================
             function applySortAndRender() {
                 sortPages(sortOrder);
                 renderTable();
@@ -1158,7 +1200,9 @@
                 sortIcon.textContent = sortOrder === 'asc' ? '▼' : '▲';
             }
 
-            // ---------- 编辑功能 ----------
+            // ============================================================
+            //  编辑功能
+            // ============================================================
             function openEditModal(index) {
                 editingIndex = index;
                 const item = pages[index];
@@ -1210,7 +1254,9 @@
                 }
             }
 
-            // ---------- 添加 ----------
+            // ============================================================
+            //  添加
+            // ============================================================
             function addPage() {
                 const raw = pageInput.value.trim();
                 const note = noteInput.value.trim();
@@ -1240,13 +1286,17 @@
                 pageInput.focus();
             }
 
-            // ---------- 排序切换 ----------
+            // ============================================================
+            //  排序切换
+            // ============================================================
             function toggleSort() {
                 sortOrder = (sortOrder === 'asc') ? 'desc' : 'asc';
                 applySortAndRender();
             }
 
-            // ---------- 导出/导入 ----------
+            // ============================================================
+            //  导出/导入
+            // ============================================================
             function exportData() {
                 if (pages.length === 0) {
                     alert('列表为空，没有什么可导出的。');
@@ -1297,7 +1347,9 @@
                 reader.readAsText(file);
             }
 
-            // ---------- 清空全部 ----------
+            // ============================================================
+            //  清空全部
+            // ============================================================
             function clearAll() {
                 if (pages.length === 0) {
                     alert('列表已经是空的。');
@@ -1313,13 +1365,17 @@
                 }
             }
 
-            // ---------- Cloud Status ----------
+            // ============================================================
+            //  Cloud Status
+            // ============================================================
             function setCloudStatus(status, text) {
                 statusDot.className = 'dot ' + status;
                 statusText.textContent = text;
             }
 
-            // ---------- Toast ----------
+            // ============================================================
+            //  Toast
+            // ============================================================
             function showToast(message, type = 'info') {
                 toast.textContent = message;
                 toast.className = 'toast ' + type;
@@ -1330,7 +1386,9 @@
                 }, 3000);
             }
 
-            // ---------- 配置弹窗 ----------
+            // ============================================================
+            //  配置弹窗
+            // ============================================================
             function openConfigModal() {
                 cfgToken.value = config.token || '';
                 cfgOwner.value = config.owner || '';
@@ -1377,7 +1435,9 @@
                 loadFromCloud();
             }
 
-            // ---------- 事件绑定 ----------
+            // ============================================================
+            //  事件绑定
+            // ============================================================
             addBtn.addEventListener('click', addPage);
 
             document.querySelectorAll('.form-group input, .form-group textarea').forEach(input => {
@@ -1450,7 +1510,9 @@
                 });
             });
 
-            // ---------- 初始化 ----------
+            // ============================================================
+            //  初始化
+            // ============================================================
             loadConfig();
             loadFromCloud();
 

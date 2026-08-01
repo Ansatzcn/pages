@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pages</title>
-    <!-- 引入 pinyin-pro 库 -->
     <script src="https://cdn.jsdelivr.net/npm/pinyin-pro@3.23.0/dist/index.min.js">
     </script>
     <style>
+        /* 完整的样式代码 */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -388,7 +388,7 @@
             padding: 2rem 2rem 1.8rem;
             max-width: 520px;
             width: 92%;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.25);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25);
             animation: slideUp 0.25s ease;
         }
         .modal-box h3 {
@@ -464,12 +464,22 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
         }
         @keyframes slideUp {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
 
         /* Toast 消息 */
@@ -485,15 +495,23 @@
             font-size: 0.9rem;
             z-index: 1000;
             animation: slideUp 0.3s ease;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
             background: #1e293b;
             max-width: 90%;
             text-align: center;
         }
-        .toast.success { background: #16a34a; }
-        .toast.error { background: #dc2626; }
-        .toast.info { background: #2563eb; }
-        .toast.hidden { display: none; }
+        .toast.success {
+            background: #16a34a;
+        }
+        .toast.error {
+            background: #dc2626;
+        }
+        .toast.info {
+            background: #2563eb;
+        }
+        .toast.hidden {
+            display: none;
+        }
 
         /* 配置弹窗 */
         .config-overlay {
@@ -519,7 +537,7 @@
             padding: 2rem 2rem 1.8rem;
             max-width: 560px;
             width: 94%;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
             animation: slideUp 0.25s ease;
         }
         .config-box h3 {
@@ -601,16 +619,32 @@
         }
 
         @media (max-width: 700px) {
-            .container { padding: 1.2rem; }
-            .form-grid { grid-template-columns: 1fr; }
-            .page-table th, .page-table td {
+            .container {
+                padding: 1.2rem;
+            }
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .page-table th,
+            .page-table td {
                 padding: 0.6rem 0.8rem;
                 font-size: 0.85rem;
             }
-            .toolbar { flex-direction: column; align-items: stretch; }
-            .toolbar .left-group, .toolbar .right-group { justify-content: center; }
-            .cloud-status { float: none; margin-top: 0; }
-            .config-box { padding: 1.5rem; }
+            .toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .toolbar .left-group,
+            .toolbar .right-group {
+                justify-content: center;
+            }
+            .cloud-status {
+                float: none;
+                margin-top: 0;
+            }
+            .config-box {
+                padding: 1.5rem;
+            }
         }
     </style>
 </head>
@@ -794,7 +828,7 @@
             let toastTimer = null;
 
             // ============================================================
-            //  工具函数 - 使用 pinyin-pro 库
+            //  工具函数
             // ============================================================
             function getFirstLetter(text) {
                 if (!text) return '';
@@ -806,19 +840,15 @@
                 // 中文字符 - 使用 pinyin-pro 获取拼音首字母
                 if (/[\u4e00-\u9fa5]/.test(char)) {
                     try {
-                        // 检查 pinyin-pro 库是否已加载
                         if (typeof window.pinyinPro !== 'undefined') {
                             const result = window.pinyinPro.pinyin(char, { pattern: 'first' });
                             return result[0]?.toLowerCase() || 'z';
-                        } else {
-                            // 如果库未加载，尝试使用 pinyin 全局变量
-                            if (typeof pinyin !== 'undefined') {
-                                const result = pinyin(char, { pattern: 'first' });
-                                return result[0]?.toLowerCase() || 'z';
-                            }
-                            // 库加载失败时的备用方案
-                            return 'z';
                         }
+                        if (typeof pinyin !== 'undefined') {
+                            const result = pinyin(char, { pattern: 'first' });
+                            return result[0]?.toLowerCase() || 'z';
+                        }
+                        return 'z';
                     } catch (e) {
                         console.warn('获取拼音失败:', char, e);
                         return 'z';
@@ -840,12 +870,11 @@
                 const category = getCharCategory(firstChar);
 
                 if (category === 'number') {
-                    // 数字：提取完整数字前缀用于正确排序
                     const match = title.match(/^(\d+)/);
                     const num = match ? parseInt(match[1], 10) : 0;
                     return {
                         category: 0,
-                        key: String(num).padStart(10, '0') // 补零确保数字排序正确
+                        key: String(num).padStart(10, '0')
                     };
                 }
                 if (category === 'english') {
@@ -867,7 +896,7 @@
             }
 
             // ============================================================
-            //  排序函数（核心：数字 → 英文 → 中文）
+            //  排序函数
             // ============================================================
             function sortPages(order) {
                 const direction = order || sortOrder;
@@ -878,16 +907,13 @@
                     const keyA = getSortKey(titleA);
                     const keyB = getSortKey(titleB);
 
-                    // 先按类别排序（数字 → 英文 → 中文 → 其他）
                     if (keyA.category !== keyB.category) {
                         return direction === 'asc' ? keyA.category - keyB.category : keyB.category - keyA.category;
                     }
 
-                    // 同一类别内按排序键比较
                     if (keyA.key < keyB.key) return direction === 'asc' ? -1 : 1;
                     if (keyA.key > keyB.key) return direction === 'asc' ? 1 : -1;
 
-                    // 如果排序键相同，按原始标题比较
                     if (titleA < titleB) return direction === 'asc' ? -1 : 1;
                     if (titleA > titleB) return direction === 'asc' ? 1 : -1;
                     return 0;
@@ -1111,11 +1137,11 @@
                         { title: '2个方法', url: 'https://example.com/2-methods', note: '数字开头示例' },
                         { title: 'Apple', url: 'https://apple.com', note: '英文开头' },
                         { title: 'GitHub', url: 'https://github.com', note: '英文开头' },
-                        { title: '访问', url: 'https://example.com/visit', note: '中文示例 - F' },
-                        { title: '苹', url: 'https://example.com/ping', note: '中文示例 - P' },
-                        { title: '中国', url: 'https://example.com/china', note: '中文示例 - Z' },
-                        { title: '北京', url: 'https://example.com/beijing', note: '中文示例 - B' },
-                        { title: '爱', url: 'https://example.com/ai', note: '中文示例 - A' }
+                        { title: '大', url: 'https://example.com/da', note: '中文 - D' },
+                        { title: '丹', url: 'https://example.com/dan', note: '中文 - D' },
+                        { title: '东', url: 'https://example.com/dong', note: '中文 - D' },
+                        { title: '访问', url: 'https://example.com/visit', note: '中文 - F' },
+                        { title: '苹', url: 'https://example.com/ping', note: '中文 - P' }
                     ];
                 }
                 applySortAndRender();

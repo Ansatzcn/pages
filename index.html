@@ -737,13 +737,11 @@
 
     <script>
         (function() {
-            // ============================================================
-            //  配置存储键名
-            // ============================================================
+            // 配置存储键名
             const CONFIG_KEY = 'pages_github_config';
             const STORAGE_KEY = 'pages_data';
 
-            // ---------- 全局状态 ----------
+            // 全局状态
             let pages = [];
             let sortOrder = 'asc';
             let editingIndex = null;
@@ -756,7 +754,7 @@
                 file: 'pages_data.json'
             };
 
-            // ---------- DOM 引用 ----------
+            // DOM 引用
             const pageInput = document.getElementById('pageInput');
             const noteInput = document.getElementById('noteInput');
             const addBtn = document.getElementById('addBtn');
@@ -792,8 +790,7 @@
             const toast = document.getElementById('toast');
             let toastTimer = null;
 
-            // ---------- 拼音首字母映射表（完整版） ----------
-            // 覆盖 GB2312 汉字按拼音首字母排序
+            // ---------- 拼音首字母映射表 ----------
             const PINYIN_MAP = {
                 // A
                 '爱': 'A', '安': 'A', '按': 'A', '奥': 'A',
@@ -843,25 +840,20 @@
                 '在': 'Z', '再': 'Z', '则': 'Z', '责': 'Z', '增': 'Z', '展': 'Z', '占': 'Z', '战': 'Z', '张': 'Z', '章': 'Z', '长': 'Z', '招': 'Z', '照': 'Z', '真': 'Z', '针': 'Z', '整': 'Z', '正': 'Z', '证': 'Z', '政': 'Z', '知': 'Z', '织': 'Z', '直': 'Z', '值': 'Z', '职': 'Z', '只': 'Z', '纸': 'Z', '指': 'Z', '至': 'Z', '志': 'Z', '制': 'Z', '治': 'Z', '中': 'Z', '终': 'Z', '众': 'Z', '重': 'Z', '州': 'Z', '周': 'Z', '主': 'Z', '住': 'Z', '助': 'Z', '筑': 'Z', '注': 'Z', '抓': 'Z', '专': 'Z', '转': 'Z', '装': 'Z', '壮': 'Z', '追': 'Z', '准': 'Z', '资': 'Z', '子': 'Z', '字': 'Z', '自': 'Z', '总': 'Z', '走': 'Z', '组': 'Z', '最': 'Z', '尊': 'Z', '作': 'Z', '坐': 'Z', '做': 'Z'
             };
 
-            // ---------- 获取拼音首字母 ----------
+            // ---------- 工具函数 ----------
             function getPinyinFirstLetter(char) {
-                // 如果是英文字母，直接返回大写
                 if (/[a-zA-Z]/.test(char)) {
                     return char.toUpperCase();
                 }
-                // 如果是数字，返回 '0'
                 if (/[0-9]/.test(char)) {
                     return '0';
                 }
-                // 如果是中文，从映射表获取
                 if (/[\u4e00-\u9fa5]/.test(char)) {
-                    return PINYIN_MAP[char] || 'Z'; // 未收录的中文放到最后
+                    return PINYIN_MAP[char] || 'Z';
                 }
-                // 其他字符（符号等）
                 return '~';
             }
 
-            // ---------- 判断字符类别 ----------
             function getCharCategory(char) {
                 if (/[0-9]/.test(char)) return 'number';
                 if (/[a-zA-Z]/.test(char)) return 'english';
@@ -869,40 +861,22 @@
                 return 'other';
             }
 
-            // ---------- 获取排序键 ----------
             function getSortKey(title) {
                 const firstChar = title[0] || '';
                 const category = getCharCategory(firstChar);
-
-                // 数字类别：category=0，使用数字本身作为键
                 if (category === 'number') {
-                    return {
-                        category: 0,
-                        key: firstChar
-                    };
+                    return { category: 0, key: firstChar };
                 }
-                // 英文类别：category=1，使用字母（小写）
                 if (category === 'english') {
-                    return {
-                        category: 1,
-                        key: firstChar.toLowerCase()
-                    };
+                    return { category: 1, key: firstChar.toLowerCase() };
                 }
-                // 中文类别：category=2，使用拼音首字母
                 if (category === 'chinese') {
-                    return {
-                        category: 2,
-                        key: getPinyinFirstLetter(firstChar)
-                    };
+                    return { category: 2, key: getPinyinFirstLetter(firstChar) };
                 }
-                // 其他字符：category=3，排在最后
-                return {
-                    category: 3,
-                    key: firstChar
-                };
+                return { category: 3, key: firstChar };
             }
 
-            // ---------- 解析 [标题](链接) 格式 ----------
+            // ---------- 解析 [标题](链接) ----------
             function parsePageInput(input) {
                 const match = input.match(/\[([^\]]+)\]\(([^)]+)\)/);
                 if (match) {
@@ -1125,7 +1099,7 @@
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(pages));
             }
 
-            // ---------- 排序函数（核心：数字 → 英文 → 中文，中文按拼音首字母） ----------
+            // ---------- 排序 ----------
             function sortPages(order) {
                 const direction = order || sortOrder;
                 pages.sort((a, b) => {
@@ -1135,16 +1109,13 @@
                     const keyA = getSortKey(titleA);
                     const keyB = getSortKey(titleB);
 
-                    // 先按类别排序（数字 → 英文 → 中文 → 其他）
                     if (keyA.category !== keyB.category) {
                         return direction === 'asc' ? keyA.category - keyB.category : keyB.category - keyA.category;
                     }
 
-                    // 同一类别内按排序键比较
                     if (keyA.key < keyB.key) return direction === 'asc' ? -1 : 1;
                     if (keyA.key > keyB.key) return direction === 'asc' ? 1 : -1;
 
-                    // 如果排序键相同，按原始标题比较（确保稳定排序）
                     if (titleA < titleB) return direction === 'asc' ? -1 : 1;
                     if (titleA > titleB) return direction === 'asc' ? 1 : -1;
                     return 0;
@@ -1229,12 +1200,18 @@
                 return div.innerHTML;
             }
 
-            // ---------- 编辑功能 ----------
+            // ---------- 编辑功能（已修复：不再对标题进行 encodeURIComponent） ----------
             function openEditModal(index) {
                 editingIndex = index;
                 const item = pages[index];
+                // 直接显示原始标题，不进行任何编码
                 editTitleDisplay.textContent = item.title;
-                editPageInput.value = item.url ? `[${item.title}](${item.url})` : item.title;
+                // 编辑框中显示 [标题](链接) 格式
+                if (item.url) {
+                    editPageInput.value = `[${item.title}](${item.url})`;
+                } else {
+                    editPageInput.value = item.title;
+                }
                 editNoteInput.value = item.note || '';
                 editModal.classList.remove('hidden');
                 setTimeout(() => editPageInput.focus(), 100);
@@ -1259,6 +1236,7 @@
                     return;
                 }
 
+                // 解析输入，直接使用原始文本，不进行任何编码转换
                 const parsed = parsePageInput(raw);
                 if (!parsed.title) {
                     alert('请正确填写格式：[标题](链接)');
@@ -1266,6 +1244,7 @@
                     return;
                 }
 
+                // 直接保存原始文本，不进行 encodeURIComponent
                 pages[editingIndex].title = parsed.title;
                 pages[editingIndex].url = parsed.url;
                 pages[editingIndex].note = editNoteInput.value.trim();
@@ -1295,6 +1274,7 @@
                     return;
                 }
 
+                // 直接保存原始文本
                 pages.push({ title: parsed.title, url: parsed.url, note: note });
                 applySortAndRender();
 

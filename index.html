@@ -680,7 +680,7 @@
                     <div class="hint">格式：[标题](链接)，例如 [GitHub](https://github.com)</div>
                 </div>
                 <div class="form-group full-width">
-                    <label for="noteInput">Note (选填)</label>
+                    <label for="noteInput">Note</label>
                     <input type="text" id="noteInput" placeholder="可留空，后续可编辑补充">
                 </div>
                 <button class="btn-primary" id="addBtn">添加</button>
@@ -828,71 +828,62 @@
             let toastTimer = null;
 
             // ============================================================
-            //  工具函数
+            //  排序工具函数
             // ============================================================
-            function getFirstLetter(text) {
-                if (!text) return '';
-                const char = text[0];
-                // 数字
-                if (/[0-9]/.test(char)) return '0';
-                // 英文字母
-                if (/[a-zA-Z]/.test(char)) return char.toLowerCase();
-                // 中文字符 - 使用 pinyin-pro 获取拼音首字母
-                if (/[\u4e00-\u9fa5]/.test(char)) {
-                    try {
-                        if (typeof window.pinyinPro !== 'undefined') {
-                            const result = window.pinyinPro.pinyin(char, { pattern: 'first' });
-                            return result[0]?.toLowerCase() || 'z';
-                        }
-                        if (typeof pinyin !== 'undefined') {
-                            const result = pinyin(char, { pattern: 'first' });
-                            return result[0]?.toLowerCase() || 'z';
-                        }
-                        return 'z';
-                    } catch (e) {
-                        console.warn('获取拼音失败:', char, e);
-                        return 'z';
-                    }
-                }
-                // 其他字符
-                return '~';
+            // 显式使用拼音校对规则：中文标题按拼音首字母及后续完整拼音排序。
+            // numeric: true 使 Page2 排在 Page10 前；ignorePunctuation 减少标点对主排序的干扰。
+            const pinyinCollator = new Intl.Collator('zh-CN-u-co-pinyin', {
+                usage: 'sort',
+                sensitivity: 'base',
+                numeric: true,
+                ignorePunctuation: true
+            });
+            const generalCollator = new Intl.Collator('zh-CN', {
+                usage: 'sort',
+                sensitivity: 'base',
+                numeric: true,
+                ignorePunctuation: true
+            });
+            const strokeCollator = new Intl.Collator('zh-CN-u-co-stroke', {
+                usage: 'sort',
+                sensitivity: 'variant',
+                numeric: true
+            });
+
+            function normalizeSortText(value) {
+                return typeof value === 'string'
+                    ? value.normalize('NFKC').trim()
+                    : '';
             }
 
-            function getCharCategory(char) {
-                if (/[0-9]/.test(char)) return 'number';
-                if (/[a-zA-Z]/.test(char)) return 'english';
-                if (/[\u4e00-\u9fa5]/.test(char)) return 'chinese';
-                return 'other';
+            function startsWithChinese(text) {
+                const firstCharacter = Array.from(text)[0] || '';
+                return /^\p{Script=Han}$/u.test(firstCharacter);
             }
 
-            function getSortKey(title) {
-                const firstChar = title[0] || '';
-                const category = getCharCategory(firstChar);
+            function compareTitleText(titleA, titleB) {
+                const textA = normalizeSortText(titleA);
+                const textB = normalizeSortText(titleB);
 
-                if (category === 'number') {
-                    const match = title.match(/^(\d+)/);
-                    const num = match ? parseInt(match[1], 10) : 0;
-                    return {
-                        category: 0,
-                        key: String(num).padStart(10, '0')
-                    };
+                if (textA === textB) return 0;
+                if (!textA) return 1;
+                if (!textB) return -1;
+
+                const bothStartWithChinese = startsWithChinese(textA) && startsWithChinese(textB);
+                let result = bothStartWithChinese
+                    ? pinyinCollator.compare(textA, textB)
+                    : generalCollator.compare(textA, textB);
+
+                // 同音、大小写或全角/半角等在主比较中相等时，按笔画及原字符回退，
+                // 保证每次添加、编辑、重新加载后的顺序一致。
+                if (result === 0) {
+                    result = strokeCollator.compare(textA, textB);
                 }
-                if (category === 'english') {
-                    return {
-                        category: 1,
-                        key: firstChar.toLowerCase()
-                    };
+                if (result === 0) {
+                    result = textA < textB ? -1 : 1;
                 }
-                if (category === 'chinese') {
-                    return {
-                        category: 2,
-                        key: getFirstLetter(firstChar)
-                    };
-                }
-                return {
-                    category: 3,
-                    key: firstChar
-                };
+
+                return result;
             }
 
             // ============================================================
@@ -900,23 +891,10 @@
             // ============================================================
             function sortPages(order) {
                 const direction = order || sortOrder;
+                const multiplier = direction === 'asc' ? 1 : -1;
+
                 pages.sort((a, b) => {
-                    const titleA = a.title || '';
-                    const titleB = b.title || '';
-
-                    const keyA = getSortKey(titleA);
-                    const keyB = getSortKey(titleB);
-
-                    if (keyA.category !== keyB.category) {
-                        return direction === 'asc' ? keyA.category - keyB.category : keyB.category - keyA.category;
-                    }
-
-                    if (keyA.key < keyB.key) return direction === 'asc' ? -1 : 1;
-                    if (keyA.key > keyB.key) return direction === 'asc' ? 1 : -1;
-
-                    if (titleA < titleB) return direction === 'asc' ? -1 : 1;
-                    if (titleA > titleB) return direction === 'asc' ? 1 : -1;
-                    return 0;
+                    return compareTitleText(a && a.title, b && b.title) * multiplier;
                 });
             }
 
@@ -1223,7 +1201,7 @@
             }
 
             function updateSortIcon() {
-                sortIcon.textContent = sortOrder === 'asc' ? '▼' : '▲';
+                sortIcon.textContent = sortOrder === 'asc' ? '▲' : '▼';
             }
 
             // ============================================================

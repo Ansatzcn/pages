@@ -357,12 +357,6 @@
             color: #334155;
         }
 
-        .footer-actions {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: 1.2rem;
-            gap: 12px;
-        }
 
         /* 编辑弹窗 */
         .modal-overlay {
@@ -708,9 +702,6 @@
             </table>
         </div>
 
-        <div class="footer-actions">
-            <button class="btn-outline" id="clearAllBtn">清空全部</button>
-        </div>
     </div>
 
     <!-- 编辑弹窗 -->
@@ -797,7 +788,6 @@
             const addBtn = document.getElementById('addBtn');
             const tableBody = document.getElementById('tableBody');
             const countDisplay = document.getElementById('countDisplay');
-            const clearAllBtn = document.getElementById('clearAllBtn');
             const exportBtn = document.getElementById('exportBtn');
             const importBtn = document.getElementById('importBtn');
             const fileInput = document.getElementById('fileInput');
@@ -1351,23 +1341,6 @@
                 reader.readAsText(file);
             }
 
-            // ============================================================
-            //  清空全部
-            // ============================================================
-            function clearAll() {
-                if (pages.length === 0) {
-                    alert('列表已经是空的。');
-                    return;
-                }
-                if (confirm('确定要删除所有条目吗？此操作不可撤销！')) {
-                    pages = [];
-                    applySortAndRender();
-                    pageInput.focus();
-                    if (isConfigValid()) {
-                        syncToCloud(false);
-                    }
-                }
-            }
 
             // ============================================================
             //  Cloud Status
@@ -1459,8 +1432,6 @@
                     }
                 });
             });
-
-            clearAllBtn.addEventListener('click', clearAll);
             exportBtn.addEventListener('click', exportData);
             importBtn.addEventListener('click', function() { fileInput.click(); });
             fileInput.addEventListener('change', function(e) {

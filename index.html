@@ -612,6 +612,41 @@
             background: #e2e8f0;
         }
 
+        /* 回到顶部悬浮按钮 */
+        .back-to-top {
+            position: fixed;
+            right: 18px;
+            bottom: 24px;
+            z-index: 900;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 0.45rem 0.75rem;
+            border: 1px solid rgba(148, 163, 184, 0.65);
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.82);
+            color: #64748b;
+            font-family: inherit;
+            font-size: 0.78rem;
+            line-height: 1;
+            cursor: pointer;
+            opacity: 0.72;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08);
+            backdrop-filter: blur(6px);
+            transition: opacity 0.2s, background 0.2s, color 0.2s, transform 0.2s;
+        }
+        .back-to-top:hover,
+        .back-to-top:focus-visible {
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.98);
+            color: #334155;
+            transform: translateY(-2px);
+            outline: none;
+        }
+        .back-to-top .back-to-top-icon {
+            font-size: 0.9rem;
+        }
+
         @media (max-width: 700px) {
             .container {
                 padding: 1.2rem;
@@ -638,6 +673,12 @@
             }
             .config-box {
                 padding: 1.5rem;
+            }
+            .back-to-top {
+                right: 12px;
+                bottom: 16px;
+                padding: 0.42rem 0.65rem;
+                font-size: 0.74rem;
             }
         }
     </style>
@@ -759,6 +800,12 @@
         </div>
     </div>
 
+    <!-- 回到顶部 -->
+    <button class="back-to-top" id="backToTopBtn" type="button" title="回到顶部" aria-label="回到顶部">
+        <span class="back-to-top-icon" aria-hidden="true">↑</span>
+        <span>回到顶部</span>
+    </button>
+
     <!-- Toast 消息 -->
     <div class="toast hidden" id="toast"></div>
 
@@ -797,6 +844,7 @@
             const statusDot = document.getElementById('statusDot');
             const statusText = document.getElementById('statusText');
             const configBtn = document.getElementById('configBtn');
+            const backToTopBtn = document.getElementById('backToTopBtn');
 
             const editModal = document.getElementById('editModal');
             const editTitleDisplay = document.getElementById('editTitleDisplay');
@@ -1451,6 +1499,12 @@
             });
 
             configBtn.addEventListener('click', openConfigModal);
+            backToTopBtn.addEventListener('click', function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
             configCancelBtn.addEventListener('click', closeConfigModal);
             configSaveBtn.addEventListener('click', saveConfigAndConnect);
 

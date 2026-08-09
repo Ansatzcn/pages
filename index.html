@@ -281,6 +281,7 @@
         }
         .page-table .col-title {
             min-width: 200px;
+            vertical-align: top;
         }
         .page-table .col-title a {
             color: #2563eb;
@@ -290,9 +291,14 @@
         .page-table .col-title a:hover {
             text-decoration: underline;
         }
-        .page-table .col-note {
-            color: #475569;
-            min-width: 160px;
+        .page-table .title-note {
+            margin-top: 0.28rem;
+            color: #64748b;
+            font-size: 0.86rem;
+            font-weight: 400;
+            line-height: 1.45;
+            white-space: normal;
+            overflow-wrap: anywhere;
         }
         .page-table .col-action {
             text-align: center;
@@ -799,13 +805,12 @@
                 <thead>
                     <tr>
                         <th class="sortable" id="sortTitleHead">标题 <span class="sort-icon" id="sortIcon">▼</span></th>
-                        <th>备注</th>
                         <th class="col-action">操作</th>
                     </tr>
                 </thead>
                 <tbody id="tableBody">
                     <tr class="empty-row">
-                        <td colspan="3">加载中...</td>
+                        <td colspan="2">加载中...</td>
                     </tr>
                 </tbody>
             </table>
@@ -1308,7 +1313,7 @@
                 countDisplay.textContent = pages.length;
 
                 if (pages.length === 0) {
-                    tableBody.innerHTML = `<tr class="empty-row"><td colspan="3">列表为空，添加一个吧！</td></tr>`;
+                    tableBody.innerHTML = `<tr class="empty-row"><td colspan="2">列表为空，添加一个吧！</td></tr>`;
                     return;
                 }
 
@@ -1318,10 +1323,15 @@
                     const url = escapeHtml(item.url || '');
                     const note = escapeHtml(item.note || '');
                     const displayHtml = url ? `<a href="${url}" target="_blank">${title}</a>` : title;
+                    const noteHtml = note
+                        ? `<div class="title-note">${note}</div>`
+                        : '';
                     html += `
                         <tr data-index="${index}">
-                            <td class="col-title">${displayHtml}</td>
-                            <td class="col-note">${note}</td>
+                            <td class="col-title">
+                                ${displayHtml}
+                                ${noteHtml}
+                            </td>
                             <td class="col-action">
                                 <button class="action-btn edit-btn" data-index="${index}" title="编辑">编辑</button>
                                 <button class="action-btn delete-btn" data-index="${index}" title="删除">删除</button>

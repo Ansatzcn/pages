@@ -291,7 +291,8 @@
         .page-table .col-title a:hover {
             text-decoration: underline;
         }
-        .page-table .title-note {
+        .page-table .title-note,
+        .page-table .title-remark {
             margin-top: 0.28rem;
             color: #64748b;
             font-size: 0.86rem;
@@ -785,19 +786,23 @@
             <h2>添加</h2>
             <div class="form-grid">
                 <div class="form-group full-width">
-                    <label for="pageInput">Page *</label>
+                    <label for="pageInput">标题</label>
                     <input type="text" id="pageInput" autofocus>
                 </div>
                 <div class="form-group full-width">
-                    <label for="noteInput">Note</label>
+                    <label for="noteInput">提要</label>
                     <input type="text" id="noteInput">
+                </div>
+                <div class="form-group full-width">
+                    <label for="remarkInput">备注</label>
+                    <input type="text" id="remarkInput">
                 </div>
                 <button class="btn-primary" id="addBtn">添加</button>
             </div>
         </div>
 
         <div class="list-header">
-            <h2>List</h2>
+            <h2>总表</h2>
             <span class="badge" id="countDisplay">0</span>
         </div>
         <div class="table-wrapper">
@@ -822,15 +827,19 @@
     <div class="modal-overlay hidden" id="editModal">
         <div class="modal-box">
             <h3>编辑条目</h3>
-            <div class="modal-sub" id="editModalTitle">Page：<span id="editTitleDisplay"></span></div>
+            <div class="modal-sub" id="editModalTitle">标题：<span id="editTitleDisplay"></span></div>
             <div class="form-group">
-                <label for="editPageInput">Page</label>
+                <label for="editPageInput">标题</label>
                 <input type="text" id="editPageInput" placeholder="[标题](链接)">
                 <div class="hint">格式：[标题](链接)</div>
             </div>
             <div class="form-group">
-                <label for="editNoteInput">备注</label>
-                <input type="text" id="editNoteInput" placeholder="请输入备注">
+                <label for="editNoteInput">提要</label>
+                <input type="text" id="editNoteInput" placeholder="请输入提要">
+            </div>
+            <div class="form-group">
+                <label for="editRemarkInput">备注</label>
+                <input type="text" id="editRemarkInput" placeholder="请输入备注">
             </div>
             <div class="modal-actions">
                 <button class="btn-modal cancel" id="editCancelBtn">取消</button>
@@ -919,6 +928,7 @@
             // DOM 引用
             const pageInput = document.getElementById('pageInput');
             const noteInput = document.getElementById('noteInput');
+            const remarkInput = document.getElementById('remarkInput');
             const addBtn = document.getElementById('addBtn');
             const tableBody = document.getElementById('tableBody');
             const countDisplay = document.getElementById('countDisplay');
@@ -938,6 +948,7 @@
             const editTitleDisplay = document.getElementById('editTitleDisplay');
             const editPageInput = document.getElementById('editPageInput');
             const editNoteInput = document.getElementById('editNoteInput');
+            const editRemarkInput = document.getElementById('editRemarkInput');
             const editCancelBtn = document.getElementById('editCancelBtn');
             const editSaveBtn = document.getElementById('editSaveBtn');
 
@@ -1322,15 +1333,20 @@
                     const title = escapeHtml(item.title || '');
                     const url = escapeHtml(item.url || '');
                     const note = escapeHtml(item.note || '');
+                    const remark = escapeHtml(item.remark || '');
                     const displayHtml = url ? `<a href="${url}" target="_blank">${title}</a>` : title;
                     const noteHtml = note
                         ? `<div class="title-note">${note}</div>`
+                        : '';
+                    const remarkHtml = remark
+                        ? `<div class="title-remark">${remark}</div>`
                         : '';
                     html += `
                         <tr data-index="${index}">
                             <td class="col-title">
                                 ${displayHtml}
                                 ${noteHtml}
+                                ${remarkHtml}
                             </td>
                             <td class="col-action">
                                 <button class="action-btn edit-btn" data-index="${index}" title="编辑">编辑</button>
@@ -1391,6 +1407,7 @@
                     editPageInput.value = item.title;
                 }
                 editNoteInput.value = item.note || '';
+                editRemarkInput.value = item.remark || '';
                 editModal.classList.remove('hidden');
                 setTimeout(() => editPageInput.focus(), 100);
             }
@@ -1424,6 +1441,7 @@
                 pages[editingIndex].title = parsed.title;
                 pages[editingIndex].url = parsed.url;
                 pages[editingIndex].note = editNoteInput.value.trim();
+                pages[editingIndex].remark = editRemarkInput.value.trim();
 
                 closeEditModal();
                 applySortAndRender();
@@ -1438,9 +1456,10 @@
             function addPage() {
                 const raw = pageInput.value.trim();
                 const note = noteInput.value.trim();
+                const remark = remarkInput.value.trim();
 
                 if (!raw) {
-                    alert('请填写 "Page" 字段。');
+                    alert('请填写“标题”字段。');
                     pageInput.focus();
                     return;
                 }
@@ -1452,7 +1471,7 @@
                     return;
                 }
 
-                pages.push({ title: parsed.title, url: parsed.url, note: note });
+                pages.push({ title: parsed.title, url: parsed.url, note: note, remark: remark });
                 applySortAndRender();
 
                 if (isConfigValid()) {
@@ -1461,6 +1480,7 @@
 
                 pageInput.value = '';
                 noteInput.value = '';
+                remarkInput.value = '';
                 pageInput.focus();
             }
 

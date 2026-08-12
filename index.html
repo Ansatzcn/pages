@@ -1705,14 +1705,6 @@
             loadConfig();
             loadFromCloud();
 
-            document.addEventListener('click', function(e) {
-                const target = e.target;
-                if (target.closest('.container') === null) return;
-                if (!target.closest('input') && !target.closest('textarea') && !target.closest('button') && !target
-                    .closest('th') && !target.closest('.modal-box') && !target.closest('.config-box')) {
-                    pageInput.focus();
-                }
-            });
         })();
     </script>
 </body>

@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pages</title>
-    <script src="https://cdn.jsdelivr.net/npm/pinyin-pro@3.23.0/dist/index.min.js">
-    </script>
     <style>
         /* 完整的样式代码 */
         * {
@@ -916,6 +914,7 @@
             const TOKEN_LOCAL_KEY = 'pages_github_token_local';
             const TOKEN_SESSION_KEY = 'pages_github_token_session';
             const STORAGE_KEY = 'pages_data';
+            const FETCH_TIMEOUT_MS = 15000;
 
             // 全局状态
             let pages = [];
@@ -1139,6 +1138,25 @@
             // ============================================================
             //  GitHub API
             // ============================================================
+            async function fetchWithTimeout(url, options = {}) {
+                const controller = new AbortController();
+                const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+
+                try {
+                    return await fetch(url, {
+                        ...options,
+                        signal: controller.signal
+                    });
+                } catch (error) {
+                    if (error && error.name === 'AbortError') {
+                        throw new Error('网络请求超时，请检查连接后重试');
+                    }
+                    throw error;
+                } finally {
+                    clearTimeout(timer);
+                }
+            }
+
             async function githubApi(method, endpoint, body = null) {
                 const url = `https://api.github.com/repos/${config.owner}/${config.repo}/${endpoint}`;
                 const headers = {
@@ -1150,7 +1168,7 @@
                 if (body) {
                     options.body = JSON.stringify(body);
                 }
-                const response = await fetch(url, options);
+                const response = await fetchWithTimeout(url, options);
                 if (!response.ok) {
                     const error = await response.json().catch(() => ({}));
                     throw new Error(error.message || `HTTP ${response.status}`);
@@ -1204,7 +1222,7 @@
                 try {
                     let sha = null;
                     try {
-                        const res = await fetch(
+                        const res = await fetchWithTimeout(
                             `https://api.github.com/repos/${config.owner}/${config.repo}/contents/${config.file}`, {
                                 headers: { 'Authorization': `token ${config.token}` }
                             });
@@ -1221,7 +1239,7 @@
                     };
                     if (sha) body.sha = sha;
 
-                    const res = await fetch(
+                    const res = await fetchWithTimeout(
                         `https://api.github.com/repos/${config.owner}/${config.repo}/contents/${config.file}`, {
                             method: 'PUT',
                             headers: {
@@ -1372,7 +1390,6 @@
                             }
                         }
                     });
-                });
                 });
             }
 
@@ -1632,7 +1649,7 @@
             // ============================================================
             addBtn.addEventListener('click', addPage);
 
-            document.querySelectorAll('.form-group input, .form-group textarea').forEach(input => {
+            document.querySelectorAll('.add-section .form-group input, .add-section .form-group textarea').forEach(input => {
                 input.addEventListener('keydown', function(e) {
                     if (e.key === 'Enter') {
                         if (this.tagName === 'TEXTAREA') {
@@ -1711,7 +1728,13 @@
             //  初始化
             // ============================================================
             loadConfig();
-            loadFromCloud();
+            loadFromLocal();
+
+            if (isConfigValid()) {
+                loadFromCloud();
+            } else {
+                setCloudStatus('offline', '未配置');
+            }
 
         })();
     </script>

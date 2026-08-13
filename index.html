@@ -280,9 +280,17 @@
         .page-table .col-title {
             min-width: 200px;
             vertical-align: top;
-            position: relative;
-            padding-right: 4.5rem;
-            padding-bottom: 2rem;
+        }
+        .page-table .title-row {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 1rem;
+            width: 100%;
+        }
+        .page-table .title-main {
+            min-width: 0;
+            overflow-wrap: anywhere;
         }
         .page-table .col-title a {
             color: #2563eb;
@@ -303,16 +311,15 @@
             overflow-wrap: anywhere;
         }
         .page-table .edit-btn {
-            position: absolute;
-            right: 1rem;
-            bottom: 0.65rem;
+            flex: 0 0 auto;
+            margin: 0;
             padding: 0;
             border: none;
             background: transparent;
             color: #64748b;
             font-size: 0.8rem;
             font-weight: 500;
-            line-height: 1.4;
+            line-height: 1.5;
             text-decoration: underline;
             text-underline-offset: 2px;
             cursor: pointer;
@@ -714,13 +721,8 @@
                 padding: 0.6rem 0.8rem;
                 font-size: 0.85rem;
             }
-            .page-table .col-title {
-                padding-right: 3.8rem;
-                padding-bottom: 1.9rem;
-            }
-            .page-table .edit-btn {
-                right: 0.8rem;
-                bottom: 0.55rem;
+            .page-table .title-row {
+                gap: 0.75rem;
             }
             .toolbar {
                 flex-direction: column;
@@ -1369,10 +1371,12 @@
                     html += `
                         <tr data-index="${index}">
                             <td class="col-title">
-                                ${displayHtml}
+                                <div class="title-row">
+                                    <div class="title-main">${displayHtml}</div>
+                                    <button class="edit-btn" data-index="${index}" title="编辑" type="button">编辑</button>
+                                </div>
                                 ${noteHtml}
                                 ${remarkHtml}
-                                <button class="edit-btn" data-index="${index}" title="编辑" type="button">编辑</button>
                             </td>
                         </tr>
                     `;

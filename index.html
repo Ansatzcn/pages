@@ -282,6 +282,9 @@
         .page-table .col-title {
             min-width: 200px;
             vertical-align: top;
+            position: relative;
+            padding-right: 4.5rem;
+            padding-bottom: 2rem;
         }
         .page-table .col-title a {
             color: #2563eb;
@@ -301,38 +304,26 @@
             white-space: normal;
             overflow-wrap: anywhere;
         }
-        .page-table .col-action {
-            text-align: center;
-            white-space: nowrap;
-            width: 110px;
-        }
-        .page-table .action-btn {
-            background: none;
+        .page-table .edit-btn {
+            position: absolute;
+            right: 1rem;
+            bottom: 0.65rem;
+            padding: 0;
             border: none;
-            padding: 4px 10px;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: 0.15s;
-            font-size: 0.85rem;
+            background: transparent;
+            color: #64748b;
+            font-size: 0.8rem;
             font-weight: 500;
             line-height: 1.4;
-            margin: 0 2px;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+            cursor: pointer;
+            transition: color 0.15s;
         }
-        .page-table .action-btn.edit-btn {
+        .page-table .edit-btn:hover,
+        .page-table .edit-btn:focus-visible {
             color: #1e3a8a;
-            background: #dbeafe;
-        }
-        .page-table .action-btn.edit-btn:hover {
-            background: #bfdbfe;
-            transform: scale(1.05);
-        }
-        .page-table .action-btn.delete-btn {
-            color: #991b1b;
-            background: #fee2e2;
-        }
-        .page-table .action-btn.delete-btn:hover {
-            background: #fecaca;
-            transform: scale(1.05);
+            outline: none;
         }
         .empty-row td {
             padding: 2.5rem 1rem;
@@ -462,6 +453,13 @@
         }
         .modal-actions .btn-modal.save:hover {
             background: #0f172a;
+        }
+        .modal-actions .btn-modal.delete {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        .modal-actions .btn-modal.delete:hover {
+            background: #fecaca;
         }
 
         @keyframes fadeIn {
@@ -718,6 +716,14 @@
                 padding: 0.6rem 0.8rem;
                 font-size: 0.85rem;
             }
+            .page-table .col-title {
+                padding-right: 3.8rem;
+                padding-bottom: 1.9rem;
+            }
+            .page-table .edit-btn {
+                right: 0.8rem;
+                bottom: 0.55rem;
+            }
             .toolbar {
                 flex-direction: column;
                 align-items: stretch;
@@ -810,12 +816,11 @@
                 <thead>
                     <tr>
                         <th class="sortable" id="sortTitleHead">标题 <span class="sort-icon" id="sortIcon">▼</span></th>
-                        <th class="col-action">操作</th>
                     </tr>
                 </thead>
                 <tbody id="tableBody">
                     <tr class="empty-row">
-                        <td colspan="2">加载中...</td>
+                        <td colspan="1">加载中...</td>
                     </tr>
                 </tbody>
             </table>
@@ -842,8 +847,9 @@
                 <input type="text" id="editRemarkInput" placeholder="请输入备注">
             </div>
             <div class="modal-actions">
-                <button class="btn-modal cancel" id="editCancelBtn">取消</button>
-                <button class="btn-modal save" id="editSaveBtn">保存</button>
+                <button class="btn-modal delete" id="editDeleteBtn" type="button">删除</button>
+                <button class="btn-modal cancel" id="editCancelBtn" type="button">取消</button>
+                <button class="btn-modal save" id="editSaveBtn" type="button">保存</button>
             </div>
         </div>
     </div>
@@ -949,6 +955,7 @@
             const editPageInput = document.getElementById('editPageInput');
             const editNoteInput = document.getElementById('editNoteInput');
             const editRemarkInput = document.getElementById('editRemarkInput');
+            const editDeleteBtn = document.getElementById('editDeleteBtn');
             const editCancelBtn = document.getElementById('editCancelBtn');
             const editSaveBtn = document.getElementById('editSaveBtn');
 
@@ -1324,7 +1331,7 @@
                 countDisplay.textContent = pages.length;
 
                 if (pages.length === 0) {
-                    tableBody.innerHTML = `<tr class="empty-row"><td colspan="2">列表为空，添加一个吧！</td></tr>`;
+                    tableBody.innerHTML = `<tr class="empty-row"><td colspan="1">列表为空，添加一个吧！</td></tr>`;
                     return;
                 }
 
@@ -1347,10 +1354,7 @@
                                 ${displayHtml}
                                 ${noteHtml}
                                 ${remarkHtml}
-                            </td>
-                            <td class="col-action">
-                                <button class="action-btn edit-btn" data-index="${index}" title="编辑">编辑</button>
-                                <button class="action-btn delete-btn" data-index="${index}" title="删除">删除</button>
+                                <button class="edit-btn" data-index="${index}" title="编辑" type="button">编辑</button>
                             </td>
                         </tr>
                     `;
@@ -1369,24 +1373,6 @@
                         }
                     });
                 });
-
-                document.querySelectorAll('#tableBody .delete-btn').forEach(btn => {
-                    btn.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        const index = this.getAttribute('data-index');
-                        if (index !== null) {
-                            const idx = parseInt(index, 10);
-                            if (!isNaN(idx) && idx >= 0 && idx < pages.length) {
-                                if (confirm(`确定要删除 "${pages[idx].title}" 吗？`)) {
-                                    pages.splice(idx, 1);
-                                    applySortAndRender();
-                                    if (isConfigValid()) {
-                                        syncToCloud(false);
-                                    }
-                                }
-                            }
-                        }
-                    });
                 });
             }
 
@@ -1445,6 +1431,27 @@
 
                 closeEditModal();
                 applySortAndRender();
+                if (isConfigValid()) {
+                    syncToCloud(false);
+                }
+            }
+
+            function deleteEditItem() {
+                if (editingIndex === null || editingIndex < 0 || editingIndex >= pages.length) {
+                    alert('删除出错，请重试。');
+                    closeEditModal();
+                    return;
+                }
+
+                const item = pages[editingIndex];
+                if (!confirm(`确定要删除 "${item.title}" 吗？`)) {
+                    return;
+                }
+
+                pages.splice(editingIndex, 1);
+                closeEditModal();
+                applySortAndRender();
+
                 if (isConfigValid()) {
                     syncToCloud(false);
                 }
@@ -1675,6 +1682,7 @@
                 }
             });
 
+            editDeleteBtn.addEventListener('click', deleteEditItem);
             editCancelBtn.addEventListener('click', closeEditModal);
             editSaveBtn.addEventListener('click', saveEdit);
             editModal.addEventListener('click', function(e) {

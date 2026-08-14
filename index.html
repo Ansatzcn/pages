@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pages</title>
+    <script src="https://cdn.jsdelivr.net/npm/pinyin-pro@3.23.0/dist/index.min.js">
+    </script>
     <style>
         /* 完整的样式代码 */
         * {
@@ -281,14 +283,6 @@
             min-width: 200px;
             vertical-align: top;
         }
-        .page-table .title-row {
-            display: block;
-            width: 100%;
-        }
-        .page-table .title-main {
-            min-width: 0;
-            overflow-wrap: anywhere;
-        }
         .page-table .col-title a {
             color: #2563eb;
             text-decoration: none;
@@ -307,39 +301,38 @@
             white-space: normal;
             overflow-wrap: anywhere;
         }
-        .page-table .title-bottom-row {
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
-            gap: 1rem;
-            width: 100%;
-            min-height: 1.25rem;
-            margin-top: 0.28rem;
+        .page-table .col-action {
+            text-align: center;
+            white-space: nowrap;
+            width: 110px;
         }
-        .page-table .title-bottom-row .title-remark {
-            flex: 1 1 auto;
-            min-width: 0;
-            margin-top: 0;
-        }
-        .page-table .edit-btn {
-            flex: 0 0 auto;
-            margin: 0;
-            padding: 0;
+        .page-table .action-btn {
+            background: none;
             border: none;
-            background: transparent;
-            color: #64748b;
-            font-size: 0.8rem;
-            font-weight: 500;
-            line-height: 1.5;
-            text-decoration: underline;
-            text-underline-offset: 2px;
+            padding: 4px 10px;
+            border-radius: 30px;
             cursor: pointer;
-            transition: color 0.15s;
+            transition: 0.15s;
+            font-size: 0.85rem;
+            font-weight: 500;
+            line-height: 1.4;
+            margin: 0 2px;
         }
-        .page-table .edit-btn:hover,
-        .page-table .edit-btn:focus-visible {
+        .page-table .action-btn.edit-btn {
             color: #1e3a8a;
-            outline: none;
+            background: #dbeafe;
+        }
+        .page-table .action-btn.edit-btn:hover {
+            background: #bfdbfe;
+            transform: scale(1.05);
+        }
+        .page-table .action-btn.delete-btn {
+            color: #991b1b;
+            background: #fee2e2;
+        }
+        .page-table .action-btn.delete-btn:hover {
+            background: #fecaca;
+            transform: scale(1.05);
         }
         .empty-row td {
             padding: 2.5rem 1rem;
@@ -469,14 +462,6 @@
         }
         .modal-actions .btn-modal.save:hover {
             background: #0f172a;
-        }
-        .modal-actions .btn-modal.delete {
-            margin-right: auto;
-            background: #fee2e2;
-            color: #991b1b;
-        }
-        .modal-actions .btn-modal.delete:hover {
-            background: #fecaca;
         }
 
         @keyframes fadeIn {
@@ -733,9 +718,6 @@
                 padding: 0.6rem 0.8rem;
                 font-size: 0.85rem;
             }
-            .page-table .title-bottom-row {
-                gap: 0.75rem;
-            }
             .toolbar {
                 flex-direction: column;
                 align-items: stretch;
@@ -828,11 +810,12 @@
                 <thead>
                     <tr>
                         <th class="sortable" id="sortTitleHead">标题 <span class="sort-icon" id="sortIcon">▼</span></th>
+                        <th class="col-action">操作</th>
                     </tr>
                 </thead>
                 <tbody id="tableBody">
                     <tr class="empty-row">
-                        <td colspan="1">加载中...</td>
+                        <td colspan="2">加载中...</td>
                     </tr>
                 </tbody>
             </table>
@@ -859,9 +842,8 @@
                 <input type="text" id="editRemarkInput" placeholder="请输入备注">
             </div>
             <div class="modal-actions">
-                <button class="btn-modal delete" id="editDeleteBtn" type="button">删除</button>
-                <button class="btn-modal cancel" id="editCancelBtn" type="button">取消</button>
-                <button class="btn-modal save" id="editSaveBtn" type="button">保存</button>
+                <button class="btn-modal cancel" id="editCancelBtn">取消</button>
+                <button class="btn-modal save" id="editSaveBtn">保存</button>
             </div>
         </div>
     </div>
@@ -928,7 +910,6 @@
             const TOKEN_LOCAL_KEY = 'pages_github_token_local';
             const TOKEN_SESSION_KEY = 'pages_github_token_session';
             const STORAGE_KEY = 'pages_data';
-            const FETCH_TIMEOUT_MS = 15000;
 
             // 全局状态
             let pages = [];
@@ -968,7 +949,6 @@
             const editPageInput = document.getElementById('editPageInput');
             const editNoteInput = document.getElementById('editNoteInput');
             const editRemarkInput = document.getElementById('editRemarkInput');
-            const editDeleteBtn = document.getElementById('editDeleteBtn');
             const editCancelBtn = document.getElementById('editCancelBtn');
             const editSaveBtn = document.getElementById('editSaveBtn');
 
@@ -1018,105 +998,51 @@
                 return /^\p{Script=Han}$/u.test(firstCharacter);
             }
 
-            function startsWithLatin(text) {
-                return /^[A-Za-z]/.test(text);
-            }
+            function compareTitleText(titleA, titleB) {
+                const textA = normalizeSortText(titleA);
+                const textB = normalizeSortText(titleB);
 
-            // 识别标题开头的 YYYY-MM-DD，并且只把真实存在的日期归入“日期”组。
-            // 日期后可以直接结束，也可以继续跟空格、文字、标点等内容。
-            function extractDateKey(text) {
-                const match = text.match(/^(\d{4})-(\d{2})-(\d{2})(?=$|\D)/);
-                if (!match) return null;
+                if (textA === textB) return 0;
+                if (!textA) return 1;
+                if (!textB) return -1;
 
-                const year = Number(match[1]);
-                const month = Number(match[2]);
-                const day = Number(match[3]);
-                const date = new Date(Date.UTC(year, month - 1, day));
-                if (
-                    date.getUTCFullYear() !== year ||
-                    date.getUTCMonth() !== month - 1 ||
-                    date.getUTCDate() !== day
-                ) {
-                    return null;
+                const bothStartWithChinese = startsWithChinese(textA) && startsWithChinese(textB);
+                let result = bothStartWithChinese
+                    ? pinyinCollator.compare(textA, textB)
+                    : generalCollator.compare(textA, textB);
+
+                // 同音、大小写或全角/半角等在主比较中相等时，按笔画及原字符回退，
+                // 保证每次添加、编辑、重新加载后的顺序一致。
+                if (result === 0) {
+                    result = strokeCollator.compare(textA, textB);
+                }
+                if (result === 0) {
+                    result = textA < textB ? -1 : 1;
                 }
 
-                return year * 10000 + month * 100 + day;
-            }
-
-            // 识别普通“数字开头”的排序键；日期会在此之前被单独识别。
-            function extractLeadingNumber(text) {
-                const match = text.match(/^\d+(?:\.\d+)?/);
-                return match ? Number(match[0]) : null;
-            }
-
-            // 排序组固定为：日期 -> 汉字 -> 数字 -> 拉丁字母 -> 其他。
-            function getSortInfo(value) {
-                const text = normalizeSortText(value);
-                if (!text) return { group: 5, text, value: null };
-
-                const dateKey = extractDateKey(text);
-                if (dateKey !== null) return { group: 0, text, value: dateKey };
-
-                if (startsWithChinese(text)) return { group: 1, text, value: null };
-
-                const numberKey = extractLeadingNumber(text);
-                if (numberKey !== null) return { group: 2, text, value: numberKey };
-                if (startsWithLatin(text)) return { group: 3, text, value: null };
-                return { group: 4, text, value: null };
-            }
-
-            function compareSameGroup(infoA, infoB) {
-                let result = 0;
-
-                // 日期和数字都先按实际数值排序；数值相同时再按完整排序键稳定排序。
-                if (infoA.group === 0 || infoA.group === 2) {
-                    result = infoA.value - infoB.value;
-                    if (result !== 0) return result;
-                    result = generalCollator.compare(infoA.text, infoB.text);
-                } else if (infoA.group === 1) {
-                    // 汉字按拼音顺序；同音时用笔画和原字符兜底，保证顺序稳定。
-                    result = pinyinCollator.compare(infoA.text, infoB.text);
-                    if (result === 0) result = strokeCollator.compare(infoA.text, infoB.text);
-                } else {
-                    // 拉丁字母及“其他”分别在各自组内按字符顺序排列。
-                    result = generalCollator.compare(infoA.text, infoB.text);
-                }
-
-                if (result === 0 && infoA.text !== infoB.text) {
-                    result = infoA.text < infoB.text ? -1 : 1;
-                }
                 return result;
-            }
-
-            function compareTitleText(titleA, titleB, direction = 'asc') {
-                const infoA = getSortInfo(titleA);
-                const infoB = getSortInfo(titleB);
-
-                if (infoA.text === infoB.text) return 0;
-
-                // 无论升序还是降序，类型优先级都不变：日期始终排最前。
-                if (infoA.group !== infoB.group) return infoA.group - infoB.group;
-
-                const result = compareSameGroup(infoA, infoB);
-                return direction === 'desc' ? -result : result;
             }
 
             // ============================================================
             //  排序函数
-            //  优先使用备注作为排序键；备注为空时才使用标题。
-            //  排序键内部仍按：日期 -> 汉字 -> 数字 -> 拉丁字母 -> 其他。
             // ============================================================
-            function getPageSortText(item) {
-                if (!item || typeof item !== 'object') return '';
-                const remark = normalizeSortText(item.remark);
-                return remark || normalizeSortText(item.title);
-            }
-
             function sortPages(order) {
                 const direction = order || sortOrder;
-                pages.sort((a, b) =>
-                    compareTitleText(getPageSortText(a), getPageSortText(b), direction)
-                );
+                const multiplier = direction === 'asc' ? 1 : -1;
+
+                pages.sort((a, b) => {
+                    // 第一优先级固定按“备注是否有内容”分组：
+                    // 有备注的始终排在前面；无备注的始终排在后面。
+                    // 升序/降序只影响各组内部原有的标题排序，不改变两组的先后位置。
+                    const aHasRemark = Boolean(a && typeof a.remark === 'string' && a.remark.trim());
+                    const bHasRemark = Boolean(b && typeof b.remark === 'string' && b.remark.trim());
+
+                    if (aHasRemark !== bHasRemark) {
+                        return aHasRemark ? -1 : 1;
+                    }
+
+                    return compareTitleText(a && a.title, b && b.title) * multiplier;
+                });
             }
 
             // ============================================================
@@ -1216,25 +1142,6 @@
             // ============================================================
             //  GitHub API
             // ============================================================
-            async function fetchWithTimeout(url, options = {}) {
-                const controller = new AbortController();
-                const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
-
-                try {
-                    return await fetch(url, {
-                        ...options,
-                        signal: controller.signal
-                    });
-                } catch (error) {
-                    if (error && error.name === 'AbortError') {
-                        throw new Error('网络请求超时，请检查连接后重试');
-                    }
-                    throw error;
-                } finally {
-                    clearTimeout(timer);
-                }
-            }
-
             async function githubApi(method, endpoint, body = null) {
                 const url = `https://api.github.com/repos/${config.owner}/${config.repo}/${endpoint}`;
                 const headers = {
@@ -1246,7 +1153,7 @@
                 if (body) {
                     options.body = JSON.stringify(body);
                 }
-                const response = await fetchWithTimeout(url, options);
+                const response = await fetch(url, options);
                 if (!response.ok) {
                     const error = await response.json().catch(() => ({}));
                     throw new Error(error.message || `HTTP ${response.status}`);
@@ -1300,7 +1207,7 @@
                 try {
                     let sha = null;
                     try {
-                        const res = await fetchWithTimeout(
+                        const res = await fetch(
                             `https://api.github.com/repos/${config.owner}/${config.repo}/contents/${config.file}`, {
                                 headers: { 'Authorization': `token ${config.token}` }
                             });
@@ -1317,7 +1224,7 @@
                     };
                     if (sha) body.sha = sha;
 
-                    const res = await fetchWithTimeout(
+                    const res = await fetch(
                         `https://api.github.com/repos/${config.owner}/${config.repo}/contents/${config.file}`, {
                             method: 'PUT',
                             headers: {
@@ -1427,7 +1334,7 @@
                 countDisplay.textContent = pages.length;
 
                 if (pages.length === 0) {
-                    tableBody.innerHTML = `<tr class="empty-row"><td colspan="1">列表为空，添加一个吧！</td></tr>`;
+                    tableBody.innerHTML = `<tr class="empty-row"><td colspan="2">列表为空，添加一个吧！</td></tr>`;
                     return;
                 }
 
@@ -1441,18 +1348,19 @@
                     const noteHtml = note
                         ? `<div class="title-note">${note}</div>`
                         : '';
-                    const remarkHtml = `<div class="title-remark">${remark}</div>`;
+                    const remarkHtml = remark
+                        ? `<div class="title-remark">${remark}</div>`
+                        : '';
                     html += `
                         <tr data-index="${index}">
                             <td class="col-title">
-                                <div class="title-row">
-                                    <div class="title-main">${displayHtml}</div>
-                                </div>
+                                ${displayHtml}
                                 ${noteHtml}
-                                <div class="title-bottom-row">
-                                    ${remarkHtml}
-                                    <button class="edit-btn" data-index="${index}" title="编辑" type="button">编辑</button>
-                                </div>
+                                ${remarkHtml}
+                            </td>
+                            <td class="col-action">
+                                <button class="action-btn edit-btn" data-index="${index}" title="编辑">编辑</button>
+                                <button class="action-btn delete-btn" data-index="${index}" title="删除">删除</button>
                             </td>
                         </tr>
                     `;
@@ -1467,6 +1375,25 @@
                             const idx = parseInt(index, 10);
                             if (!isNaN(idx) && idx >= 0 && idx < pages.length) {
                                 openEditModal(idx);
+                            }
+                        }
+                    });
+                });
+
+                document.querySelectorAll('#tableBody .delete-btn').forEach(btn => {
+                    btn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const index = this.getAttribute('data-index');
+                        if (index !== null) {
+                            const idx = parseInt(index, 10);
+                            if (!isNaN(idx) && idx >= 0 && idx < pages.length) {
+                                if (confirm(`确定要删除 "${pages[idx].title}" 吗？`)) {
+                                    pages.splice(idx, 1);
+                                    applySortAndRender();
+                                    if (isConfigValid()) {
+                                        syncToCloud(false);
+                                    }
+                                }
                             }
                         }
                     });
@@ -1528,27 +1455,6 @@
 
                 closeEditModal();
                 applySortAndRender();
-                if (isConfigValid()) {
-                    syncToCloud(false);
-                }
-            }
-
-            function deleteEditItem() {
-                if (editingIndex === null || editingIndex < 0 || editingIndex >= pages.length) {
-                    alert('删除出错，请重试。');
-                    closeEditModal();
-                    return;
-                }
-
-                const item = pages[editingIndex];
-                if (!confirm(`确定要删除 "${item.title}" 吗？`)) {
-                    return;
-                }
-
-                pages.splice(editingIndex, 1);
-                closeEditModal();
-                applySortAndRender();
-
                 if (isConfigValid()) {
                     syncToCloud(false);
                 }
@@ -1729,7 +1635,7 @@
             // ============================================================
             addBtn.addEventListener('click', addPage);
 
-            document.querySelectorAll('.add-section .form-group input, .add-section .form-group textarea').forEach(input => {
+            document.querySelectorAll('.form-group input, .form-group textarea').forEach(input => {
                 input.addEventListener('keydown', function(e) {
                     if (e.key === 'Enter') {
                         if (this.tagName === 'TEXTAREA') {
@@ -1779,7 +1685,6 @@
                 }
             });
 
-            editDeleteBtn.addEventListener('click', deleteEditItem);
             editCancelBtn.addEventListener('click', closeEditModal);
             editSaveBtn.addEventListener('click', saveEdit);
             editModal.addEventListener('click', function(e) {
@@ -1808,13 +1713,7 @@
             //  初始化
             // ============================================================
             loadConfig();
-            loadFromLocal();
-
-            if (isConfigValid()) {
-                loadFromCloud();
-            } else {
-                setCloudStatus('offline', '未配置');
-            }
+            loadFromCloud();
 
         })();
     </script>

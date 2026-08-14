@@ -720,8 +720,57 @@
         }
 
         @media (max-width: 700px) {
+            body {
+                width: 100%;
+                max-width: 100%;
+                padding: 0.75rem 0.5rem;
+                overflow-x: hidden;
+            }
             .container {
+                width: 100%;
+                max-width: 100%;
+                min-width: 0;
                 padding: 1.2rem;
+            }
+            .table-wrapper {
+                width: 100%;
+                max-width: 100%;
+                min-width: 0;
+                overflow-x: hidden;
+            }
+            .page-table {
+                width: 100%;
+                max-width: 100%;
+                min-width: 0;
+                table-layout: fixed;
+            }
+            .page-table th,
+            .page-table td,
+            .page-table .col-title {
+                width: 100%;
+                max-width: 100%;
+                min-width: 0;
+            }
+            .page-table .col-title {
+                overflow-wrap: anywhere;
+                word-break: break-word;
+            }
+            .page-table .col-title > a {
+                display: inline;
+                max-width: 100%;
+                overflow-wrap: anywhere;
+                word-break: break-all;
+            }
+            .page-table .title-note,
+            .page-table .title-remark {
+                max-width: 100%;
+                overflow-wrap: anywhere;
+                word-break: break-word;
+            }
+            .page-table .title-footer {
+                width: 100%;
+                max-width: 100%;
+                min-width: 0;
             }
             .form-grid {
                 grid-template-columns: 1fr;

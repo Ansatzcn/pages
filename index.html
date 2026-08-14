@@ -301,38 +301,38 @@
             white-space: normal;
             overflow-wrap: anywhere;
         }
-        .page-table .col-action {
-            text-align: center;
-            white-space: nowrap;
-            width: 110px;
+        .page-table .title-footer {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-top: 0.32rem;
+            min-height: 1.5rem;
         }
-        .page-table .action-btn {
-            background: none;
+        .page-table .title-footer .title-remark {
+            flex: 1 1 auto;
+            min-width: 0;
+            margin-top: 0;
+        }
+        .page-table .row-edit-link {
+            flex: 0 0 auto;
+            align-self: flex-end;
             border: none;
-            padding: 4px 10px;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: 0.15s;
-            font-size: 0.85rem;
+            background: transparent;
+            color: #2563eb;
+            padding: 0;
+            font: inherit;
+            font-size: 0.86rem;
             font-weight: 500;
-            line-height: 1.4;
-            margin: 0 2px;
+            line-height: 1.45;
+            cursor: pointer;
+            text-decoration: none;
         }
-        .page-table .action-btn.edit-btn {
-            color: #1e3a8a;
-            background: #dbeafe;
-        }
-        .page-table .action-btn.edit-btn:hover {
-            background: #bfdbfe;
-            transform: scale(1.05);
-        }
-        .page-table .action-btn.delete-btn {
-            color: #991b1b;
-            background: #fee2e2;
-        }
-        .page-table .action-btn.delete-btn:hover {
-            background: #fecaca;
-            transform: scale(1.05);
+        .page-table .row-edit-link:hover,
+        .page-table .row-edit-link:focus-visible {
+            color: #1d4ed8;
+            text-decoration: underline;
+            outline: none;
         }
         .empty-row td {
             padding: 2.5rem 1rem;
@@ -437,8 +437,14 @@
         .modal-actions {
             display: flex;
             gap: 10px;
-            justify-content: flex-end;
+            justify-content: space-between;
+            align-items: center;
             margin-top: 1.2rem;
+        }
+        .modal-actions-right {
+            display: flex;
+            gap: 10px;
+            align-items: center;
         }
         .modal-actions .btn-modal {
             padding: 0.5rem 1.6rem;
@@ -462,6 +468,13 @@
         }
         .modal-actions .btn-modal.save:hover {
             background: #0f172a;
+        }
+        .modal-actions .btn-modal.delete {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        .modal-actions .btn-modal.delete:hover {
+            background: #fecaca;
         }
 
         @keyframes fadeIn {
@@ -809,13 +822,12 @@
             <table class="page-table" id="pageTable">
                 <thead>
                     <tr>
-                        <th class="sortable" id="sortTitleHead">标题 <span class="sort-icon" id="sortIcon">▼</span></th>
-                        <th class="col-action">操作</th>
+                        <th>标题</th>
                     </tr>
                 </thead>
                 <tbody id="tableBody">
                     <tr class="empty-row">
-                        <td colspan="2">加载中...</td>
+                        <td>加载中...</td>
                     </tr>
                 </tbody>
             </table>
@@ -842,8 +854,11 @@
                 <input type="text" id="editRemarkInput" placeholder="请输入备注">
             </div>
             <div class="modal-actions">
-                <button class="btn-modal cancel" id="editCancelBtn">取消</button>
-                <button class="btn-modal save" id="editSaveBtn">保存</button>
+                <button class="btn-modal delete" id="editDeleteBtn">删除</button>
+                <div class="modal-actions-right">
+                    <button class="btn-modal cancel" id="editCancelBtn">取消</button>
+                    <button class="btn-modal save" id="editSaveBtn">保存</button>
+                </div>
             </div>
         </div>
     </div>
@@ -913,7 +928,6 @@
 
             // 全局状态
             let pages = [];
-            let sortOrder = 'asc';
             let editingIndex = null;
             let isSyncing = false;
 
@@ -935,8 +949,6 @@
             const exportBtn = document.getElementById('exportBtn');
             const importBtn = document.getElementById('importBtn');
             const fileInput = document.getElementById('fileInput');
-            const sortTitleHead = document.getElementById('sortTitleHead');
-            const sortIcon = document.getElementById('sortIcon');
             const syncBtn = document.getElementById('syncBtn');
             const lastSyncTime = document.getElementById('lastSyncTime');
             const statusDot = document.getElementById('statusDot');
@@ -949,6 +961,7 @@
             const editPageInput = document.getElementById('editPageInput');
             const editNoteInput = document.getElementById('editNoteInput');
             const editRemarkInput = document.getElementById('editRemarkInput');
+            const editDeleteBtn = document.getElementById('editDeleteBtn');
             const editCancelBtn = document.getElementById('editCancelBtn');
             const editSaveBtn = document.getElementById('editSaveBtn');
 
@@ -993,92 +1006,46 @@
                     : '';
             }
 
-            function startsWithChinese(text) {
-                const firstCharacter = Array.from(text)[0] || '';
-                return /^\p{Script=Han}$/u.test(firstCharacter);
-            }
-
-            function compareTitleText(titleA, titleB) {
-                const textA = normalizeSortText(titleA);
-                const textB = normalizeSortText(titleB);
-
-                if (textA === textB) return 0;
-                if (!textA) return 1;
-                if (!textB) return -1;
-
-                const bothStartWithChinese = startsWithChinese(textA) && startsWithChinese(textB);
-                let result = bothStartWithChinese
-                    ? pinyinCollator.compare(textA, textB)
-                    : generalCollator.compare(textA, textB);
-
-                // 同音、大小写或全角/半角等在主比较中相等时，按笔画及原字符回退，
-                // 保证每次添加、编辑、重新加载后的顺序一致。
-                if (result === 0) {
-                    result = strokeCollator.compare(textA, textB);
-                }
-                if (result === 0) {
-                    result = textA < textB ? -1 : 1;
-                }
-
-                return result;
-            }
-
-            // ============================================================
-            //  排序函数
-            // ============================================================
-            // ============================================================
-            //  备注排序
-            //  有备注条目完全不参考标题，固定按：
-            //  日期 → 汉字 → 数字 → 拉丁字母 → 其它
-            // ============================================================
-            function parseRemarkDate(text) {
-                const value = String(text || '').trim();
-
-                // 支持常见日期写法：
-                // 2026-08-14 / 2026/8/14 / 2026.8.14 / 2026年8月14日
-                const match = value.match(
-                    /^(\d{4})(?:年|[-/.])(\d{1,2})(?:月|[-/.])(\d{1,2})(?:日)?(?:\s+(\d{1,2}):(\d{2})(?::(\d{2}))?)?/
-                );
+            function parseExactDateKey(text) {
+                const value = normalizeSortText(text);
+                const match = value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
                 if (!match) return null;
 
                 const year = Number(match[1]);
                 const month = Number(match[2]);
                 const day = Number(match[3]);
-                const hour = Number(match[4] || 0);
-                const minute = Number(match[5] || 0);
-                const second = Number(match[6] || 0);
+                const date = new Date(Date.UTC(year, month - 1, day));
 
                 if (
-                    month < 1 || month > 12 ||
-                    day < 1 || day > 31 ||
-                    hour < 0 || hour > 23 ||
-                    minute < 0 || minute > 59 ||
-                    second < 0 || second > 59
+                    date.getUTCFullYear() !== year ||
+                    date.getUTCMonth() !== month - 1 ||
+                    date.getUTCDate() !== day
                 ) {
                     return null;
                 }
 
-                // 用纯数字键比较，避免时区影响。
-                return (((((year * 100 + month) * 100 + day) * 100 + hour) * 100 + minute) * 100 + second);
+                return year * 10000 + month * 100 + day;
             }
 
-            function getRemarkSortInfo(value) {
-                const text = typeof value === 'string' ? value.trim() : '';
+            function getStructuredSortInfo(value) {
+                const text = normalizeSortText(value);
                 if (!text) {
                     return { type: 99, text: '', dateKey: null, numberKey: null };
                 }
 
-                const dateKey = parseRemarkDate(text);
+                const dateKey = parseExactDateKey(text);
                 if (dateKey !== null) {
                     return { type: 0, text, dateKey, numberKey: null };
                 }
 
                 const first = Array.from(text)[0] || '';
 
+                // 汉字：按拼音首字母及后续完整拼音排序。
                 if (/^\p{Script=Han}$/u.test(first)) {
                     return { type: 1, text, dateKey: null, numberKey: null };
                 }
 
+                // 数字：按开头数值从小到大；日期已在上一步优先识别。
                 const numberMatch = text.match(/^[+-]?(?:\d+(?:\.\d+)?|\.\d+)/);
                 if (numberMatch) {
                     return {
@@ -1089,69 +1056,75 @@
                     };
                 }
 
+                // 拉丁字母：A → Z，不区分大小写。
                 if (/^[A-Za-z]$/.test(first)) {
                     return { type: 3, text, dateKey: null, numberKey: null };
                 }
 
+                // 未指定的其它符号放在最后。
                 return { type: 4, text, dateKey: null, numberKey: null };
             }
 
-            function compareRemarkText(remarkA, remarkB) {
-                const a = getRemarkSortInfo(remarkA);
-                const b = getRemarkSortInfo(remarkB);
+            function compareStructuredText(valueA, valueB) {
+                const a = getStructuredSortInfo(valueA);
+                const b = getStructuredSortInfo(valueB);
 
-                // 类型优先级固定：日期 → 汉字 → 数字 → 拉丁字母 → 其它。
                 if (a.type !== b.type) {
                     return a.type - b.type;
                 }
 
-                // 日期按时间先后排列。
                 if (a.type === 0 && a.dateKey !== b.dateKey) {
                     return a.dateKey - b.dateKey;
                 }
 
-                // 汉字沿用原页面的中文拼音比较规则。
                 if (a.type === 1) {
-                    const result = pinyinCollator.compare(a.text, b.text);
+                    let result = pinyinCollator.compare(a.text, b.text);
                     if (result !== 0) return result;
 
-                    const strokeResult = strokeCollator.compare(a.text, b.text);
-                    if (strokeResult !== 0) return strokeResult;
+                    result = strokeCollator.compare(a.text, b.text);
+                    if (result !== 0) return result;
                 }
 
-                // 数字先按数值大小，再按完整文本自然排序。
                 if (a.type === 2 && a.numberKey !== b.numberKey) {
                     return a.numberKey - b.numberKey;
                 }
 
-                // 日期同值、数字同值、拉丁字母及其它内容，按自然文本顺序回退。
+                if (a.type === 3) {
+                    const upperA = a.text.toUpperCase();
+                    const upperB = b.text.toUpperCase();
+                    const result = upperA.localeCompare(upperB, 'en', {
+                        sensitivity: 'base',
+                        numeric: true
+                    });
+                    if (result !== 0) return result;
+                }
+
                 const result = generalCollator.compare(a.text, b.text);
                 if (result !== 0) return result;
 
                 return a.text < b.text ? -1 : (a.text > b.text ? 1 : 0);
             }
 
-            function sortPages(order) {
-                const direction = order || sortOrder;
-                const multiplier = direction === 'asc' ? 1 : -1;
-
+            // ============================================================
+            //  总表固定排序规则
+            // ============================================================
+            function sortPages() {
                 pages.sort((a, b) => {
                     const aHasRemark = Boolean(a && typeof a.remark === 'string' && a.remark.trim());
                     const bHasRemark = Boolean(b && typeof b.remark === 'string' && b.remark.trim());
 
-                    // 第一层：有备注的永远在前，无备注的永远在后。
+                    // 有备注的条目永远在前。
                     if (aHasRemark !== bHasRemark) {
                         return aHasRemark ? -1 : 1;
                     }
 
-                    // 第二层：两条都有备注时，只比较备注，完全不看标题。
+                    // 两条都有备注：只比较备注，完全不考虑标题。
                     if (aHasRemark && bHasRemark) {
-                        return compareRemarkText(a.remark, b.remark);
+                        return compareStructuredText(a.remark, b.remark);
                     }
 
-                    // 第三层：两条都没有备注时，才沿用原来的标题排序；
-                    // 升序/降序切换也只作用于这一组。
-                    return compareTitleText(a && a.title, b && b.title) * multiplier;
+                    // 两条都没有备注：只比较标题。
+                    return compareStructuredText(a && a.title, b && b.title);
                 });
             }
 
@@ -1159,11 +1132,34 @@
             //  解析 [标题](链接) 格式
             // ============================================================
             function parsePageInput(input) {
-                const match = input.match(/\[([^\]]+)\]\(([^)]+)\)/);
+                const raw = String(input || '').trim();
+
+                // [文字](链接)：总表只显示“文字”为蓝色链接，
+                // 编辑时仍保留完整的 [文字](链接) 原始格式。
+                const match = raw.match(/^\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)$/i);
                 if (match) {
-                    return { title: match[1].trim(), url: match[2].trim() };
+                    return {
+                        title: match[1].trim(),
+                        url: match[2].trim(),
+                        titleMode: 'markdown'
+                    };
                 }
-                return { title: input.trim(), url: '' };
+
+                // 直接输入完整网址：总表直接显示网址本身为蓝色链接，
+                // 编辑时仍显示原始网址，不转换成 [网址](网址)。
+                if (/^https?:\/\/[^\s]+$/i.test(raw)) {
+                    return {
+                        title: raw,
+                        url: raw,
+                        titleMode: 'url'
+                    };
+                }
+
+                return {
+                    title: raw,
+                    url: '',
+                    titleMode: 'text'
+                };
             }
 
             function escapeHtml(text) {
@@ -1434,9 +1430,8 @@
             //  渲染
             // ============================================================
             function applySortAndRender() {
-                sortPages(sortOrder);
+                sortPages();
                 renderTable();
-                updateSortIcon();
                 saveToLocal();
             }
 
@@ -1444,7 +1439,7 @@
                 countDisplay.textContent = pages.length;
 
                 if (pages.length === 0) {
-                    tableBody.innerHTML = `<tr class="empty-row"><td colspan="2">列表为空，添加一个吧！</td></tr>`;
+                    tableBody.innerHTML = `<tr class="empty-row"><td>列表为空，添加一个吧！</td></tr>`;
                     return;
                 }
 
@@ -1454,23 +1449,25 @@
                     const url = escapeHtml(item.url || '');
                     const note = escapeHtml(item.note || '');
                     const remark = escapeHtml(item.remark || '');
-                    const displayHtml = url ? `<a href="${url}" target="_blank">${title}</a>` : title;
+                    const displayHtml = url
+                        ? `<a href="${url}" target="_blank" rel="noopener noreferrer">${title}</a>`
+                        : title;
                     const noteHtml = note
                         ? `<div class="title-note">${note}</div>`
                         : '';
                     const remarkHtml = remark
                         ? `<div class="title-remark">${remark}</div>`
-                        : '';
+                        : '<div class="title-remark"></div>';
+
                     html += `
                         <tr data-index="${index}">
                             <td class="col-title">
                                 ${displayHtml}
                                 ${noteHtml}
-                                ${remarkHtml}
-                            </td>
-                            <td class="col-action">
-                                <button class="action-btn edit-btn" data-index="${index}" title="编辑">编辑</button>
-                                <button class="action-btn delete-btn" data-index="${index}" title="删除">删除</button>
+                                <div class="title-footer">
+                                    ${remarkHtml}
+                                    <button class="row-edit-link edit-btn" data-index="${index}" type="button">编辑</button>
+                                </div>
                             </td>
                         </tr>
                     `;
@@ -1489,29 +1486,6 @@
                         }
                     });
                 });
-
-                document.querySelectorAll('#tableBody .delete-btn').forEach(btn => {
-                    btn.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        const index = this.getAttribute('data-index');
-                        if (index !== null) {
-                            const idx = parseInt(index, 10);
-                            if (!isNaN(idx) && idx >= 0 && idx < pages.length) {
-                                if (confirm(`确定要删除 "${pages[idx].title}" 吗？`)) {
-                                    pages.splice(idx, 1);
-                                    applySortAndRender();
-                                    if (isConfigValid()) {
-                                        syncToCloud(false);
-                                    }
-                                }
-                            }
-                        }
-                    });
-                });
-            }
-
-            function updateSortIcon() {
-                sortIcon.textContent = sortOrder === 'asc' ? '▲' : '▼';
             }
 
             // ============================================================
@@ -1522,7 +1496,12 @@
                 const item = pages[index];
                 editTitleDisplay.textContent = item.title;
                 if (item.url) {
-                    editPageInput.value = `[${item.title}](${item.url})`;
+                    // 新数据用 titleMode 精确保留输入形式。
+                    // 兼容旧数据：若 title 与 url 完全相同，则按“直接网址”处理。
+                    const mode = item.titleMode || (item.title === item.url ? 'url' : 'markdown');
+                    editPageInput.value = mode === 'url'
+                        ? item.url
+                        : `[${item.title}](${item.url})`;
                 } else {
                     editPageInput.value = item.title;
                 }
@@ -1560,11 +1539,33 @@
 
                 pages[editingIndex].title = parsed.title;
                 pages[editingIndex].url = parsed.url;
+                pages[editingIndex].titleMode = parsed.titleMode;
                 pages[editingIndex].note = editNoteInput.value.trim();
                 pages[editingIndex].remark = editRemarkInput.value.trim();
 
                 closeEditModal();
                 applySortAndRender();
+                if (isConfigValid()) {
+                    syncToCloud(false);
+                }
+            }
+
+            function deleteEditingEntry() {
+                if (editingIndex === null || editingIndex < 0 || editingIndex >= pages.length) {
+                    alert('删除出错，请重试。');
+                    closeEditModal();
+                    return;
+                }
+
+                const item = pages[editingIndex];
+                if (!confirm(`确定要删除 "${item.title}" 吗？`)) {
+                    return;
+                }
+
+                pages.splice(editingIndex, 1);
+                closeEditModal();
+                applySortAndRender();
+
                 if (isConfigValid()) {
                     syncToCloud(false);
                 }
@@ -1591,7 +1592,13 @@
                     return;
                 }
 
-                pages.push({ title: parsed.title, url: parsed.url, note: note, remark: remark });
+                pages.push({
+                    title: parsed.title,
+                    url: parsed.url,
+                    titleMode: parsed.titleMode,
+                    note: note,
+                    remark: remark
+                });
                 applySortAndRender();
 
                 if (isConfigValid()) {
@@ -1602,14 +1609,6 @@
                 noteInput.value = '';
                 remarkInput.value = '';
                 pageInput.focus();
-            }
-
-            // ============================================================
-            //  排序切换
-            // ============================================================
-            function toggleSort() {
-                sortOrder = (sortOrder === 'asc') ? 'desc' : 'asc';
-                applySortAndRender();
             }
 
             // ============================================================
@@ -1769,8 +1768,6 @@
                 }
             });
 
-            sortTitleHead.addEventListener('click', toggleSort);
-
             syncBtn.addEventListener('click', function() {
                 if (pages.length === 0) {
                     showToast('没有数据需要同步', 'info');
@@ -1795,6 +1792,7 @@
                 }
             });
 
+            editDeleteBtn.addEventListener('click', deleteEditingEntry);
             editCancelBtn.addEventListener('click', closeEditModal);
             editSaveBtn.addEventListener('click', saveEdit);
             editModal.addEventListener('click', function(e) {

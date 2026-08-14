@@ -282,10 +282,7 @@
             vertical-align: top;
         }
         .page-table .title-row {
-            display: flex;
-            align-items: baseline;
-            justify-content: space-between;
-            gap: 1rem;
+            display: block;
             width: 100%;
         }
         .page-table .title-main {
@@ -309,6 +306,20 @@
             line-height: 1.45;
             white-space: normal;
             overflow-wrap: anywhere;
+        }
+        .page-table .title-bottom-row {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 1rem;
+            width: 100%;
+            min-height: 1.25rem;
+            margin-top: 0.28rem;
+        }
+        .page-table .title-bottom-row .title-remark {
+            flex: 1 1 auto;
+            min-width: 0;
+            margin-top: 0;
         }
         .page-table .edit-btn {
             flex: 0 0 auto;
@@ -721,7 +732,7 @@
                 padding: 0.6rem 0.8rem;
                 font-size: 0.85rem;
             }
-            .page-table .title-row {
+            .page-table .title-bottom-row {
                 gap: 0.75rem;
             }
             .toolbar {
@@ -1365,18 +1376,18 @@
                     const noteHtml = note
                         ? `<div class="title-note">${note}</div>`
                         : '';
-                    const remarkHtml = remark
-                        ? `<div class="title-remark">${remark}</div>`
-                        : '';
+                    const remarkHtml = `<div class="title-remark">${remark}</div>`;
                     html += `
                         <tr data-index="${index}">
                             <td class="col-title">
                                 <div class="title-row">
                                     <div class="title-main">${displayHtml}</div>
-                                    <button class="edit-btn" data-index="${index}" title="编辑" type="button">编辑</button>
                                 </div>
                                 ${noteHtml}
-                                ${remarkHtml}
+                                <div class="title-bottom-row">
+                                    ${remarkHtml}
+                                    <button class="edit-btn" data-index="${index}" title="编辑" type="button">编辑</button>
+                                </div>
                             </td>
                         </tr>
                     `;

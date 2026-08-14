@@ -282,7 +282,24 @@
         .page-table .col-title {
             min-width: 200px;
             vertical-align: top;
+            -webkit-user-select: text;
+            user-select: text;
         }
+
+        /* 总表优先保证文字可选择：标题、提要、备注都允许正常鼠标拖选 */
+        .page-table .col-title > a,
+        .page-table .title-note,
+        .page-table .title-remark {
+            -webkit-user-select: text;
+            user-select: text;
+            cursor: text;
+        }
+
+        /* 禁止浏览器把链接当成可拖拽对象，否则会和“选择链接文字”冲突 */
+        .page-table .col-title > a {
+            -webkit-user-drag: none;
+        }
+
         .page-table .col-title a {
             color: #2563eb;
             text-decoration: none;
@@ -1501,7 +1518,7 @@
                     const note = escapeHtml(item.note || '');
                     const remark = escapeHtml(item.remark || '');
                     const displayHtml = url
-                        ? `<a href="${url}" target="_blank" rel="noopener noreferrer">${title}</a>`
+                        ? `<a href="${url}" target="_blank" rel="noopener noreferrer" draggable="false">${title}</a>`
                         : title;
                     const noteHtml = note
                         ? `<div class="title-note">${note}</div>`
@@ -1524,6 +1541,26 @@
                     `;
                 });
                 tableBody.innerHTML = html;
+
+                // 链接标题需要同时兼顾“单击打开”和“拖动选择文字”。
+                // 禁止原生链接拖拽；如果当前确实选中了链接文字，则不要触发跳转。
+                document.querySelectorAll('#tableBody .col-title > a').forEach(link => {
+                    link.addEventListener('dragstart', function(e) {
+                        e.preventDefault();
+                    });
+
+                    link.addEventListener('click', function(e) {
+                        const selection = window.getSelection();
+                        const hasSelectedLinkText =
+                            selection &&
+                            !selection.isCollapsed &&
+                            (this.contains(selection.anchorNode) || this.contains(selection.focusNode));
+
+                        if (hasSelectedLinkText) {
+                            e.preventDefault();
+                        }
+                    });
+                });
 
                 document.querySelectorAll('#tableBody .edit-btn').forEach(btn => {
                     btn.addEventListener('click', function(e) {

@@ -1018,29 +1018,87 @@
                 return /^\p{Script=Han}$/u.test(firstCharacter);
             }
 
-            function compareTitleText(titleA, titleB) {
-                const textA = normalizeSortText(titleA);
-                const textB = normalizeSortText(titleB);
+            function startsWithLatin(text) {
+                return /^[A-Za-z]/.test(text);
+            }
 
-                if (textA === textB) return 0;
-                if (!textA) return 1;
-                if (!textB) return -1;
+            // 识别标题开头的 YYYY-MM-DD，并且只把真实存在的日期归入“日期”组。
+            // 日期后可以直接结束，也可以继续跟空格、文字、标点等内容。
+            function extractDateKey(text) {
+                const match = text.match(/^(\d{4})-(\d{2})-(\d{2})(?=$|\D)/);
+                if (!match) return null;
 
-                const bothStartWithChinese = startsWithChinese(textA) && startsWithChinese(textB);
-                let result = bothStartWithChinese
-                    ? pinyinCollator.compare(textA, textB)
-                    : generalCollator.compare(textA, textB);
-
-                // 同音、大小写或全角/半角等在主比较中相等时，按笔画及原字符回退，
-                // 保证每次添加、编辑、重新加载后的顺序一致。
-                if (result === 0) {
-                    result = strokeCollator.compare(textA, textB);
+                const year = Number(match[1]);
+                const month = Number(match[2]);
+                const day = Number(match[3]);
+                const date = new Date(Date.UTC(year, month - 1, day));
+                if (
+                    date.getUTCFullYear() !== year ||
+                    date.getUTCMonth() !== month - 1 ||
+                    date.getUTCDate() !== day
+                ) {
+                    return null;
                 }
-                if (result === 0) {
-                    result = textA < textB ? -1 : 1;
+
+                return year * 10000 + month * 100 + day;
+            }
+
+            // 日期组之后，识别普通“数字开头”的标题；日期会在此之前被单独识别。
+            function extractLeadingNumber(text) {
+                const match = text.match(/^\d+(?:\.\d+)?/);
+                return match ? Number(match[0]) : null;
+            }
+
+            // 排序组固定为：日期 -> 数字 -> 汉字 -> 拉丁字母 -> 其他。
+            function getSortInfo(value) {
+                const text = normalizeSortText(value);
+                if (!text) return { group: 5, text, value: null };
+
+                const dateKey = extractDateKey(text);
+                if (dateKey !== null) return { group: 0, text, value: dateKey };
+
+                const numberKey = extractLeadingNumber(text);
+                if (numberKey !== null) return { group: 1, text, value: numberKey };
+
+                if (startsWithChinese(text)) return { group: 2, text, value: null };
+                if (startsWithLatin(text)) return { group: 3, text, value: null };
+                return { group: 4, text, value: null };
+            }
+
+            function compareSameGroup(infoA, infoB) {
+                let result = 0;
+
+                // 日期和数字都先按实际数值排序；数值相同时再按完整标题稳定排序。
+                if (infoA.group === 0 || infoA.group === 1) {
+                    result = infoA.value - infoB.value;
+                    if (result !== 0) return result;
+                    result = generalCollator.compare(infoA.text, infoB.text);
+                } else if (infoA.group === 2) {
+                    // 汉字按拼音顺序；同音时用笔画和原字符兜底，保证顺序稳定。
+                    result = pinyinCollator.compare(infoA.text, infoB.text);
+                    if (result === 0) result = strokeCollator.compare(infoA.text, infoB.text);
+                } else {
+                    // 拉丁字母及“其他”分别在各自组内按字符顺序排列。
+                    result = generalCollator.compare(infoA.text, infoB.text);
                 }
 
+                if (result === 0 && infoA.text !== infoB.text) {
+                    result = infoA.text < infoB.text ? -1 : 1;
+                }
                 return result;
+            }
+
+            function compareTitleText(titleA, titleB, direction = 'asc') {
+                const infoA = getSortInfo(titleA);
+                const infoB = getSortInfo(titleB);
+
+                if (infoA.text === infoB.text) return 0;
+
+                // 无论升序还是降序，类型优先级都不变：日期始终排最前。
+                if (infoA.group !== infoB.group) return infoA.group - infoB.group;
+
+                const result = compareSameGroup(infoA, infoB);
+                return direction === 'desc' ? -result : result;
             }
 
             // ============================================================
@@ -1048,11 +1106,7 @@
             // ============================================================
             function sortPages(order) {
                 const direction = order || sortOrder;
-                const multiplier = direction === 'asc' ? 1 : -1;
-
-                pages.sort((a, b) => {
-                    return compareTitleText(a && a.title, b && b.title) * multiplier;
-                });
+                pages.sort((a, b) => compareTitleText(a && a.title, b && b.title, direction));
             }
 
             // ============================================================

@@ -1043,13 +1043,13 @@
                 return year * 10000 + month * 100 + day;
             }
 
-            // 日期组之后，识别普通“数字开头”的标题；日期会在此之前被单独识别。
+            // 识别普通“数字开头”的排序键；日期会在此之前被单独识别。
             function extractLeadingNumber(text) {
                 const match = text.match(/^\d+(?:\.\d+)?/);
                 return match ? Number(match[0]) : null;
             }
 
-            // 排序组固定为：日期 -> 数字 -> 汉字 -> 拉丁字母 -> 其他。
+            // 排序组固定为：日期 -> 汉字 -> 数字 -> 拉丁字母 -> 其他。
             function getSortInfo(value) {
                 const text = normalizeSortText(value);
                 if (!text) return { group: 5, text, value: null };
@@ -1057,10 +1057,10 @@
                 const dateKey = extractDateKey(text);
                 if (dateKey !== null) return { group: 0, text, value: dateKey };
 
-                const numberKey = extractLeadingNumber(text);
-                if (numberKey !== null) return { group: 1, text, value: numberKey };
+                if (startsWithChinese(text)) return { group: 1, text, value: null };
 
-                if (startsWithChinese(text)) return { group: 2, text, value: null };
+                const numberKey = extractLeadingNumber(text);
+                if (numberKey !== null) return { group: 2, text, value: numberKey };
                 if (startsWithLatin(text)) return { group: 3, text, value: null };
                 return { group: 4, text, value: null };
             }
@@ -1068,12 +1068,12 @@
             function compareSameGroup(infoA, infoB) {
                 let result = 0;
 
-                // 日期和数字都先按实际数值排序；数值相同时再按完整标题稳定排序。
-                if (infoA.group === 0 || infoA.group === 1) {
+                // 日期和数字都先按实际数值排序；数值相同时再按完整排序键稳定排序。
+                if (infoA.group === 0 || infoA.group === 2) {
                     result = infoA.value - infoB.value;
                     if (result !== 0) return result;
                     result = generalCollator.compare(infoA.text, infoB.text);
-                } else if (infoA.group === 2) {
+                } else if (infoA.group === 1) {
                     // 汉字按拼音顺序；同音时用笔画和原字符兜底，保证顺序稳定。
                     result = pinyinCollator.compare(infoA.text, infoB.text);
                     if (result === 0) result = strokeCollator.compare(infoA.text, infoB.text);
@@ -1103,10 +1103,20 @@
 
             // ============================================================
             //  排序函数
+            //  优先使用备注作为排序键；备注为空时才使用标题。
+            //  排序键内部仍按：日期 -> 汉字 -> 数字 -> 拉丁字母 -> 其他。
             // ============================================================
+            function getPageSortText(item) {
+                if (!item || typeof item !== 'object') return '';
+                const remark = normalizeSortText(item.remark);
+                return remark || normalizeSortText(item.title);
+            }
+
             function sortPages(order) {
                 const direction = order || sortOrder;
-                pages.sort((a, b) => compareTitleText(a && a.title, b && b.title, direction));
+                pages.sort((a, b) =>
+                    compareTitleText(getPageSortText(a), getPageSortText(b), direction)
+                );
             }
 
             // ============================================================

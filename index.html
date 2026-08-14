@@ -1026,21 +1026,131 @@
             // ============================================================
             //  排序函数
             // ============================================================
+            // ============================================================
+            //  备注排序
+            //  有备注条目完全不参考标题，固定按：
+            //  日期 → 汉字 → 数字 → 拉丁字母 → 其它
+            // ============================================================
+            function parseRemarkDate(text) {
+                const value = String(text || '').trim();
+
+                // 支持常见日期写法：
+                // 2026-08-14 / 2026/8/14 / 2026.8.14 / 2026年8月14日
+                const match = value.match(
+                    /^(\d{4})(?:年|[-/.])(\d{1,2})(?:月|[-/.])(\d{1,2})(?:日)?(?:\s+(\d{1,2}):(\d{2})(?::(\d{2}))?)?/
+                );
+                if (!match) return null;
+
+                const year = Number(match[1]);
+                const month = Number(match[2]);
+                const day = Number(match[3]);
+                const hour = Number(match[4] || 0);
+                const minute = Number(match[5] || 0);
+                const second = Number(match[6] || 0);
+
+                if (
+                    month < 1 || month > 12 ||
+                    day < 1 || day > 31 ||
+                    hour < 0 || hour > 23 ||
+                    minute < 0 || minute > 59 ||
+                    second < 0 || second > 59
+                ) {
+                    return null;
+                }
+
+                // 用纯数字键比较，避免时区影响。
+                return (((((year * 100 + month) * 100 + day) * 100 + hour) * 100 + minute) * 100 + second);
+            }
+
+            function getRemarkSortInfo(value) {
+                const text = typeof value === 'string' ? value.trim() : '';
+                if (!text) {
+                    return { type: 99, text: '', dateKey: null, numberKey: null };
+                }
+
+                const dateKey = parseRemarkDate(text);
+                if (dateKey !== null) {
+                    return { type: 0, text, dateKey, numberKey: null };
+                }
+
+                const first = Array.from(text)[0] || '';
+
+                if (/^\p{Script=Han}$/u.test(first)) {
+                    return { type: 1, text, dateKey: null, numberKey: null };
+                }
+
+                const numberMatch = text.match(/^[+-]?(?:\d+(?:\.\d+)?|\.\d+)/);
+                if (numberMatch) {
+                    return {
+                        type: 2,
+                        text,
+                        dateKey: null,
+                        numberKey: Number(numberMatch[0])
+                    };
+                }
+
+                if (/^[A-Za-z]$/.test(first)) {
+                    return { type: 3, text, dateKey: null, numberKey: null };
+                }
+
+                return { type: 4, text, dateKey: null, numberKey: null };
+            }
+
+            function compareRemarkText(remarkA, remarkB) {
+                const a = getRemarkSortInfo(remarkA);
+                const b = getRemarkSortInfo(remarkB);
+
+                // 类型优先级固定：日期 → 汉字 → 数字 → 拉丁字母 → 其它。
+                if (a.type !== b.type) {
+                    return a.type - b.type;
+                }
+
+                // 日期按时间先后排列。
+                if (a.type === 0 && a.dateKey !== b.dateKey) {
+                    return a.dateKey - b.dateKey;
+                }
+
+                // 汉字沿用原页面的中文拼音比较规则。
+                if (a.type === 1) {
+                    const result = pinyinCollator.compare(a.text, b.text);
+                    if (result !== 0) return result;
+
+                    const strokeResult = strokeCollator.compare(a.text, b.text);
+                    if (strokeResult !== 0) return strokeResult;
+                }
+
+                // 数字先按数值大小，再按完整文本自然排序。
+                if (a.type === 2 && a.numberKey !== b.numberKey) {
+                    return a.numberKey - b.numberKey;
+                }
+
+                // 日期同值、数字同值、拉丁字母及其它内容，按自然文本顺序回退。
+                const result = generalCollator.compare(a.text, b.text);
+                if (result !== 0) return result;
+
+                return a.text < b.text ? -1 : (a.text > b.text ? 1 : 0);
+            }
+
             function sortPages(order) {
                 const direction = order || sortOrder;
                 const multiplier = direction === 'asc' ? 1 : -1;
 
                 pages.sort((a, b) => {
-                    // 第一优先级固定按“备注是否有内容”分组：
-                    // 有备注的始终排在前面；无备注的始终排在后面。
-                    // 升序/降序只影响各组内部原有的标题排序，不改变两组的先后位置。
                     const aHasRemark = Boolean(a && typeof a.remark === 'string' && a.remark.trim());
                     const bHasRemark = Boolean(b && typeof b.remark === 'string' && b.remark.trim());
 
+                    // 第一层：有备注的永远在前，无备注的永远在后。
                     if (aHasRemark !== bHasRemark) {
                         return aHasRemark ? -1 : 1;
                     }
 
+                    // 第二层：两条都有备注时，只比较备注，完全不看标题。
+                    if (aHasRemark && bHasRemark) {
+                        return compareRemarkText(a.remark, b.remark);
+                    }
+
+                    // 第三层：两条都没有备注时，才沿用原来的标题排序；
+                    // 升序/降序切换也只作用于这一组。
                     return compareTitleText(a && a.title, b && b.title) * multiplier;
                 });
             }

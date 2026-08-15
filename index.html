@@ -292,12 +292,18 @@
         .page-table .title-remark {
             -webkit-user-select: text;
             user-select: text;
+        }
+
+        /* 提要、备注仍使用文字光标，便于拖选文字 */
+        .page-table .title-note,
+        .page-table .title-remark {
             cursor: text;
         }
 
-        /* 禁止浏览器把链接当成可拖拽对象，否则会和“选择链接文字”冲突 */
+        /* 蓝色标题链接悬停时使用普通箭头；同时禁止原生链接拖拽 */
         .page-table .col-title > a {
             -webkit-user-drag: none;
+            cursor: default;
         }
 
         .page-table .col-title a {
@@ -342,7 +348,7 @@
             font-size: 0.86rem;
             font-weight: 500;
             line-height: 1.45;
-            cursor: pointer;
+            cursor: default;
             text-decoration: none;
         }
         .page-table .row-edit-link:hover,
@@ -634,6 +640,7 @@
         .config-box .form-group .hint a {
             color: #2563eb;
             text-decoration: none;
+            cursor: default;
         }
         .config-box .form-group .hint a:hover {
             text-decoration: underline;

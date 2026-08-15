@@ -1082,77 +1082,53 @@
                     : '';
             }
 
-            function parseExactDateKey(text) {
-                const value = normalizeSortText(text);
-                const match = value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-                if (!match) return null;
-
-                const year = Number(match[1]);
-                const month = Number(match[2]);
-                const day = Number(match[3]);
-                const date = new Date(Date.UTC(year, month - 1, day));
-
-                if (
-                    date.getUTCFullYear() !== year ||
-                    date.getUTCMonth() !== month - 1 ||
-                    date.getUTCDate() !== day
-                ) {
-                    return null;
-                }
-
-                return year * 10000 + month * 100 + day;
-            }
-
             function getStructuredSortInfo(value) {
                 const text = normalizeSortText(value);
                 if (!text) {
-                    return { type: 99, text: '', dateKey: null, numberKey: null };
-                }
-
-                const dateKey = parseExactDateKey(text);
-                if (dateKey !== null) {
-                    return { type: 0, text, dateKey, numberKey: null };
+                    return { type: 99, text: '', numberKey: null };
                 }
 
                 const first = Array.from(text)[0] || '';
 
-                // 汉字：按拼音首字母及后续完整拼音排序。
-                if (/^\p{Script=Han}$/u.test(first)) {
-                    return { type: 1, text, dateKey: null, numberKey: null };
-                }
-
-                // 数字：按开头数值从小到大；日期已在上一步优先识别。
+                // 1. 数字：排在最前，并按开头数值从小到大排序。
                 const numberMatch = text.match(/^[+-]?(?:\d+(?:\.\d+)?|\.\d+)/);
                 if (numberMatch) {
                     return {
-                        type: 2,
+                        type: 0,
                         text,
-                        dateKey: null,
                         numberKey: Number(numberMatch[0])
                     };
                 }
 
-                // 拉丁字母：A → Z，不区分大小写。
+                // 2. 汉字：按拼音顺序排序（首字拼音优先，随后继续比较后续拼音）。
+                if (/^\p{Script=Han}$/u.test(first)) {
+                    return { type: 1, text, numberKey: null };
+                }
+
+                // 3. 英文：A → Z，不区分大小写。
                 if (/^[A-Za-z]$/.test(first)) {
-                    return { type: 3, text, dateKey: null, numberKey: null };
+                    return { type: 2, text, numberKey: null };
                 }
 
                 // 未指定的其它符号放在最后。
-                return { type: 4, text, dateKey: null, numberKey: null };
+                return { type: 3, text, numberKey: null };
             }
 
             function compareStructuredText(valueA, valueB) {
                 const a = getStructuredSortInfo(valueA);
                 const b = getStructuredSortInfo(valueB);
 
+                // 类型优先级：数字 → 汉字 → 英文 → 其它。
                 if (a.type !== b.type) {
                     return a.type - b.type;
                 }
 
-                if (a.type === 0 && a.dateKey !== b.dateKey) {
-                    return a.dateKey - b.dateKey;
+                // 数字类型：先比较开头的数值大小。
+                if (a.type === 0 && a.numberKey !== b.numberKey) {
+                    return a.numberKey - b.numberKey;
                 }
 
+                // 汉字类型：按拼音排序；拼音相同再按笔画等规则稳定区分。
                 if (a.type === 1) {
                     let result = pinyinCollator.compare(a.text, b.text);
                     if (result !== 0) return result;
@@ -1161,11 +1137,8 @@
                     if (result !== 0) return result;
                 }
 
-                if (a.type === 2 && a.numberKey !== b.numberKey) {
-                    return a.numberKey - b.numberKey;
-                }
-
-                if (a.type === 3) {
+                // 英文类型：按字母顺序排序，不区分大小写，并支持自然数字顺序。
+                if (a.type === 2) {
                     const upperA = a.text.toUpperCase();
                     const upperB = b.text.toUpperCase();
                     const result = upperA.localeCompare(upperB, 'en', {
@@ -1186,20 +1159,27 @@
             // ============================================================
             function sortPages() {
                 pages.sort((a, b) => {
-                    const aHasRemark = Boolean(a && typeof a.remark === 'string' && a.remark.trim());
-                    const bHasRemark = Boolean(b && typeof b.remark === 'string' && b.remark.trim());
+                    const aRemark = normalizeSortText(a && a.remark);
+                    const bRemark = normalizeSortText(b && b.remark);
+                    const aHasRemark = Boolean(aRemark);
+                    const bHasRemark = Boolean(bRemark);
 
-                    // 有备注的条目永远在前。
+                    // 有备注的条目在前；备注为空的条目在后，并按标题排序。
                     if (aHasRemark !== bHasRemark) {
                         return aHasRemark ? -1 : 1;
                     }
 
-                    // 两条都有备注：只比较备注，完全不考虑标题。
+                    // 两条都有备注：先按备注排序。
+                    // 规则统一为：数字从小到大 → 汉字拼音 → 英文字母。
                     if (aHasRemark && bHasRemark) {
-                        return compareStructuredText(a.remark, b.remark);
+                        const remarkResult = compareStructuredText(aRemark, bRemark);
+                        if (remarkResult !== 0) return remarkResult;
+
+                        // 备注相同时，再按标题使用同一规则排序。
+                        return compareStructuredText(a && a.title, b && b.title);
                     }
 
-                    // 两条都没有备注：只比较标题。
+                    // 两条备注都为空：直接按标题使用同一规则排序。
                     return compareStructuredText(a && a.title, b && b.title);
                 });
             }

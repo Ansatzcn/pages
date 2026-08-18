@@ -742,11 +742,7 @@
             outline: none;
         }
         .back-to-top .back-to-top-icon {
-            display: inline-block;
-            font-size: 1rem;
-            font-weight: 900;
-            line-height: 1;
-            transform: scaleX(1.18);
+            display: none;
         }
 
         @media (max-width: 700px) {
@@ -1071,7 +1067,7 @@
     </div>
 
     <!-- 回到顶部 -->
-    <button class="back-to-top" id="backToTopBtn" type="button" aria-label="↑">
+    <button class="back-to-top" id="backToTopBtn" type="button" aria-label="回到顶部" title="回到顶部">
         <span class="back-to-top-icon" aria-hidden="true">↑</span>
     </button>
 
@@ -1169,50 +1165,81 @@
             function getStructuredSortInfo(value) {
                 const text = normalizeSortText(value);
                 if (!text) {
-                    return { type: 99, text: '', numberKey: null };
+                    return { type: 99, text: '', dateKey: null, numberKey: null };
+                }
+
+                // 1. 日期型数字：严格识别 YYYY-MM-DD，按日期从早到晚。
+                const dateMatch = text.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+                if (dateMatch) {
+                    const year = Number(dateMatch[1]);
+                    const month = Number(dateMatch[2]);
+                    const day = Number(dateMatch[3]);
+                    const date = new Date(Date.UTC(year, month - 1, day));
+                    const validDate =
+                        date.getUTCFullYear() === year &&
+                        date.getUTCMonth() === month - 1 &&
+                        date.getUTCDate() === day;
+
+                    if (validDate) {
+                        return {
+                            type: 0,
+                            text,
+                            dateKey: year * 10000 + month * 100 + day,
+                            numberKey: null
+                        };
+                    }
+                }
+
+                // 网址必须先识别，否则 http 会被误归到拉丁字母。
+                // 同时兼容 http:// 与 https://，统一放在最后。
+                if (/^https?:\/\//i.test(text)) {
+                    return { type: 5, text, dateKey: null, numberKey: null };
                 }
 
                 const first = Array.from(text)[0] || '';
 
-                // 1. 数字：排在最前，并按开头数值从小到大排序。
+                // 2. 汉字：按拼音顺序排列。
+                if (/^\p{Script=Han}$/u.test(first)) {
+                    return { type: 1, text, dateKey: null, numberKey: null };
+                }
+
+                // 3. 拉丁字母：A → Z，不区分大小写。
+                if (/^[A-Za-z]$/.test(first)) {
+                    return { type: 2, text, dateKey: null, numberKey: null };
+                }
+
+                // 4. 普通数字：按开头数值从小到大排列。
+                // 例如 2、10、2个方法、10个技巧都按数值自然顺序处理。
                 const numberMatch = text.match(/^[+-]?(?:\d+(?:\.\d+)?|\.\d+)/);
                 if (numberMatch) {
                     return {
-                        type: 0,
+                        type: 3,
                         text,
+                        dateKey: null,
                         numberKey: Number(numberMatch[0])
                     };
                 }
 
-                // 2. 汉字：按拼音顺序排序（首字拼音优先，随后继续比较后续拼音）。
-                if (/^\p{Script=Han}$/u.test(first)) {
-                    return { type: 1, text, numberKey: null };
-                }
-
-                // 3. 英文：A → Z，不区分大小写。
-                if (/^[A-Za-z]$/.test(first)) {
-                    return { type: 2, text, numberKey: null };
-                }
-
-                // 未指定的其它符号放在最后。
-                return { type: 3, text, numberKey: null };
+                // 未指定的其它符号放在普通数字之后、网址之前。
+                return { type: 4, text, dateKey: null, numberKey: null };
             }
 
             function compareStructuredText(valueA, valueB) {
                 const a = getStructuredSortInfo(valueA);
                 const b = getStructuredSortInfo(valueB);
 
-                // 类型优先级：数字 → 汉字 → 英文 → 其它。
+                // 优先级：
+                // YYYY-MM-DD → 汉字拼音 → 拉丁字母 A-Z → 普通数字 → 其它 → URL。
                 if (a.type !== b.type) {
                     return a.type - b.type;
                 }
 
-                // 数字类型：先比较开头的数值大小。
-                if (a.type === 0 && a.numberKey !== b.numberKey) {
-                    return a.numberKey - b.numberKey;
+                // 日期从早到晚。
+                if (a.type === 0 && a.dateKey !== b.dateKey) {
+                    return a.dateKey - b.dateKey;
                 }
 
-                // 汉字类型：按拼音排序；拼音相同再按笔画等规则稳定区分。
+                // 汉字按拼音；拼音相同时再按笔画稳定区分。
                 if (a.type === 1) {
                     let result = pinyinCollator.compare(a.text, b.text);
                     if (result !== 0) return result;
@@ -1221,17 +1248,21 @@
                     if (result !== 0) return result;
                 }
 
-                // 英文类型：按字母顺序排序，不区分大小写，并支持自然数字顺序。
+                // 拉丁字母 A → Z，不区分大小写，并保留自然数字比较。
                 if (a.type === 2) {
-                    const upperA = a.text.toUpperCase();
-                    const upperB = b.text.toUpperCase();
-                    const result = upperA.localeCompare(upperB, 'en', {
+                    const result = a.text.localeCompare(b.text, 'en', {
                         sensitivity: 'base',
                         numeric: true
                     });
                     if (result !== 0) return result;
                 }
 
+                // 普通数字按数值从小到大；数值相同再比较全文。
+                if (a.type === 3 && a.numberKey !== b.numberKey) {
+                    return a.numberKey - b.numberKey;
+                }
+
+                // 其它字符与 URL 各自在本组内使用稳定自然排序。
                 const result = generalCollator.compare(a.text, b.text);
                 if (result !== 0) return result;
 
@@ -1245,26 +1276,27 @@
                 pages.sort((a, b) => {
                     const aRemark = normalizeSortText(a && a.remark);
                     const bRemark = normalizeSortText(b && b.remark);
-                    const aHasRemark = Boolean(aRemark);
-                    const bHasRemark = Boolean(bRemark);
+                    const aTitle = normalizeSortText(a && a.title);
+                    const bTitle = normalizeSortText(b && b.title);
 
-                    // 有备注的条目在前；备注为空的条目在后，并按标题排序。
-                    if (aHasRemark !== bHasRemark) {
-                        return aHasRemark ? -1 : 1;
-                    }
+                    // 有备注：以备注作为排序键；
+                    // 无备注：直接以标题作为排序键。
+                    // 两者统一套用完全相同的五级规则。
+                    const aSortKey = aRemark || aTitle;
+                    const bSortKey = bRemark || bTitle;
 
-                    // 两条都有备注：先按备注排序。
-                    // 规则统一为：数字从小到大 → 汉字拼音 → 英文字母。
-                    if (aHasRemark && bHasRemark) {
-                        const remarkResult = compareStructuredText(aRemark, bRemark);
-                        if (remarkResult !== 0) return remarkResult;
+                    const primaryResult = compareStructuredText(aSortKey, bSortKey);
+                    if (primaryResult !== 0) return primaryResult;
 
-                        // 备注相同时，再按标题使用同一规则排序。
-                        return compareStructuredText(a && a.title, b && b.title);
-                    }
+                    // 主排序键相同时，用标题继续按同一规则稳定排序。
+                    const titleResult = compareStructuredText(aTitle, bTitle);
+                    if (titleResult !== 0) return titleResult;
 
-                    // 两条备注都为空：直接按标题使用同一规则排序。
-                    return compareStructuredText(a && a.title, b && b.title);
+                    // 标题仍相同则比较原始文本，保证结果稳定可预期。
+                    return generalCollator.compare(
+                        `${aRemark}\u0000${aTitle}`,
+                        `${bRemark}\u0000${bTitle}`
+                    );
                 });
             }
 

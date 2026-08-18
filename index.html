@@ -1915,7 +1915,7 @@
             // ============================================================
             addBtn.addEventListener('click', addPage);
 
-            document.querySelectorAll('.form-group input, .form-group textarea').forEach(input => {
+            document.querySelectorAll('.add-section .form-group input, .add-section .form-group textarea').forEach(input => {
                 input.addEventListener('keydown', function(e) {
                     if (e.key === 'Enter') {
                         if (this.tagName === 'TEXTAREA') {

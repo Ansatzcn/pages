@@ -1279,20 +1279,27 @@
                     const aTitle = normalizeSortText(a && a.title);
                     const bTitle = normalizeSortText(b && b.title);
 
-                    // 有备注：以备注作为排序键；
-                    // 无备注：直接以标题作为排序键。
-                    // 两者统一套用完全相同的五级规则。
-                    const aSortKey = aRemark || aTitle;
-                    const bSortKey = bRemark || bTitle;
+                    const aHasRemark = Boolean(aRemark);
+                    const bHasRemark = Boolean(bRemark);
 
-                    const primaryResult = compareStructuredText(aSortKey, bSortKey);
-                    if (primaryResult !== 0) return primaryResult;
+                    // 第一层：有备注的条目排在前面；无备注的条目排在后面。
+                    if (aHasRemark !== bHasRemark) {
+                        return aHasRemark ? -1 : 1;
+                    }
 
-                    // 主排序键相同时，用标题继续按同一规则稳定排序。
-                    const titleResult = compareStructuredText(aTitle, bTitle);
-                    if (titleResult !== 0) return titleResult;
+                    // 两条都有备注：先按备注；备注相同再按标题。
+                    if (aHasRemark && bHasRemark) {
+                        const remarkResult = compareStructuredText(aRemark, bRemark);
+                        if (remarkResult !== 0) return remarkResult;
 
-                    // 标题仍相同则比较原始文本，保证结果稳定可预期。
+                        const titleResult = compareStructuredText(aTitle, bTitle);
+                        if (titleResult !== 0) return titleResult;
+                    } else {
+                        // 两条备注都为空：直接按标题。
+                        const titleResult = compareStructuredText(aTitle, bTitle);
+                        if (titleResult !== 0) return titleResult;
+                    }
+
                     return generalCollator.compare(
                         `${aRemark}\u0000${aTitle}`,
                         `${bRemark}\u0000${bTitle}`

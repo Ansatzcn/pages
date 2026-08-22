@@ -3488,14 +3488,37 @@
                 saveEdit
             );
 
+            // 仅当一次完整的指针操作都发生在遮罩空白处时才关闭编辑弹窗。
+            // 这样从输入框内开始拖选文字、鼠标在弹窗外松开时，不会误触关闭。
+            let editOverlayPointerDown = false;
+
             editModal.addEventListener(
-                'click',
+                'pointerdown',
                 function(e) {
-                    if (
-                        e.target === this
-                    ) {
+                    editOverlayPointerDown =
+                        e.target === this;
+                }
+            );
+
+            editModal.addEventListener(
+                'pointerup',
+                function(e) {
+                    const shouldClose =
+                        editOverlayPointerDown &&
+                        e.target === this;
+
+                    editOverlayPointerDown = false;
+
+                    if (shouldClose) {
                         closeEditModal();
                     }
+                }
+            );
+
+            editModal.addEventListener(
+                'pointercancel',
+                function() {
+                    editOverlayPointerDown = false;
                 }
             );
 

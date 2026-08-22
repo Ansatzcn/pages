@@ -2306,7 +2306,7 @@
             syncConfigVisualViewport();
 
             configBtn.addEventListener('click', openConfigModal);
-            function fastScrollToTop(duration = 200) {
+            function fastScrollToTop(duration = 50) {
                 const startY = window.scrollY || window.pageYOffset || 0;
                 if (startY <= 0) return;
 
@@ -2335,7 +2335,7 @@
             }
 
             backToTopBtn.addEventListener('click', function() {
-                fastScrollToTop(200);
+                fastScrollToTop(50);
             });
             configCancelBtn.addEventListener('click', closeConfigModal);
             configSaveBtn.addEventListener('click', saveConfigAndConnect);

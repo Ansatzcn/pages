@@ -115,8 +115,8 @@
             border-color: #94a3b8;
         }
         .toolbar .btn-primary-outline {
-            background: #1e293b;
-            border: 1px solid #1e293b;
+            background: #1E40AF;
+            border: 1px solid #1E40AF;
             padding: 0.4rem 1.2rem;
             border-radius: 40px;
             font-weight: 500;
@@ -126,11 +126,12 @@
             font-size: 0.85rem;
         }
         .toolbar .btn-primary-outline:hover {
-            background: #0f172a;
+            background: #1E3A8A;
+            border-color: #1E3A8A;
         }
         .toolbar .btn-sync {
-            background: #2563eb;
-            border: 1px solid #2563eb;
+            background: #1E40AF;
+            border: 1px solid #1E40AF;
             padding: 0.4rem 1.2rem;
             border-radius: 40px;
             font-weight: 500;
@@ -140,7 +141,8 @@
             font-size: 0.85rem;
         }
         .toolbar .btn-sync:hover {
-            background: #1d4ed8;
+            background: #1E3A8A;
+            border-color: #1E3A8A;
         }
         .toolbar .btn-sync:disabled {
             opacity: 0.6;
@@ -192,7 +194,7 @@
         }
         .form-group input:focus,
         .form-group textarea:focus {
-            outline: 2px solid #7c9bff;
+            outline: 2px solid #1E40AF;
             border-color: transparent;
             box-shadow: 0 0 0 3px rgba(124, 155, 255, 0.2);
         }
@@ -272,7 +274,7 @@
 
         .btn-primary {
             grid-column: 1 / -1;
-            background: #1e293b;
+            background: #1E40AF;
             color: white;
             border: none;
             border-radius: 40px;
@@ -288,7 +290,7 @@
             margin-top: 0.4rem;
         }
         .btn-primary:hover {
-            background: #0f172a;
+            background: #1E3A8A;
             transform: scale(0.98);
         }
         .btn-primary:active {
@@ -350,6 +352,8 @@
             vertical-align: top;
             -webkit-user-select: text;
             user-select: text;
+            font-size: 1.1rem;
+            font-weight: 700;
         }
 
         /* 总表优先保证文字可选择：标题、提要、备注都允许正常鼠标拖选 */
@@ -373,18 +377,20 @@
         }
 
         .page-table .col-title a {
-            color: #2563eb;
+            color: #1E40AF;
             text-decoration: none;
-            font-weight: 500;
+            font-size: inherit;
+            font-weight: inherit;
         }
         .page-table .col-title a:hover {
+            color: #1E3A8A;
             text-decoration: underline;
         }
         .page-table .title-note,
         .page-table .title-remark {
             margin-top: 0.28rem;
             color: #64748b;
-            font-size: 0.86rem;
+            font-size: 1rem;
             font-weight: 400;
             line-height: 1.45;
             white-space: normal;
@@ -408,19 +414,19 @@
             align-self: flex-end;
             border: none;
             background: transparent;
-            color: #2563eb;
+            color: #64748b;
             padding: 0;
             font: inherit;
-            font-size: 0.86rem;
-            font-weight: 500;
+            font-size: 1rem;
+            font-weight: 400;
             line-height: 1.45;
             cursor: default;
             text-decoration: none;
         }
         .page-table .row-edit-link:hover,
         .page-table .row-edit-link:focus-visible {
-            color: #1d4ed8;
-            text-decoration: underline;
+            color: #64748b;
+            text-decoration: none;
             outline: none;
         }
         .empty-row td {
@@ -515,7 +521,7 @@
         }
         .modal-box .form-group input:focus,
         .modal-box .form-group textarea:focus {
-            outline: 2px solid #7c9bff;
+            outline: 2px solid #1E40AF;
             border-color: transparent;
         }
         .modal-box .form-group textarea {
@@ -551,11 +557,11 @@
             background: #e2e8f0;
         }
         .modal-actions .btn-modal.save {
-            background: #1e293b;
+            background: #1E40AF;
             color: white;
         }
         .modal-actions .btn-modal.save:hover {
-            background: #0f172a;
+            background: #1E3A8A;
         }
         .modal-actions .btn-modal.delete {
             background: #fee2e2;
@@ -598,7 +604,7 @@
             z-index: 1000;
             animation: slideUp 0.3s ease;
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-            background: #1e293b;
+            background: #1E40AF;
             max-width: 90%;
             text-align: center;
         }
@@ -609,7 +615,7 @@
             background: #dc2626;
         }
         .toast.info {
-            background: #2563eb;
+            background: #1E40AF;
         }
         .toast.hidden {
             display: none;
@@ -694,7 +700,7 @@
             transition: 0.2s;
         }
         .config-box .form-group input:focus {
-            outline: 2px solid #7c9bff;
+            outline: 2px solid #1E40AF;
             border-color: transparent;
         }
         .config-box .form-group .hint {
@@ -703,7 +709,7 @@
             margin-top: 4px;
         }
         .config-box .form-group .hint a {
-            color: #2563eb;
+            color: #1E40AF;
             text-decoration: none;
             cursor: default;
         }
@@ -728,7 +734,7 @@
             height: 16px;
             margin: 0;
             padding: 0;
-            accent-color: #2563eb;
+            accent-color: #1E40AF;
             cursor: pointer;
             flex: 0 0 auto;
         }
@@ -758,11 +764,11 @@
             transition: 0.15s;
         }
         .config-actions .btn-config.primary {
-            background: #1e293b;
+            background: #1E40AF;
             color: white;
         }
         .config-actions .btn-config.primary:hover {
-            background: #0f172a;
+            background: #1E3A8A;
         }
         .config-actions .btn-config.secondary {
             background: #f1f5f9;
@@ -785,31 +791,27 @@
             width: 30px;
             height: 30px;
             padding: 0;
-            border: 1px solid #2563eb;
+            border: 1px solid #1E40AF;
             border-radius: 999px;
-            background: #2563eb;
+            background: #1E40AF;
             color: #ffffff;
             font-family: inherit;
             font-size: 0.78rem;
             line-height: 1;
             cursor: pointer;
             opacity: 1;
-            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.24);
+            box-shadow: 0 4px 14px rgba(30, 64, 175, 0.24);
             transition: opacity 0.2s, background 0.2s, color 0.2s, transform 0.2s;
         }
         .back-to-top:hover,
         .back-to-top:focus-visible {
             opacity: 1;
-            background: #1d4ed8;
-            border-color: #1d4ed8;
+            background: #1E3A8A;
+            border-color: #1E3A8A;
             color: #ffffff;
             transform: translateY(calc(-50% - 2px));
             outline: none;
         }
-        .back-to-top .back-to-top-icon {
-            display: none;
-        }
-
         @media (max-width: 700px) {
             body {
                 width: 100%;
@@ -1141,9 +1143,7 @@
     </div>
 
     <!-- 回到顶部 -->
-    <button class="back-to-top" id="backToTopBtn" type="button" aria-label="回到顶部" title="回到顶部">
-        <span class="back-to-top-icon" aria-hidden="true">↑</span>
-    </button>
+    <button class="back-to-top" id="backToTopBtn" type="button" aria-label="回到顶部" title="回到顶部"></button>
 
     <!-- Toast 消息 -->
     <div class="toast hidden" id="toast"></div>
@@ -3355,10 +3355,10 @@
             );
 
             // ============================================================
-            //  50ms 快速平滑回到顶部
+            //  10ms 快速平滑回到顶部
             // ============================================================
             function fastScrollToTop(
-                duration = 50
+                duration = 10
             ) {
                 const startY =
                     window.scrollY ||
@@ -3447,7 +3447,7 @@
                 'click',
                 function() {
                     fastScrollToTop(
-                        50
+                        10
                     );
                 }
             );

@@ -2026,6 +2026,78 @@
                 return year * 10000 + month * 100 + day;
             }
 
+            // 第一个备注专用排序：沿用原有结构化排序，但不再把 YYYY-MM-DD 日期
+            // 单独置于汉字之前。日期按其数字开头进入普通数字组，其它规则保持不变。
+            function compareFirstRemarkText(valueA, valueB) {
+                function getFirstRemarkSortInfo(value) {
+                    const text = normalizeSortText(value);
+                    if (!text) {
+                        return { type: 99, text: '', numberKey: null };
+                    }
+
+                    // URL 仍保持在最后。
+                    if (/^https?:\/\//i.test(text)) {
+                        return { type: 5, text, numberKey: null };
+                    }
+
+                    const first = Array.from(text)[0] || '';
+
+                    // 汉字：按拼音。
+                    if (/^\p{Script=Han}$/u.test(first)) {
+                        return { type: 1, text, numberKey: null };
+                    }
+
+                    // 拉丁字母：A → Z。
+                    if (/^[A-Za-z]$/.test(first)) {
+                        return { type: 2, text, numberKey: null };
+                    }
+
+                    // 数字：包括 YYYY-MM-DD 日期在内，都按开头数值进入普通数字组。
+                    const numberMatch = text.match(/^[+-]?(?:\d+(?:\.\d+)?|\.\d+)/);
+                    if (numberMatch) {
+                        return {
+                            type: 3,
+                            text,
+                            numberKey: Number(numberMatch[0])
+                        };
+                    }
+
+                    return { type: 4, text, numberKey: null };
+                }
+
+                const a = getFirstRemarkSortInfo(valueA);
+                const b = getFirstRemarkSortInfo(valueB);
+
+                if (a.type !== b.type) {
+                    return a.type - b.type;
+                }
+
+                if (a.type === 1) {
+                    let result = pinyinCollator.compare(a.text, b.text);
+                    if (result !== 0) return result;
+
+                    result = strokeCollator.compare(a.text, b.text);
+                    if (result !== 0) return result;
+                }
+
+                if (a.type === 2) {
+                    const result = a.text.localeCompare(b.text, 'en', {
+                        sensitivity: 'base',
+                        numeric: true
+                    });
+                    if (result !== 0) return result;
+                }
+
+                if (a.type === 3 && a.numberKey !== b.numberKey) {
+                    return a.numberKey - b.numberKey;
+                }
+
+                const result = generalCollator.compare(a.text, b.text);
+                if (result !== 0) return result;
+
+                return a.text < b.text ? -1 : (a.text > b.text ? 1 : 0);
+            }
+
             function sortPages() {
                 pages.sort((a, b) => {
                     const aRemarks = normalizeRemarks(a && a.remark);
@@ -2057,7 +2129,7 @@
                         }
 
                         // 日期相同时，以第一个备注的原有规则稳定区分。
-                        const firstRemarkResult = compareStructuredText(
+                        const firstRemarkResult = compareFirstRemarkText(
                             aFirstRemark,
                             bFirstRemark
                         );
@@ -2091,7 +2163,7 @@
                     }
 
                     if (aHasFirstRemark && bHasFirstRemark) {
-                        const firstRemarkResult = compareStructuredText(
+                        const firstRemarkResult = compareFirstRemarkText(
                             aFirstRemark,
                             bFirstRemark
                         );

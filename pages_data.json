@@ -44,7 +44,10 @@
     "url": "https://mp.weixin.qq.com/s/bjwSM0bQ1I-4LcrqQ7FLQg",
     "titleMode": "markdown",
     "note": "",
-    "remark": "2019-12-31"
+    "remark": [
+      "2019-12-31",
+      "健言"
+    ]
   },
   {
     "title": "武汉肺炎疫情追踪：华南海鲜批发市场休市整治",

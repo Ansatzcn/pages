@@ -4573,9 +4573,11 @@
     "remark": ""
   },
   {
-    "title": "手把手教你把 OpenClaw 接入飞书",
+    "title": "手把手教你把OpenClaw接入飞书",
     "url": "https://mp.weixin.qq.com/s/bHNYwj5qQ3WL3ddr0e60gg",
-    "note": ""
+    "note": "",
+    "titleMode": "markdown",
+    "remark": ""
   },
   {
     "title": "首任黄冈地委书记李友九回忆麻城“东义洲事件”和“宋埠杀匪”",

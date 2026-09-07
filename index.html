@@ -471,6 +471,9 @@
         .page-table .title-note {
             width: calc(100% + var(--edit-reserve));
             max-width: calc(100% + var(--edit-reserve));
+            text-align: justify;
+            text-justify: inter-character;
+            text-align-last: left;
         }
         .page-table .title-remark .remark-line {
             display: block;
@@ -1999,35 +2002,111 @@
             // ============================================================
             //  总表固定排序规则
             // ============================================================
+            function getRemarkDateSortKey(value) {
+                const text = normalizeSortText(value);
+                const match = text.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+
+                if (!match) {
+                    return Number.POSITIVE_INFINITY;
+                }
+
+                const year = Number(match[1]);
+                const month = Number(match[2]);
+                const day = Number(match[3]);
+                const date = new Date(Date.UTC(year, month - 1, day));
+
+                if (
+                    date.getUTCFullYear() !== year ||
+                    date.getUTCMonth() !== month - 1 ||
+                    date.getUTCDate() !== day
+                ) {
+                    return Number.POSITIVE_INFINITY;
+                }
+
+                return year * 10000 + month * 100 + day;
+            }
+
             function sortPages() {
                 pages.sort((a, b) => {
-                    const aRemark =
-                        normalizeRemarks(a && a.remark)[0] || '';
+                    const aRemarks = normalizeRemarks(a && a.remark);
+                    const bRemarks = normalizeRemarks(b && b.remark);
 
-                    const bRemark =
-                        normalizeRemarks(b && b.remark)[0] || '';
+                    const aFirstRemark = aRemarks[0] || '';
+                    const bFirstRemark = bRemarks[0] || '';
+                    const aSecondRemark = aRemarks[1] || '';
+                    const bSecondRemark = bRemarks[1] || '';
 
-                    const aHasRemark = Boolean(aRemark);
-                    const bHasRemark = Boolean(bRemark);
+                    const aHasSecondRemark = Boolean(aSecondRemark);
+                    const bHasSecondRemark = Boolean(bSecondRemark);
+                    const aHasFirstRemark = Boolean(aFirstRemark);
+                    const bHasFirstRemark = Boolean(bFirstRemark);
 
-                    // 第一排序键：每个条目的第一个备注；有备注在前，无备注在后。
-                    if (aHasRemark !== bHasRemark) {
-                        return aHasRemark ? -1 : 1;
+                    // 第一组：有第二个备注的条目始终排在最前。
+                    if (aHasSecondRemark !== bHasSecondRemark) {
+                        return aHasSecondRemark ? -1 : 1;
                     }
 
-                    // 两条都有备注时，先比较各自的第一个备注。
-                    if (aHasRemark && bHasRemark) {
-                        const remarkResult = compareStructuredText(
-                            aRemark,
-                            bRemark
+                    if (aHasSecondRemark && bHasSecondRemark) {
+                        // 第二个备注按 YYYY-MM-DD 日期从小到大排序。
+                        // 非法或非日期值放在本组日期值之后。
+                        const aDateKey = getRemarkDateSortKey(aSecondRemark);
+                        const bDateKey = getRemarkDateSortKey(bSecondRemark);
+
+                        if (aDateKey !== bDateKey) {
+                            return aDateKey - bDateKey;
+                        }
+
+                        // 日期相同时，以第一个备注的原有规则稳定区分。
+                        const firstRemarkResult = compareStructuredText(
+                            aFirstRemark,
+                            bFirstRemark
                         );
 
-                        if (remarkResult !== 0) {
-                            return remarkResult;
+                        if (firstRemarkResult !== 0) {
+                            return firstRemarkResult;
                         }
+
+                        // 第二个备注不是合法日期、且两者都落在日期组末尾时，
+                        // 再按第二个备注文本稳定排序。
+                        if (!Number.isFinite(aDateKey)) {
+                            const secondRemarkResult = compareStructuredText(
+                                aSecondRemark,
+                                bSecondRemark
+                            );
+
+                            if (secondRemarkResult !== 0) {
+                                return secondRemarkResult;
+                            }
+                        }
+
+                        return compareStructuredText(
+                            a && a.title,
+                            b && b.title
+                        );
                     }
 
-                    // 第二排序键：第一个备注相同，或两条都没有备注时，再按标题排序。
+                    // 第二组：只有第一个备注的条目，按原有备注规则排序。
+                    if (aHasFirstRemark !== bHasFirstRemark) {
+                        return aHasFirstRemark ? -1 : 1;
+                    }
+
+                    if (aHasFirstRemark && bHasFirstRemark) {
+                        const firstRemarkResult = compareStructuredText(
+                            aFirstRemark,
+                            bFirstRemark
+                        );
+
+                        if (firstRemarkResult !== 0) {
+                            return firstRemarkResult;
+                        }
+
+                        return compareStructuredText(
+                            a && a.title,
+                            b && b.title
+                        );
+                    }
+
+                    // 第三组：完全没有备注，按标题拼音/原有标题规则排序。
                     return compareStructuredText(
                         a && a.title,
                         b && b.title

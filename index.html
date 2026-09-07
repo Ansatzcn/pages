@@ -271,6 +271,59 @@
             color: #1e3a8a;
         }
 
+        /* 仅添加板块：备注历史选项管理 */
+        .remark-option-row {
+            display: flex;
+            align-items: stretch;
+            gap: 6px;
+            width: 100%;
+            min-width: 0;
+        }
+
+        .remark-option-row + .remark-option-row {
+            margin-top: 2px;
+        }
+
+        .remark-option-row .remark-option {
+            flex: 1 1 auto;
+            width: auto;
+            min-width: 0;
+        }
+
+        .remark-option-actions {
+            display: flex;
+            flex: 0 0 auto;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .remark-manage-btn {
+            min-width: 32px;
+            padding: 0.45rem 0.5rem;
+            border: 1px solid #d1d9e6;
+            border-radius: 8px;
+            background: #fff;
+            color: #475569;
+            font: inherit;
+            font-size: 0.78rem;
+            line-height: 1;
+            cursor: pointer;
+        }
+
+        .remark-manage-btn:hover,
+        .remark-manage-btn:focus-visible {
+            background: #f1f5f9;
+            border-color: #94a3b8;
+            outline: none;
+        }
+
+        .remark-manage-btn.delete:hover,
+        .remark-manage-btn.delete:focus-visible {
+            background: #fee2e2;
+            border-color: #fecaca;
+            color: #991b1b;
+        }
+
         .remark-empty {
             padding: 0.65rem 0.72rem;
             color: #94a3b8;
@@ -1157,12 +1210,14 @@
             const TOKEN_SESSION_KEY = 'pages_github_token_session';
             const STORAGE_KEY = 'pages_data';
             const REMARK_HISTORY_KEY = 'pages_remark_history_v1';
+            const REMARK_HIDDEN_KEY = 'pages_remark_hidden_v1';
 
             // 全局状态
             let pages = [];
             let editingIndex = null;
             let isSyncing = false;
             let remarkHistory = [];
+            let remarkHidden = new Set();
             let backToTopAnimationFrame = null;
 
             let config = {
@@ -1477,6 +1532,34 @@
                 return generalCollator.compare(a.text, b.text);
             }
 
+            function loadRemarkHidden() {
+                try {
+                    const stored = JSON.parse(
+                        localStorage.getItem(REMARK_HIDDEN_KEY) || '[]'
+                    );
+
+                    remarkHidden = new Set(
+                        (Array.isArray(stored) ? stored : [])
+                            .map(remarkHistoryKey)
+                            .filter(Boolean)
+                    );
+                } catch (error) {
+                    console.error('读取已删除备注选项失败:', error);
+                    remarkHidden = new Set();
+                }
+            }
+
+            function saveRemarkHidden() {
+                try {
+                    localStorage.setItem(
+                        REMARK_HIDDEN_KEY,
+                        JSON.stringify([...remarkHidden])
+                    );
+                } catch (error) {
+                    console.error('保存已删除备注选项失败:', error);
+                }
+            }
+
             function saveRemarkHistory() {
                 try {
                     localStorage.setItem(
@@ -1512,7 +1595,7 @@
                     const value = normalizeRemarkValue(raw);
                     const key = remarkHistoryKey(value);
 
-                    if (value && !seen.has(key)) {
+                    if (value && !remarkHidden.has(key) && !seen.has(key)) {
                         seen.set(key, value);
                     }
                 });
@@ -1534,6 +1617,10 @@
 
                 const key = remarkHistoryKey(normalized);
 
+                if (remarkHidden.delete(key)) {
+                    saveRemarkHidden();
+                }
+
                 if (
                     !remarkHistory.some(
                         item => remarkHistoryKey(item) === key
@@ -1545,7 +1632,7 @@
                 }
             }
 
-            function setupRemarkCombo({ input, dropdown, options, combo, submit }) {
+            function setupRemarkCombo({ input, dropdown, options, combo, submit, manageOptions = false }) {
                 let selected = [], filtered = [], activeIndex = -1;
                 let suppressMenuOpen = false;
                 const tags = document.createElement('div');
@@ -1554,11 +1641,13 @@
                 input.removeAttribute('placeholder');
                 options.setAttribute('role', 'listbox');
                 options.setAttribute('aria-multiselectable', 'true');
+
                 function closeMenu() {
                     dropdown.classList.add('hidden');
                     input.setAttribute('aria-expanded', 'false');
                     activeIndex = -1;
                 }
+
                 function renderTags() {
                     tags.replaceChildren();
                     selected.forEach((value, index) => {
@@ -1581,13 +1670,17 @@
                         tags.append(tag);
                     });
                 }
+
                 function add(value) {
                     selected = normalizeRemarks([...selected, value]);
                     input.value = '';
                     renderTags();
                 }
+
                 function choose(value) {
-                    const index = selected.findIndex(item => remarkHistoryKey(item) === remarkHistoryKey(value));
+                    const index = selected.findIndex(
+                        item => remarkHistoryKey(item) === remarkHistoryKey(value)
+                    );
                     if (index >= 0) selected.splice(index, 1);
                     else add(value);
                     input.value = '';
@@ -1603,43 +1696,227 @@
                         suppressMenuOpen = false;
                     }, 0);
                 }
+
                 function setActive(index) {
-                    activeIndex = filtered.length ? (index + filtered.length) % filtered.length : -1;
-                    [...options.children].forEach((button, i) => button.classList.toggle('is-active', i === activeIndex));
-                    if (activeIndex >= 0) options.children[activeIndex].scrollIntoView({block: 'nearest'});
+                    activeIndex = filtered.length
+                        ? (index + filtered.length) % filtered.length
+                        : -1;
+
+                    [...options.children].forEach((node, i) => {
+                        const button = node.matches('.remark-option')
+                            ? node
+                            : node.querySelector('.remark-option');
+                        if (button) {
+                            button.classList.toggle('is-active', i === activeIndex);
+                        }
+                    });
+
+                    if (activeIndex >= 0) {
+                        const node = options.children[activeIndex];
+                        if (node) node.scrollIntoView({ block: 'nearest' });
+                    }
                 }
+
+                function renameHistoryOption(oldValue) {
+                    const oldNormalized = normalizeRemarkValue(oldValue);
+                    if (!oldNormalized) return;
+
+                    const result = prompt('修改备注选项：', oldNormalized);
+                    if (result === null) return;
+
+                    const newNormalized = normalizeRemarkValue(result);
+                    if (!newNormalized) {
+                        alert('备注选项不能为空。');
+                        return;
+                    }
+
+                    const oldKey = remarkHistoryKey(oldNormalized);
+                    const newKey = remarkHistoryKey(newNormalized);
+
+                    if (
+                        newKey !== oldKey &&
+                        remarkHistory.some(item => remarkHistoryKey(item) === newKey)
+                    ) {
+                        alert('该备注选项已经存在。');
+                        return;
+                    }
+
+                    // 修改备注选项时，同步替换总表中所有条目的对应备注。
+                    pages.forEach(item => {
+                        if (!item) return;
+                        item.remark = normalizeRemarks(item.remark).map(remark =>
+                            remarkHistoryKey(remark) === oldKey
+                                ? newNormalized
+                                : remark
+                        );
+                        item.remark = normalizeRemarks(item.remark);
+                    });
+
+                    remarkHidden.add(oldKey);
+                    remarkHidden.delete(newKey);
+
+                    remarkHistory = remarkHistory.filter(
+                        item => remarkHistoryKey(item) !== oldKey &&
+                                remarkHistoryKey(item) !== newKey
+                    );
+                    remarkHistory.push(newNormalized);
+                    remarkHistory.sort(compareRemarkOptions);
+
+                    selected = normalizeRemarks(
+                        selected.map(item =>
+                            remarkHistoryKey(item) === oldKey
+                                ? newNormalized
+                                : item
+                        )
+                    );
+
+                    saveRemarkHidden();
+                    saveRemarkHistory();
+                    input.value = '';
+                    renderTags();
+                    closeMenu();
+                    applySortAndRender();
+
+                    if (isConfigValid()) {
+                        syncToCloud(false);
+                    }
+                }
+
+                function deleteHistoryOption(value) {
+                    const normalized = normalizeRemarkValue(value);
+                    if (!normalized) return;
+
+                    if (!confirm(`确定删除备注“${normalized}”吗？\n该备注会同时从总表中所有已保存条目里移除。`)) {
+                        return;
+                    }
+
+                    const key = remarkHistoryKey(normalized);
+
+                    // 删除备注选项时，同步从总表中所有条目移除该备注。
+                    pages.forEach(item => {
+                        if (!item) return;
+                        item.remark = normalizeRemarks(item.remark).filter(
+                            remark => remarkHistoryKey(remark) !== key
+                        );
+                    });
+
+                    remarkHidden.add(key);
+                    remarkHistory = remarkHistory.filter(
+                        item => remarkHistoryKey(item) !== key
+                    );
+                    selected = selected.filter(
+                        item => remarkHistoryKey(item) !== key
+                    );
+
+                    saveRemarkHidden();
+                    saveRemarkHistory();
+                    input.value = '';
+                    renderTags();
+                    closeMenu();
+                    applySortAndRender();
+
+                    if (isConfigValid()) {
+                        syncToCloud(false);
+                    }
+                }
+
+                function createOptionButton(value, checked) {
+                    const button = document.createElement('button');
+                    button.type = 'button';
+                    button.className = 'remark-option';
+                    button.textContent = (checked ? '✓ ' : '') + value;
+                    button.setAttribute('role', 'option');
+                    button.setAttribute('aria-selected', String(checked));
+                    button.addEventListener('pointerdown', event => {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        choose(value);
+                    });
+                    button.addEventListener('click', event => {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        closeMenu();
+                    });
+                    return button;
+                }
+
                 function renderMenu(forceOpen = false) {
                     const query = remarkHistoryKey(input.value);
-                    filtered = remarkHistory.filter(item => remarkHistoryKey(item).includes(query));
-                    if (query && !filtered.some(item => remarkHistoryKey(item) === query)) filtered.unshift(normalizeRemarkValue(input.value));
+                    filtered = remarkHistory.filter(
+                        item => remarkHistoryKey(item).includes(query)
+                    );
+
+                    if (
+                        query &&
+                        !filtered.some(item => remarkHistoryKey(item) === query)
+                    ) {
+                        filtered.unshift(normalizeRemarkValue(input.value));
+                    }
+
                     options.replaceChildren();
+
                     filtered.forEach(value => {
-                        const button = document.createElement('button');
-                        const checked = selected.some(item => remarkHistoryKey(item) === remarkHistoryKey(value));
-                        button.type = 'button';
-                        button.className = 'remark-option';
-                        button.textContent = (checked ? '✓ ' : '') + value;
-                        button.setAttribute('role', 'option');
-                        button.setAttribute('aria-selected', String(checked));
-                        button.addEventListener('pointerdown', event => {
+                        const checked = selected.some(
+                            item => remarkHistoryKey(item) === remarkHistoryKey(value)
+                        );
+                        const optionButton = createOptionButton(value, checked);
+
+                        if (!manageOptions) {
+                            options.append(optionButton);
+                            return;
+                        }
+
+                        const row = document.createElement('div');
+                        row.className = 'remark-option-row';
+
+                        const actions = document.createElement('div');
+                        actions.className = 'remark-option-actions';
+
+                        const editButton = document.createElement('button');
+                        editButton.type = 'button';
+                        editButton.className = 'remark-manage-btn edit';
+                        editButton.textContent = '改';
+                        editButton.setAttribute('aria-label', '修改备注选项：' + value);
+                        editButton.addEventListener('pointerdown', event => {
                             event.preventDefault();
                             event.stopPropagation();
-                            choose(value);
+                            renameHistoryOption(value);
                         });
-                        button.addEventListener('click', event => {
+                        editButton.addEventListener('click', event => {
                             event.preventDefault();
                             event.stopPropagation();
-                            closeMenu();
                         });
-                        options.append(button);
+
+                        const deleteButton = document.createElement('button');
+                        deleteButton.type = 'button';
+                        deleteButton.className = 'remark-manage-btn delete';
+                        deleteButton.textContent = '删';
+                        deleteButton.setAttribute('aria-label', '删除备注选项：' + value);
+                        deleteButton.addEventListener('pointerdown', event => {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            deleteHistoryOption(value);
+                        });
+                        deleteButton.addEventListener('click', event => {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        });
+
+                        actions.append(editButton, deleteButton);
+                        row.append(optionButton, actions);
+                        options.append(row);
                     });
+
                     activeIndex = -1;
-                    if (!filtered.length) options.innerHTML = '<div class="remark-empty">输入新备注，按回车添加</div>';
+                    if (!filtered.length) {
+                        options.innerHTML = '<div class="remark-empty">输入新备注，按回车添加</div>';
+                    }
                     if (forceOpen) {
                         dropdown.classList.remove('hidden');
                         input.setAttribute('aria-expanded', 'true');
                     }
                 }
+
                 input.addEventListener('focus', () => {
                     if (suppressMenuOpen) {
                         closeMenu();
@@ -1647,6 +1924,7 @@
                     }
                     renderMenu(true);
                 });
+
                 input.addEventListener('input', () => {
                     if (suppressMenuOpen) {
                         closeMenu();
@@ -1654,6 +1932,7 @@
                     }
                     renderMenu(true);
                 });
+
                 input.addEventListener('keydown', event => {
                     if (event.isComposing || event.keyCode === 229) return;
                     if (['ArrowDown', 'ArrowUp', 'Enter', 'Escape'].includes(event.key)) {
@@ -1662,18 +1941,41 @@
                     }
                     if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
                         if (dropdown.classList.contains('hidden')) renderMenu(true);
-                        setActive(activeIndex < 0 ? (event.key === 'ArrowDown' ? 0 : filtered.length - 1) : activeIndex + (event.key === 'ArrowDown' ? 1 : -1));
-                    } else if (event.key === 'Escape') closeMenu();
-                    else if (event.key === 'Enter') {
-                        if (activeIndex >= 0) choose(filtered[activeIndex]);
-                        else if (input.value.trim()) { add(input.value); renderMenu(true); }
-                        else { closeMenu(); submit(); }
+                        setActive(
+                            activeIndex < 0
+                                ? (event.key === 'ArrowDown' ? 0 : filtered.length - 1)
+                                : activeIndex + (event.key === 'ArrowDown' ? 1 : -1)
+                        );
+                    } else if (event.key === 'Escape') {
+                        closeMenu();
+                    } else if (event.key === 'Enter') {
+                        if (activeIndex >= 0) {
+                            choose(filtered[activeIndex]);
+                        } else if (input.value.trim()) {
+                            add(input.value);
+                            renderMenu(true);
+                        } else {
+                            closeMenu();
+                            submit();
+                        }
                     }
                 });
-                document.addEventListener('mousedown', event => { if (!combo.contains(event.target)) closeMenu(); });
+
+                document.addEventListener('mousedown', event => {
+                    if (!combo.contains(event.target)) closeMenu();
+                });
+
                 return {
-                    setValues(value) { selected = normalizeRemarks(value); input.value = ''; renderTags(); closeMenu(); },
-                    getValues() { if (input.value.trim()) add(input.value); return [...selected]; },
+                    setValues(value) {
+                        selected = normalizeRemarks(value);
+                        input.value = '';
+                        renderTags();
+                        closeMenu();
+                    },
+                    getValues() {
+                        if (input.value.trim()) add(input.value);
+                        return [...selected];
+                    },
                     closeMenu
                 };
             }
@@ -3462,6 +3764,8 @@
             // ============================================================
             //  初始化备注下拉菜单
             // ============================================================
+            loadRemarkHidden();
+
             const remarkPicker = setupRemarkCombo({
                 input:
                     remarkInput,
@@ -3476,7 +3780,10 @@
                     remarkCombo,
 
                 submit:
-                    addPage
+                    addPage,
+
+                manageOptions:
+                    true
             });
 
             const editRemarkPicker = setupRemarkCombo({

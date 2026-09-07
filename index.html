@@ -356,6 +356,8 @@
         .page-table .col-title {
             min-width: 200px;
             vertical-align: top;
+            position: relative;
+            padding-bottom: 2.45rem;
             -webkit-user-select: text;
             user-select: text;
             font-size: 1.1rem;
@@ -403,21 +405,22 @@
             overflow-wrap: anywhere;
         }
         .page-table .title-footer {
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
-            gap: 1rem;
+            display: block;
+            width: 100%;
             margin-top: 0.32rem;
-            min-height: 1.5rem;
+            min-height: 0;
         }
         .page-table .title-footer .title-remark {
-            flex: 1 1 auto;
             min-width: 0;
             margin-top: 0;
         }
+        .page-table .title-remark .remark-line {
+            display: block;
+        }
         .page-table .row-edit-link {
-            flex: 0 0 auto;
-            align-self: flex-end;
+            position: absolute;
+            right: 1.2rem;
+            bottom: 0.8rem;
             border: none;
             background: transparent;
             color: #64748b;
@@ -871,6 +874,10 @@
                 max-width: 100%;
                 min-width: 0;
             }
+            .page-table .row-edit-link {
+                right: 0.8rem;
+                bottom: 0.6rem;
+            }
             .form-grid {
                 grid-template-columns: 1fr;
             }
@@ -1074,7 +1081,7 @@
             <div class="modal-sub" id="editModalTitle">标题：<span id="editTitleDisplay"></span></div>
             <div class="form-group">
                 <label for="editPageInput">标题</label>
-                <input type="text" id="editPageInput" placeholder="[标题](链接)">
+                <input type="text" id="editPageInput">
                 <div class="hint">格式：[标题](链接)</div>
             </div>
             <div class="form-group">
@@ -1550,12 +1557,12 @@
                 }
             }
 
-            function setupRemarkCombo({ input, dropdown, options, combo, submit, placeholder = '搜索备注或输入新备注，按回车添加（可多选）' }) {
+            function setupRemarkCombo({ input, dropdown, options, combo, submit }) {
                 let selected = [], filtered = [], activeIndex = -1;
                 const tags = document.createElement('div');
                 tags.className = 'remark-tags';
                 combo.insertBefore(tags, input);
-                input.placeholder = placeholder;
+                input.removeAttribute('placeholder');
                 options.setAttribute('role', 'listbox');
                 options.setAttribute('aria-multiselectable', 'true');
                 function closeMenu() {
@@ -1597,7 +1604,7 @@
                     input.value = '';
                     renderTags();
                     input.focus();
-                    renderMenu(true);
+                    closeMenu();
                 }
                 function setActive(index) {
                     activeIndex = filtered.length ? (index + filtered.length) % filtered.length : -1;
@@ -2425,9 +2432,7 @@
                             item.note || ''
                         );
 
-                    const remark = normalizeRemarks(item.remark)
-                        .map(value => escapeHtml(value))
-                        .join('/');
+                    const remarkValues = normalizeRemarks(item.remark);
 
                     const displayHtml =
                         url
@@ -2440,8 +2445,10 @@
                             : '';
 
                     const remarkHtml =
-                        remark
-                            ? `<div class="title-remark">${remark}</div>`
+                        remarkValues.length
+                            ? `<div class="title-remark">${remarkValues
+                                .map(value => `<div class="remark-line">${escapeHtml(value)}</div>`)
+                                .join('')}</div>`
                             : '<div class="title-remark"></div>';
 
                     html += `
@@ -3471,10 +3478,7 @@
                     editRemarkCombo,
 
                 submit:
-                    saveEdit,
-
-                placeholder:
-                    ''
+                    saveEdit
             });
 
             loadConfig();

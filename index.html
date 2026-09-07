@@ -207,8 +207,7 @@
             margin-top: 4px;
         }
 
-        .remark-tags, .title-remark { display: flex; flex-wrap: wrap; gap: 6px; }
-        .remark-tags { margin-bottom: 6px; }
+        .remark-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
         .remark-tag { display: inline-flex; align-items: center; gap: 6px; max-width: 100%; border: 1px solid #c7d2fe; border-radius: 999px; background: #eef2ff; color: #1e3a8a; padding: 3px 10px; font-size: .9rem; font-weight: 400; }
         .remark-tag span { overflow-wrap: anywhere; min-width: 0; }
         .remark-remove { flex: 0 0 auto; border: 0; background: transparent; color: inherit; cursor: pointer; font: inherit; font-size: 1.15rem; width: 24px; min-height: 24px; border-radius: 50%; }
@@ -1080,12 +1079,12 @@
             </div>
             <div class="form-group">
                 <label for="editNoteInput">提要</label>
-                <input type="text" id="editNoteInput" placeholder="请输入提要">
+                <input type="text" id="editNoteInput">
             </div>
             <div class="form-group">
                 <label for="editRemarkInput">备注</label>
                 <div class="remark-combo" id="editRemarkCombo">
-                    <input type="text" id="editRemarkInput" placeholder="请输入备注" autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-controls="editRemarkOptions">
+                    <input type="text" id="editRemarkInput" autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-controls="editRemarkOptions">
                     <div class="remark-dropdown hidden" id="editRemarkDropdown">
                         <div id="editRemarkOptions"></div>
                     </div>
@@ -1551,12 +1550,12 @@
                 }
             }
 
-            function setupRemarkCombo({ input, dropdown, options, combo, submit }) {
+            function setupRemarkCombo({ input, dropdown, options, combo, submit, placeholder = '搜索备注或输入新备注，按回车添加（可多选）' }) {
                 let selected = [], filtered = [], activeIndex = -1;
                 const tags = document.createElement('div');
                 tags.className = 'remark-tags';
                 combo.insertBefore(tags, input);
-                input.placeholder = '搜索备注或输入新备注，按回车添加（可多选）';
+                input.placeholder = placeholder;
                 options.setAttribute('role', 'listbox');
                 options.setAttribute('aria-multiselectable', 'true');
                 function closeMenu() {
@@ -1666,57 +1665,30 @@
                     const bRemark =
                         normalizeRemarks(b && b.remark)[0] || '';
 
-                    const aTitle =
-                        normalizeSortText(a && a.title);
-
-                    const bTitle =
-                        normalizeSortText(b && b.title);
-
                     const aHasRemark = Boolean(aRemark);
                     const bHasRemark = Boolean(bRemark);
 
-                    // 有备注排前面，无备注排后面。
+                    // 第一排序键：每个条目的第一个备注；有备注在前，无备注在后。
                     if (aHasRemark !== bHasRemark) {
                         return aHasRemark ? -1 : 1;
                     }
 
-                    // 两条都有备注：先备注，再标题。
+                    // 两条都有备注时，先比较各自的第一个备注。
                     if (aHasRemark && bHasRemark) {
-                        const remarkResult =
-                            compareStructuredText(
-                                aRemark,
-                                bRemark
-                            );
+                        const remarkResult = compareStructuredText(
+                            aRemark,
+                            bRemark
+                        );
 
                         if (remarkResult !== 0) {
                             return remarkResult;
                         }
-
-                        const titleResult =
-                            compareStructuredText(
-                                aTitle,
-                                bTitle
-                            );
-
-                        if (titleResult !== 0) {
-                            return titleResult;
-                        }
-                    } else {
-                        // 两条都没有备注：直接按标题。
-                        const titleResult =
-                            compareStructuredText(
-                                aTitle,
-                                bTitle
-                            );
-
-                        if (titleResult !== 0) {
-                            return titleResult;
-                        }
                     }
 
-                    return generalCollator.compare(
-                        `${aRemark}\u0000${aTitle}`,
-                        `${bRemark}\u0000${bTitle}`
+                    // 第二排序键：第一个备注相同，或两条都没有备注时，再按标题排序。
+                    return compareStructuredText(
+                        a && a.title,
+                        b && b.title
                     );
                 });
             }
@@ -2453,9 +2425,9 @@
                             item.note || ''
                         );
 
-                    const remark = normalizeRemarks(item.remark).map((value, remarkIndex) =>
-                        `<span class="remark-tag"><span>${escapeHtml(value)}</span><button type="button" class="remark-remove" data-page="${index}" data-remark="${remarkIndex}" aria-label="移除备注：${escapeHtml(value)}">×</button></span>`
-                    ).join('');
+                    const remark = normalizeRemarks(item.remark)
+                        .map(value => escapeHtml(value))
+                        .join('/');
 
                     const displayHtml =
                         url
@@ -2487,16 +2459,6 @@
                 });
 
                 tableBody.innerHTML = html;
-                tableBody.querySelectorAll('.remark-remove').forEach(button => {
-                    button.addEventListener('click', event => {
-                        event.stopPropagation();
-                        const item = pages[Number(button.dataset.page)];
-                        item.remark = normalizeRemarks(item.remark);
-                        item.remark.splice(Number(button.dataset.remark), 1);
-                        applySortAndRender();
-                        if (isConfigValid()) syncToCloud(false);
-                    });
-                });
 
                 /*
                  * 链接标题同时支持：
@@ -3509,7 +3471,10 @@
                     editRemarkCombo,
 
                 submit:
-                    saveEdit
+                    saveEdit,
+
+                placeholder:
+                    ''
             });
 
             loadConfig();

@@ -357,7 +357,7 @@
             min-width: 200px;
             vertical-align: top;
             position: relative;
-            padding-bottom: 2.45rem;
+            padding-right: 5.2rem;
             -webkit-user-select: text;
             user-select: text;
             font-size: 1.1rem;
@@ -403,16 +403,6 @@
             line-height: 1.45;
             white-space: normal;
             overflow-wrap: anywhere;
-        }
-        .page-table .title-footer {
-            display: block;
-            width: 100%;
-            margin-top: 0.32rem;
-            min-height: 0;
-        }
-        .page-table .title-footer .title-remark {
-            min-width: 0;
-            margin-top: 0;
         }
         .page-table .title-remark .remark-line {
             display: block;
@@ -869,10 +859,8 @@
                 overflow-wrap: anywhere;
                 word-break: break-word;
             }
-            .page-table .title-footer {
-                width: 100%;
-                max-width: 100%;
-                min-width: 0;
+            .page-table .col-title {
+                padding-right: 4.2rem;
             }
             .page-table .row-edit-link {
                 right: 0.8rem;
@@ -2456,10 +2444,8 @@
                             <td class="col-title">
                                 ${displayHtml}
                                 ${noteHtml}
-                                <div class="title-footer">
-                                    ${remarkHtml}
-                                    <button class="row-edit-link edit-btn" data-index="${index}" type="button">编辑</button>
-                                </div>
+                                ${remarkHtml}
+                                <button class="row-edit-link edit-btn" data-index="${index}" type="button">编辑</button>
                             </td>
                         </tr>
                     `;

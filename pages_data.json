@@ -54,7 +54,10 @@
     "url": "https://mp.weixin.qq.com/s/O6Nfzfv2BI-p4-jmndoBCQ",
     "titleMode": "markdown",
     "note": "",
-    "remark": "2020-01-01"
+    "remark": [
+      "2020-01-01",
+      "健言"
+    ]
   },
   {
     "title": "武汉华南海鲜市场已休市，不明原因肺炎已有成熟监测体系",

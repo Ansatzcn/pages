@@ -410,7 +410,12 @@
             min-width: 200px;
             vertical-align: top;
             position: relative;
-            padding-right: 5.2rem;
+            /*
+             * 右侧仅为固定在右下角的“编辑”按钮预留空间。
+             * 提要会在下面单独把这部分宽度补回来，避免整段提要被永久缩窄。
+             */
+            --edit-reserve: 4rem;
+            padding-right: calc(1.2rem + var(--edit-reserve));
             -webkit-user-select: text;
             user-select: text;
             font-size: 1.1rem;
@@ -456,6 +461,16 @@
             line-height: 1.45;
             white-space: normal;
             overflow-wrap: anywhere;
+        }
+
+        /*
+         * 提要使用标题列的完整可用宽度。
+         * 只把 col-title 为“编辑”按钮额外预留的宽度补回来，
+         * 仍保留表格本身正常的右侧内边距，因此不会贴住单元格边缘。
+         */
+        .page-table .title-note {
+            width: calc(100% + var(--edit-reserve));
+            max-width: calc(100% + var(--edit-reserve));
         }
         .page-table .title-remark .remark-line {
             display: block;
@@ -913,7 +928,8 @@
                 word-break: break-word;
             }
             .page-table .col-title {
-                padding-right: 4.2rem;
+                --edit-reserve: 3.4rem;
+                padding-right: calc(0.8rem + var(--edit-reserve));
             }
             .page-table .row-edit-link {
                 right: 0.8rem;

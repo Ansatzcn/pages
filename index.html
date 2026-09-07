@@ -1547,6 +1547,7 @@
 
             function setupRemarkCombo({ input, dropdown, options, combo, submit }) {
                 let selected = [], filtered = [], activeIndex = -1;
+                let suppressMenuOpen = false;
                 const tags = document.createElement('div');
                 tags.className = 'remark-tags';
                 combo.insertBefore(tags, input);
@@ -1591,8 +1592,16 @@
                     else add(value);
                     input.value = '';
                     renderTags();
-                    input.focus();
+
+                    // 选中备注后立即关闭下拉，并阻止随后的 focus/click 再次把菜单打开。
+                    suppressMenuOpen = true;
                     closeMenu();
+                    input.focus({ preventScroll: true });
+                    closeMenu();
+                    setTimeout(() => {
+                        closeMenu();
+                        suppressMenuOpen = false;
+                    }, 0);
                 }
                 function setActive(index) {
                     activeIndex = filtered.length ? (index + filtered.length) % filtered.length : -1;
@@ -1612,8 +1621,16 @@
                         button.textContent = (checked ? '✓ ' : '') + value;
                         button.setAttribute('role', 'option');
                         button.setAttribute('aria-selected', String(checked));
-                        button.addEventListener('mousedown', event => event.preventDefault());
-                        button.addEventListener('click', () => choose(value));
+                        button.addEventListener('pointerdown', event => {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            choose(value);
+                        });
+                        button.addEventListener('click', event => {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            closeMenu();
+                        });
                         options.append(button);
                     });
                     activeIndex = -1;
@@ -1623,8 +1640,20 @@
                         input.setAttribute('aria-expanded', 'true');
                     }
                 }
-                input.addEventListener('focus', () => renderMenu(true));
-                input.addEventListener('input', () => renderMenu(true));
+                input.addEventListener('focus', () => {
+                    if (suppressMenuOpen) {
+                        closeMenu();
+                        return;
+                    }
+                    renderMenu(true);
+                });
+                input.addEventListener('input', () => {
+                    if (suppressMenuOpen) {
+                        closeMenu();
+                        return;
+                    }
+                    renderMenu(true);
+                });
                 input.addEventListener('keydown', event => {
                     if (event.isComposing || event.keyCode === 229) return;
                     if (['ArrowDown', 'ArrowUp', 'Enter', 'Escape'].includes(event.key)) {

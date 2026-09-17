@@ -2,312 +2,2939 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
-<title>Pages</title>
-<script src="https://cdn.jsdelivr.net/npm/pinyin-pro@3.23.0/dist/index.min.js"></script>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover,interactive-widget=resizes-content">
+<title>Press</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#f5f7fa;font-family:"Times New Roman","Microsoft YaHei","微软雅黑",sans-serif;display:flex;justify-content:center;align-items:flex-start;min-height:100vh;padding:2rem 1rem}
-button,input,textarea,select{font-family:inherit}
-.container{max-width:1100px;width:100%;background:white;border-radius:32px;box-shadow:0 20px 40px -12px rgba(0,0,0,.15);padding:2rem 1.8rem;transition:.2s}
-h1{font-size:2.2rem;font-weight:600;color:#1e293b;letter-spacing:-.5px;border-bottom:2px solid #e9edf4;padding-bottom:.6rem;margin-bottom:1.8rem}
-.cloud-status{display:flex;align-items:center;gap:8px;font-size:.85rem;color:#475569;padding:.3rem 1rem;background:#f1f5f9;border-radius:40px;float:right;margin-top:-2.8rem}
-.cloud-status .dot{width:10px;height:10px;border-radius:50%;display:inline-block}
-.cloud-status .dot.online{background:#22c55e}.cloud-status .dot.offline{background:#ef4444}.cloud-status .dot.syncing{background:#f59e0b;animation:pulse 1s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-.toolbar{display:flex;gap:10px;margin-bottom:1.8rem;flex-wrap:wrap;align-items:center;justify-content:space-between;border-bottom:1px solid #e9edf4;padding-bottom:1rem}
-.toolbar .left-group,.toolbar .right-group{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.toolbar .btn-outline{background:transparent;border:1px solid #d1d9e6;padding:.4rem 1.2rem;border-radius:40px;font-weight:500;color:#334155;cursor:pointer;transition:.15s;font-size:.85rem}
-.toolbar .btn-outline:hover{background:#f1f5f9;border-color:#94a3b8}
-.toolbar .btn-primary-outline,.toolbar .btn-sync{background:#1E40AF;border:1px solid #1E40AF;padding:.4rem 1.2rem;border-radius:40px;font-weight:500;color:white;cursor:pointer;transition:.15s;font-size:.85rem}
-.toolbar .btn-primary-outline:hover,.toolbar .btn-sync:hover{background:#1E3A8A;border-color:#1E3A8A}.toolbar .btn-sync:disabled{opacity:.6;cursor:not-allowed}
-.add-section{background:#f8fafc;border-radius:24px;padding:1.6rem 1.5rem;margin-bottom:2.2rem;border:1px solid #e2e8f0}
-.add-section h2{font-size:1.2rem;font-weight:500;color:#0f172a;margin-bottom:1rem}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem 1.2rem}.form-group{display:flex;flex-direction:column;gap:4px}.form-group.full-width{grid-column:1/-1}
-.form-group label{font-size:.8rem;font-weight:600;text-transform:uppercase;letter-spacing:.4px;color:#475569}
-.form-group input,.form-group textarea{background:white;border:1px solid #d1d9e6;border-radius:16px;padding:.7rem 1rem;font-size:.95rem;transition:.2s;font-family:inherit;resize:vertical}
-.form-group input:focus,.form-group textarea:focus{outline:2px solid #1E40AF;border-color:transparent;box-shadow:0 0 0 3px rgba(124,155,255,.2)}
-.form-group textarea{min-height:60px}.form-group .hint{font-size:.75rem;color:#94a3b8;margin-top:4px}
-.remark-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}.remark-tag{display:inline-flex;align-items:center;gap:6px;max-width:100%;border:1px solid #c7d2fe;border-radius:999px;background:#eef2ff;color:#1e3a8a;padding:3px 10px;font-size:.9rem;font-weight:400}.remark-tag span{overflow-wrap:anywhere;min-width:0}
-.remark-remove{flex:0 0 auto;border:0;background:transparent;color:inherit;cursor:pointer;font:inherit;font-size:1.15rem;width:24px;min-height:24px;border-radius:50%}.remark-remove:hover{background:#c7d2fe}.remark-remove:focus-visible{outline:2px solid #1e40af}
-.remark-combo{position:relative;width:100%;min-width:0}.remark-combo>input{width:100%}
-.remark-dropdown{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:1300;max-height:260px;overflow-y:auto;padding:6px;border:1px solid #cbd5e1;border-radius:14px;background:#fff;box-shadow:0 14px 30px rgba(15,23,42,.16);overscroll-behavior:contain}.remark-dropdown.hidden{display:none!important}
-.remark-option{display:block;width:100%;min-width:0;padding:.58rem .72rem;border:0;border-radius:9px;background:#fff;color:#0f172a;font:inherit;font-size:.9rem;line-height:1.35;text-align:left;overflow-wrap:anywhere;cursor:pointer}.remark-option+.remark-option{margin-top:2px}.remark-option:hover,.remark-option.is-active{background:#eef2ff;color:#1e3a8a}
-.remark-option-row{display:flex;align-items:stretch;gap:6px;width:100%;min-width:0}.remark-option-row+.remark-option-row{margin-top:2px}.remark-option-row .remark-option{flex:1 1 auto;width:auto;min-width:0}
-.remark-option-actions{display:flex;flex:0 0 auto;align-items:center;gap:4px}.remark-manage-btn{min-width:32px;padding:.45rem .5rem;border:1px solid #d1d9e6;border-radius:8px;background:#fff;color:#475569;font:inherit;font-size:.78rem;line-height:1;cursor:pointer}
-.remark-manage-btn:hover,.remark-manage-btn:focus-visible{background:#f1f5f9;border-color:#94a3b8;outline:none}.remark-manage-btn.delete:hover,.remark-manage-btn.delete:focus-visible{background:#fee2e2;border-color:#fecaca;color:#991b1b}
-.remark-empty{padding:.65rem .72rem;color:#94a3b8;font-size:.82rem;text-align:center}
-.btn-primary{grid-column:1/-1;background:#1E40AF;color:white;border:none;border-radius:40px;padding:.85rem 1.5rem;font-weight:600;font-size:1rem;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:.4rem}.btn-primary:hover{background:#1E3A8A;transform:scale(.98)}.btn-primary:active{transform:scale(.96)}.btn-primary:disabled{opacity:.6;cursor:not-allowed;transform:none}
-.table-wrapper{overflow-x:auto;border-radius:20px;border:1px solid #e9edf4;margin-top:.5rem}.page-table{width:100%;border-collapse:collapse;font-size:.95rem}
-.page-table th{background:#f1f5f9;text-align:left;padding:.9rem 1.2rem;font-weight:600;color:#1e293b;border-bottom:2px solid #d1d9e6;white-space:nowrap}
-.page-table th.sortable{cursor:pointer;user-select:none;transition:background .15s}.page-table th.sortable:hover{background:#e2e8f0}.page-table th.sortable .sort-icon{margin-left:6px;font-size:.75rem;color:#94a3b8}
-.page-table td{padding:.8rem 1.2rem;border-bottom:1px solid #eef2f6;vertical-align:middle;line-height:1.5}.page-table tbody tr:hover{background:#fafcff}.page-table tbody tr:last-child td{border-bottom:none}
-.page-table .col-title{min-width:200px;vertical-align:top;position:relative;--edit-reserve:4rem;padding-right:calc(1.2rem + var(--edit-reserve));-webkit-user-select:text;user-select:text;font-size:1.1rem;font-weight:700}
-.page-table .col-title>a,.page-table .title-note,.page-table .title-remark{-webkit-user-select:text;user-select:text}.page-table .title-note,.page-table .title-remark{cursor:text}
-.page-table .col-title>a{-webkit-user-drag:none;cursor:default}.page-table .col-title a{color:#1E40AF;text-decoration:none;font-size:inherit;font-weight:inherit}.page-table .col-title a:hover{color:#1E3A8A;text-decoration:underline}
-.page-table .title-note,.page-table .title-remark{margin-top:.28rem;color:#000;font-size:1rem;font-weight:400;line-height:1.45;white-space:normal;overflow-wrap:anywhere}
-.page-table .title-note{width:calc(100% + var(--edit-reserve));max-width:calc(100% + var(--edit-reserve));text-align:justify;text-justify:inter-character;text-align-last:left}.page-table .title-remark .remark-line{display:block}
-.page-table .row-edit-link{position:absolute;right:1.2rem;bottom:.8rem;border:none;background:transparent;color:#64748b;padding:0;font:inherit;font-size:1rem;font-weight:400;line-height:1.45;cursor:default;text-decoration:none}.page-table .row-edit-link:hover,.page-table .row-edit-link:focus-visible{color:#64748b;text-decoration:none;outline:none}
-.empty-row td{padding:2.5rem 1rem;text-align:center;color:#94a3b8;font-size:1rem;background:#fafcff}
-.list-header{display:flex;justify-content:space-between;align-items:baseline;margin:1.8rem 0 .8rem;flex-wrap:wrap;gap:10px}.list-header h2{font-size:1.4rem;font-weight:600;color:#0f172a}.list-header .badge{background:#e9edf4;padding:.2rem 1rem;border-radius:40px;font-size:.8rem;font-weight:500;color:#334155}
-.modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.4);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:999;animation:fadeIn .2s ease}.modal-overlay.hidden{display:none}
-.modal-box{background:white;border-radius:28px;padding:2rem 2rem 1.8rem;max-width:520px;width:92%;box-shadow:0 30px 60px rgba(0,0,0,.25);animation:slideUp .25s ease}.modal-box h3{font-size:1.3rem;font-weight:600;color:#0f172a;margin-bottom:.2rem}.modal-box .modal-sub{color:#64748b;font-size:.9rem;margin-bottom:1.2rem;border-bottom:1px solid #e9edf4;padding-bottom:.8rem}.modal-box .form-group{margin-bottom:1rem}.modal-box .form-group label{font-size:.75rem;font-weight:600;text-transform:uppercase;color:#475569}
-.modal-box .form-group input,.modal-box .form-group textarea{width:100%;background:white;border:1px solid #d1d9e6;border-radius:14px;padding:.6rem 1rem;font-size:.95rem;font-family:inherit;transition:.2s}.modal-box .form-group input:focus,.modal-box .form-group textarea:focus{outline:2px solid #1E40AF;border-color:transparent}.modal-box .form-group textarea{min-height:56px;resize:vertical}
-.modal-actions{display:flex;gap:10px;justify-content:space-between;align-items:center;margin-top:1.2rem}.modal-actions-right{display:flex;gap:10px;align-items:center}.modal-actions .btn-modal{padding:.5rem 1.6rem;border-radius:40px;font-weight:600;font-size:.9rem;border:none;cursor:pointer;transition:.15s}.modal-actions .btn-modal.cancel{background:#f1f5f9;color:#334155}.modal-actions .btn-modal.cancel:hover{background:#e2e8f0}.modal-actions .btn-modal.save{background:#1E40AF;color:white}.modal-actions .btn-modal.save:hover{background:#1E3A8A}.modal-actions .btn-modal.delete{background:#fee2e2;color:#991b1b}.modal-actions .btn-modal.delete:hover{background:#fecaca}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
-.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);padding:.8rem 2rem;border-radius:40px;color:white;font-weight:500;font-size:.9rem;z-index:1000;animation:slideUp .3s ease;box-shadow:0 8px 30px rgba(0,0,0,.2);background:#1E40AF;max-width:90%;text-align:center}.toast.success{background:#16a34a}.toast.error{background:#dc2626}.toast.info{background:#1E40AF}.toast.hidden{display:none}
-.config-overlay{position:fixed;inset:0;width:100%;height:100vh;height:100dvh;background:rgba(0,0,0,.5);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;z-index:1000;animation:fadeIn .25s ease;padding:max(12px,env(safe-area-inset-top)) 12px max(12px,env(safe-area-inset-bottom));overflow:hidden}.config-overlay.hidden{display:none}
-.config-box{background:white;border-radius:28px;padding:2rem 2rem 1.2rem;max-width:560px;width:min(94%,560px);max-height:calc(100vh - 24px);max-height:calc(100dvh - max(24px,env(safe-area-inset-top) + env(safe-area-inset-bottom) + 16px));overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-gutter:stable;box-shadow:0 30px 60px rgba(0,0,0,.3);animation:slideUp .25s ease}
-.config-box::-webkit-scrollbar{width:8px}.config-box::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:999px}.config-box::-webkit-scrollbar-track{background:transparent}.config-box h3{font-size:1.3rem;font-weight:600;color:#0f172a;margin-bottom:.5rem}.config-box .config-desc{color:#64748b;font-size:.9rem;margin-bottom:1.2rem;border-bottom:1px solid #e9edf4;padding-bottom:.8rem}.config-box .form-group{margin-bottom:1rem}.config-box .form-group label{font-size:.75rem;font-weight:600;text-transform:uppercase;color:#475569}
-.config-box .form-group input{width:100%;background:white;border:1px solid #d1d9e6;border-radius:14px;padding:.7rem 1rem;font-size:.95rem;font-family:inherit;transition:.2s}.config-box .form-group input:focus{outline:2px solid #1E40AF;border-color:transparent}.config-box .form-group .hint{font-size:.75rem;color:#94a3b8;margin-top:4px}.config-box .form-group .hint a{color:#1E40AF;text-decoration:none;cursor:default}.config-box .form-group .hint a:hover{text-decoration:underline}
-.config-box .token-save-option{display:flex;flex-direction:row;align-items:center;gap:8px;margin-top:8px;color:#475569;font-size:.82rem;font-weight:500;text-transform:none;letter-spacing:0;cursor:pointer}.config-box .token-save-option input[type=checkbox]{width:16px;height:16px;margin:0;padding:0;accent-color:#1E40AF;cursor:pointer;flex:0 0 auto}.config-box .token-save-hint{margin-left:24px;color:#64748b;line-height:1.5}
-.config-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:1.2rem;position:sticky;bottom:0;z-index:3;background:linear-gradient(to bottom,rgba(255,255,255,.88),#fff 24%);padding:.9rem 0 max(.2rem,env(safe-area-inset-bottom))}.config-actions .btn-config{padding:.5rem 1.8rem;border-radius:40px;font-weight:600;font-size:.9rem;border:none;cursor:pointer;transition:.15s}.config-actions .btn-config.primary{background:#1E40AF;color:white}.config-actions .btn-config.primary:hover{background:#1E3A8A}.config-actions .btn-config.secondary{background:#f1f5f9;color:#334155}.config-actions .btn-config.secondary:hover{background:#e2e8f0}
-.back-to-top{position:fixed;right:16px;top:70%;transform:translateY(-50%);z-index:900;display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;padding:0;border:1px solid #1E40AF;border-radius:999px;background:#1E40AF;color:#fff;font-family:inherit;font-size:.78rem;line-height:1;cursor:pointer;opacity:1;box-shadow:0 4px 14px rgba(30,64,175,.24);transition:opacity .2s,background .2s,color .2s,transform .2s}.back-to-top:hover,.back-to-top:focus-visible{opacity:1;background:#1E3A8A;border-color:#1E3A8A;color:#fff;transform:translateY(calc(-50% - 2px));outline:none}
-@media(max-width:700px){
-body{width:100%;max-width:100%;padding:.75rem .5rem;overflow-x:hidden}.container{width:100%;max-width:100%;min-width:0;padding:1.2rem}.table-wrapper{width:100%;max-width:100%;min-width:0;overflow-x:hidden}.page-table{width:100%;max-width:100%;min-width:0;table-layout:fixed}.page-table th,.page-table td,.page-table .col-title{width:100%;max-width:100%;min-width:0}.page-table .col-title{overflow-wrap:anywhere;word-break:break-word}.page-table .col-title>a{display:inline;max-width:100%;overflow-wrap:anywhere;word-break:break-all}.page-table .title-note,.page-table .title-remark{max-width:100%;overflow-wrap:anywhere;word-break:break-word}.page-table .col-title{--edit-reserve:0rem;padding-right:.8rem}.page-table .title-note{width:100%;max-width:100%}.page-table .row-edit-link{right:.8rem;bottom:.6rem}.form-grid{grid-template-columns:1fr}.page-table th,.page-table td{padding:.6rem .8rem;font-size:.85rem}.toolbar{flex-direction:column;align-items:stretch}.toolbar .left-group,.toolbar .right-group{justify-content:center}.cloud-status{float:none;margin-top:0}.config-overlay{align-items:stretch;padding:max(8px,env(safe-area-inset-top)) 8px max(8px,env(safe-area-inset-bottom))}.config-box{width:100%;max-height:calc(100dvh - max(16px,env(safe-area-inset-top) + env(safe-area-inset-bottom) + 8px));margin:auto 0;padding:1.25rem 1rem .8rem;border-radius:22px}.config-actions{gap:8px}.config-actions .btn-config{flex:1 1 0;min-width:0;padding-left:.75rem;padding-right:.75rem}.back-to-top{right:3px;top:70%;width:24px;height:24px;padding:0;font-size:.68rem}
+body{min-height:100vh;padding:2rem 1rem 4rem;background:#f5f7fa;color:#0f172a;font-family:"Times New Roman","Microsoft YaHei","PingFang SC",serif}
+button,input,select{font:inherit}button{cursor:pointer}.hidden{display:none!important}
+.container{width:min(100%,1080px);margin:auto;padding:2rem 1.8rem;background:#fff;border-radius:30px;box-shadow:0 20px 42px -14px rgba(15,23,42,.18)}
+.page-title{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-bottom:1.45rem;padding-bottom:.8rem;border-bottom:2px solid #e8edf4;font-size:2.2rem}
+.cloud-status{display:inline-flex;align-items:center;gap:8px;padding:.35rem .9rem;border-radius:999px;background:#f1f5f9;color:#475569;font-size:.82rem;font-weight:500}
+.status-dot{width:9px;height:9px;border-radius:50%;background:#94a3b8}.status-dot.online{background:#22c55e}.status-dot.offline{background:#ef4444}.status-dot.syncing{background:#f59e0b}
+.toolbar{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;margin-bottom:1.7rem;padding-bottom:1rem;border-bottom:1px solid #e8edf4}
+.toolbar-group{display:flex;flex-wrap:wrap;gap:9px}.btn{min-height:36px;padding:.45rem 1.1rem;border:1px solid #cbd5e1;border-radius:999px;background:#fff;color:#334155;font-size:.86rem;font-weight:650}.btn:hover{background:#f1f5f9}.btn:disabled{opacity:.5;cursor:not-allowed}.btn-primary{border-color:#1e293b;background:#1e293b;color:#fff}.btn-primary:hover{background:#0f172a}.btn-danger{border-color:#fecaca;background:#fee2e2;color:#991b1b}.btn-danger:hover{background:#fecaca}.btn-sync{border-color:#1E40AF;background:#1E40AF;color:#fff}.last-sync{color:#94a3b8;font-size:.8rem}
+.add-section{margin-bottom:2rem;padding:1.5rem;border:1px solid #e2e8f0;border-radius:23px;background:#f8fafc}.add-section h2,.list-header h2{font-size:1.3rem}.add-section h2{margin-bottom:1rem}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}.three-fields-row{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}.code-bookno-row,.tag-category-row{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}.form-group{display:flex;flex-direction:column;gap:5px}.form-group.full{grid-column:1/-1}.form-group label{color:#475569;font-size:.78rem;font-weight:700;letter-spacing:.04em}.required{color:#dc2626}
+.form-group input,.form-group select{width:100%;min-height:44px;padding:.72rem 1rem;border:1px solid #cbd5e1;border-radius:15px;background:#fff;color:#0f172a;outline:none}.clearable-field{display:grid;grid-template-columns:minmax(0,1fr) 36px;gap:6px;align-items:center}.edit-title-field{display:grid;grid-template-columns:minmax(0,1fr) 36px;gap:6px;align-items:center}.clear-field-btn{height:44px;width:36px;border:1px solid #cbd5e1;border-radius:12px;background:#fff;color:#64748b;font-weight:800}.clear-field-btn:hover{background:#f1f5f9;color:#0f172a}.form-group input:focus,.form-group select:focus{outline:2px solid #93b4ff;outline-offset:1px;border-color:transparent}.form-group input[readonly]{background:#f1f5f9;color:#64748b}
+.add-button{grid-column:1/-1;min-height:46px;border:0;border-radius:999px;background:#1e293b;color:#fff;font-weight:700}.add-button:hover{background:#0f172a}
+.combo{position:relative;border:1px solid #cbd5e1;border-radius:15px;background:#fff;padding:.45rem;min-height:44px}
+.combo-row{display:grid;grid-template-columns:minmax(0,1fr) 44px;gap:7px}
+.combo-row input{border:0!important;border-radius:10px!important;min-height:38px;padding:.55rem .7rem}
+.combo-row input:focus{outline:2px solid #93b4ff!important;outline-offset:0}
+.combo-toggle{min-height:38px;border:1px solid #cbd5e1;border-radius:12px;background:#fff;color:#475569;font-weight:700}
+.combo-toggle:hover{background:#f1f5f9}
+.combo-panel{position:absolute;left:0;right:0;top:calc(44px + 7px);z-index:650;max-height:250px;overflow-y:auto;padding:.6rem;border:1px solid #cbd5e1;border-radius:15px;background:#fff;box-shadow:0 15px 30px rgba(15,23,42,.14)}
+.combo-selected{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}.combo-selected:empty{display:none}
+.combo-option-list{display:flex;flex-direction:column;gap:6px}
+.combo-pill,.selected-pill{display:inline-flex;align-items:center;max-width:100%;min-height:34px;border:1px solid #cbd5e1;border-radius:999px;background:#f8fafc;overflow:hidden}
+.combo-pill{display:flex;width:100%;border-radius:11px}
+.combo-pill.selected{border-color:#93b4ff;background:#eaf1ff}
+.combo-pill-select{flex:1;min-width:0;padding:.5rem .7rem;border:0;background:transparent;color:#0f172a;text-align:left;white-space:normal;overflow-wrap:anywhere}
+.combo-pill-select:hover{background:rgba(226,232,240,.7)}
+.combo-pill-select.keyboard-active{
+    background:#dbeafe;
+    color:#1E3A8A;
+    font-weight:800;
+    box-shadow:inset 0 0 0 2px #93c5fd;
 }
-.config-box{padding:0;display:grid;grid-template-rows:minmax(0,1fr) auto;overflow:hidden}
-.config-scroll{min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-width:auto;scrollbar-color:#94a3b8 #eef2f7;scrollbar-gutter:stable;padding:2rem 2rem 1rem;touch-action:pan-y}
-.config-scroll::-webkit-scrollbar{width:10px}.config-scroll::-webkit-scrollbar-track{background:#eef2f7}.config-scroll::-webkit-scrollbar-thumb{background:#94a3b8;border:2px solid #eef2f7;border-radius:999px}
-.config-actions{position:static;bottom:auto;flex:0 0 auto;margin-top:0;padding:.9rem 2rem max(1.2rem,env(safe-area-inset-bottom));border-top:1px solid #e9edf4;background:#fff;box-shadow:0 -8px 20px rgba(15,23,42,.06)}
-@media(max-width:700px){
-.config-overlay{top:var(--config-vv-top,0px);bottom:auto;height:var(--config-vv-height,100dvh);min-height:0;padding:max(8px,env(safe-area-inset-top)) 8px max(8px,env(safe-area-inset-bottom));align-items:stretch;overflow:hidden}.config-box{width:100%;max-width:none;height:100%;max-height:none;min-height:0;margin:0;border-radius:22px}.config-scroll{min-height:0;padding:1.25rem 1rem 1rem}.config-actions{width:100%;padding:.85rem 1rem max(.85rem,env(safe-area-inset-bottom))}
+.combo-drag{flex:0 0 32px;width:32px;align-self:stretch;border:0;border-right:1px solid #e2e8f0;background:transparent;color:#64748b;font-size:1rem;font-weight:700;line-height:1;cursor:grab;touch-action:none}
+.combo-drag:hover{background:#e2e8f0;color:#0f172a}.combo-drag:active,.combo-pill.dragging .combo-drag{cursor:grabbing}
+.combo-pill.manual-order.dragging{opacity:.52}
+.combo-pill.drag-before{box-shadow:inset 0 3px 0 #1E40AF}.combo-pill.drag-after{box-shadow:inset 0 -3px 0 #1E40AF}
+body.reordering{user-select:none}
+.combo-pill-edit,.combo-pill-delete,.selected-pill-remove{flex:0 0 28px;width:28px;height:30px;border:0;border-radius:50%;background:transparent;font-size:.95rem;font-weight:800;line-height:1}
+.combo-pill-edit{color:#15803d}
+.combo-pill-edit:hover{background:#dcfce7;color:#166534}
+.combo-pill-delete,.selected-pill-remove{margin-right:2px;color:#991b1b}
+.combo-pill-delete:hover,.selected-pill-remove:hover{background:#fee2e2}
+.selected-pill-label{min-width:0;padding:.4rem .28rem .4rem .72rem;color:#334155;white-space:normal;overflow-wrap:anywhere}
+.combo-add{display:block;width:100%;margin-top:.55rem;padding:.55rem .65rem;border:0;border-top:1px solid #e2e8f0;background:#fff;color:#1E40AF;text-align:left;font-size:.82rem;font-weight:700}.combo-add:hover{background:#f8fafc}.combo-empty{width:100%;padding:.75rem;color:#94a3b8;text-align:center;font-size:.82rem}
+.list-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:.8rem}.count-badge{min-width:38px;padding:.22rem .8rem;border-radius:999px;background:#e8edf4;text-align:center;font-size:.8rem;font-weight:650}
+.press-list{border:1px solid #e2e8f0;border-radius:20px;overflow:hidden;background:#fff}.press-item{position:relative;padding:1rem 1.15rem;background:#fff}.press-item+.press-item{border-top:2px solid #dbe3ed}.press-item:hover{background:#fafcff}
+.press-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem}.book-title{font-size:1.05rem;font-weight:700;line-height:1.5;overflow-wrap:anywhere;color:#1E40AF;}.book-title a{color:#1E40AF;text-decoration:none}.book-title a:hover,.book-title a:focus-visible{color:#1E3A8A;text-decoration:underline;outline:none}.meta{display:grid;grid-template-columns:1fr;gap:.28rem;margin-top:.45rem;color:#475569;font-size:.9rem;line-height:1.55}.meta-row{overflow-wrap:anywhere}.meta-label{color:#94a3b8}.institution a{color:#1E40AF;text-decoration:none}.institution a:hover{color:#1E3A8A;text-decoration:underline}
+.press-content{flex:1;min-width:0;padding-bottom:0}.code-row,.bookshelf-row{display:flex;align-items:baseline;justify-content:space-between;gap:1rem}.code-text,.bookshelf-text{min-width:0;overflow-wrap:anywhere}.edit-btn{flex:0 0 auto;position:absolute;right:1.15rem;bottom:1rem;padding:0;border:0;background:transparent;color:#64748b;font-size:.9rem;font-family:"Times New Roman","Microsoft YaHei","PingFang SC",serif;font-weight:400;line-height:1.55;text-decoration:underline;text-underline-offset:2px;cursor:pointer}.edit-btn:hover,.edit-btn:focus-visible{background:transparent;color:#475569;text-decoration:underline;outline:none}.empty-state{padding:2.6rem 1rem;background:#fafcff;color:#94a3b8;text-align:center}
+.overlay{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:max(12px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));background:rgba(15,23,42,.45);backdrop-filter:blur(5px)}
+.dialog{width:min(100%,620px);max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom));display:flex;flex-direction:column;overflow:hidden;background:#fff;border-radius:26px;box-shadow:0 30px 70px rgba(15,23,42,.28)}.dialog-scroll{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y;scrollbar-gutter:stable;padding:1.7rem 1.7rem 1rem}.dialog h3{margin-bottom:.9rem;font-size:1.3rem}.dialog-desc{margin-bottom:1rem;padding-bottom:.8rem;border-bottom:1px solid #e2e8f0;color:#64748b;font-size:.86rem;line-height:1.55}.dialog .form-group{margin-bottom:.95rem}.dialog-actions{position:relative;z-index:2;flex:0 0 auto;display:flex;justify-content:flex-start;gap:9px;padding:.95rem 1.7rem max(.95rem,env(safe-area-inset-bottom));border-top:1px solid #e8edf4;background:#fff}#editModal .dialog-actions .btn-danger{margin-right:0}
+.remember-row{display:flex;align-items:flex-start;gap:8px;color:#334155;font-size:.82rem;line-height:1.5}.remember-row input{width:auto;min-height:auto;margin-top:.2rem}
+.toast{position:fixed;left:50%;bottom:28px;z-index:1500;max-width:min(90vw,640px);padding:.78rem 1.5rem;transform:translateX(-50%);border-radius:999px;background:#1E40AF;color:#fff;font-size:.88rem;font-weight:600;box-shadow:0 12px 34px rgba(15,23,42,.25)}.toast.success{background:#16a34a}.toast.error{background:#dc2626}
+
+.manage-dialog{height:min(760px,calc(100vh - 24px));height:min(760px,calc(100dvh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom)))}.manage-fixed-top{flex:0 0 auto;padding:1.7rem 1.7rem .9rem;border-bottom:1px solid #e8edf4;background:#fff}.manage-fixed-top .dialog-desc{margin-bottom:1rem}.manage-fixed-top .form-group{margin-bottom:0}.manage-table-scroll{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y;scrollbar-gutter:stable;padding:.55rem 1.7rem 1rem;background:#fff}.manage-add-row{display:grid;grid-template-columns:minmax(0,1fr) 92px auto;gap:8px;align-items:center}.manage-add-row input{min-width:0}.manage-add-row .btn{min-height:44px;padding-inline:1.2rem}.manage-line-head{display:grid;grid-template-columns:minmax(0,1fr) 86px 30px 30px;gap:7px;align-items:center;margin:.25rem 0 .4rem;padding:0 .3rem;color:#94a3b8;font-size:.75rem;font-weight:700}.manage-list{margin-top:.35rem}.manage-option-row{display:grid;grid-template-columns:minmax(0,1fr) 86px 30px 30px;gap:7px;align-items:center;min-height:46px;padding:.35rem .4rem;border:1px solid #cbd5e1;border-radius:12px;background:#fff}.manage-option-row+.manage-option-row{margin-top:7px}.manage-option-label{min-width:0;padding:.35rem .25rem;color:#0f172a;white-space:normal;overflow-wrap:anywhere}.manage-line-input{width:100%;min-width:0;height:34px;padding:.3rem .4rem;border:1px solid #cbd5e1;border-radius:9px;background:#fff;text-align:center;font-weight:700;outline:none}.manage-line-input:focus{border-color:#93c5fd;box-shadow:0 0 0 2px #dbeafe}.manage-empty{padding:1.3rem .8rem;border:1px dashed #cbd5e1;border-radius:14px;color:#94a3b8;text-align:center;font-size:.86rem}.institution-choice{display:flex;align-items:center;width:100%}@media(max-width:700px){.manage-dialog{width:100%;height:calc(100vh - 16px);height:calc(100dvh - 16px - env(safe-area-inset-top) - env(safe-area-inset-bottom));max-height:none}.manage-fixed-top{padding:1.2rem 1.2rem .8rem}.manage-table-scroll{padding:.55rem 1.2rem .8rem}.manage-add-row{grid-template-columns:minmax(0,1fr) 78px}.manage-add-row .btn{grid-column:1/-1}.manage-line-head{grid-template-columns:minmax(0,1fr) 72px 30px 30px}.manage-option-row{grid-template-columns:minmax(0,1fr) 72px 30px 30px}.manage-option-label{font-size:.88rem}}
+@media(max-width:700px){body{padding:.8rem}.container{padding:1.25rem;border-radius:22px}.page-title{font-size:1.8rem}.toolbar{flex-direction:column}.toolbar-group{justify-content:center}.form-grid{grid-template-columns:1fr}.three-fields-row,.code-bookno-row{grid-column:auto;grid-template-columns:1fr}.form-group.full,.add-button{grid-column:auto}.press-head{gap:.6rem}.meta{grid-template-columns:1fr}.overlay{padding:max(8px,env(safe-area-inset-top)) max(8px,env(safe-area-inset-right)) max(8px,env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left))}.dialog{width:100%;max-height:calc(100vh - 16px);max-height:calc(100dvh - 16px - env(safe-area-inset-top) - env(safe-area-inset-bottom));border-radius:20px}.dialog-scroll{flex:1 1 auto;min-height:0;padding:1.2rem 1.2rem .8rem}.dialog-actions{flex:0 0 auto;padding:.85rem 1.2rem max(.85rem,env(safe-area-inset-bottom));box-shadow:0 -6px 16px rgba(15,23,42,.06)}.dialog-actions .btn{flex:1}#configModal{align-items:flex-start;overflow:hidden}#configForm{width:100%;height:calc(100vh - 16px);height:calc(100dvh - 16px - env(safe-area-inset-top) - env(safe-area-inset-bottom));max-height:none;min-height:0;display:flex;flex-direction:column;overflow:hidden}#configForm .dialog-scroll{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y;scroll-padding-bottom:1rem}#configForm .dialog-actions{position:relative;flex:0 0 auto;z-index:3}}
+.edit-two-column-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;grid-column:1/-1}
+.edit-title-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;grid-column:1/-1}
+@media(max-width:700px){.edit-title-row{grid-template-columns:1fr}}
+
+/* 添加时标签 / 书架严格单选；编辑时书架仍严格单选。
+   编辑标签例外：允许保留原标签并继续增加或删除多个标签。 */
+#tagCombo:has(> .combo-selected:not(:empty)) > .combo-row,
+#categoryCombo:has(> .combo-selected:not(:empty)) > .combo-row,
+#editCategoryCombo:has(> .combo-selected:not(:empty)) > .combo-row{
+    display:none!important;
+}
+
+#tagCombo:has(> .combo-selected:not(:empty)),
+#categoryCombo:has(> .combo-selected:not(:empty)),
+#editCategoryCombo:has(> .combo-selected:not(:empty)){
+    display:block!important;
+}
+
+#tagCombo > .combo-selected:not(:empty),
+#categoryCombo > .combo-selected:not(:empty),
+#editCategoryCombo > .combo-selected:not(:empty){
+    display:flex!important;
+    width:100%!important;
+    max-width:100%!important;
+    margin:0!important;
+    overflow:visible!important;
+}
+
+</style>
+
+<style id="mobile-config-hard-fix">
+/* 手机端配置弹窗：Pages 同级 visual viewport 方案，确保配置页可打开、滚动和提交。 */
+@media (max-width:700px){
+  #configModal{
+    top:var(--press-vv-top,0px)!important;
+    right:0!important;
+    bottom:auto!important;
+    left:0!important;
+    width:100%!important;
+    height:min(var(--press-vv-height,100dvh),100dvh)!important;
+    padding:0!important;
+    align-items:stretch!important;
+    justify-content:stretch!important;
+    overflow:hidden!important;
+  }
+  #configForm{
+    position:absolute!important;
+    inset:0!important;
+    width:100%!important;
+    height:100%!important;
+    max-width:none!important;
+    max-height:none!important;
+    min-width:0!important;
+    min-height:0!important;
+    margin:0!important;
+    border-radius:0!important;
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-rows:minmax(0,1fr) auto!important;
+    overflow:hidden!important;
+  }
+  #configForm .dialog-scroll{
+    grid-row:1!important;
+    width:100%!important;
+    min-width:0!important;
+    min-height:0!important;
+    overflow-y:scroll!important;
+    overflow-x:hidden!important;
+    -webkit-overflow-scrolling:touch!important;
+    overscroll-behavior-y:contain!important;
+    touch-action:pan-y!important;
+    scrollbar-gutter:stable!important;
+    scrollbar-width:auto;
+    scrollbar-color:#94a3b8 #f1f5f9;
+    padding:max(1.2rem,env(safe-area-inset-top)) 1.2rem 1.2rem!important;
+  }
+  #configForm .dialog-scroll::-webkit-scrollbar{width:8px}
+  #configForm .dialog-scroll::-webkit-scrollbar-track{background:#f1f5f9}
+  #configForm .dialog-scroll::-webkit-scrollbar-thumb{background:#94a3b8;border-radius:999px;border:2px solid #f1f5f9}
+  #configForm .dialog-actions{
+    grid-row:2!important;
+    position:static!important;
+    z-index:10!important;
+    width:100%!important;
+    min-width:0!important;
+    flex:0 0 auto!important;
+    padding:.85rem 1.2rem max(.85rem,env(safe-area-inset-bottom))!important;
+    border-top:1px solid #dbe3ed!important;
+    background:#fff!important;
+    box-shadow:0 -8px 20px rgba(15,23,42,.10)!important;
+  }
+  #configForm .dialog-actions .btn{
+    min-width:0!important;
+    min-height:44px!important;
+  }
 }
 </style>
+
+<style id="edit-actions-layout-fix">
+/* 编辑弹窗底部按钮：
+   删除与左边线对齐；
+   保存与右边线对齐；
+   取消紧邻保存左侧。 */
+#editModal .dialog-actions{
+    display:flex;
+    align-items:center;
+    justify-content:flex-start;
+    gap:9px;
+}
+
+#editModal .dialog-actions .btn{
+    flex:0 0 auto;
+    margin:0;
+}
+
+#editModal #editCancel{
+    margin-left:auto;
+}
+
+@media(max-width:700px){
+    #editModal .dialog-actions{
+        justify-content:flex-start;
+    }
+
+    #editModal .dialog-actions .btn{
+        flex:0 0 auto;
+        min-width:0;
+        width:auto;
+    }
+
+    #editModal #editCancel{
+        margin-left:auto;
+    }
+}
+</style>
+
+
+<style id="edit-selected-pill-size-fix">
+/* 编辑弹窗：标签可多选，书架仍单选；已选项保持单行紧凑显示。
+   编辑标签在左侧横向排列多个已选标签，右侧继续保留搜索输入框与倒三角。 */
+#editTagCombo,
+#editCategoryCombo{
+    height:54px;
+    min-height:54px;
+    min-width:0;
+}
+
+#editTagCombo:has(> .combo-selected:not(:empty)),
+#editCategoryCombo:has(> .combo-selected:not(:empty)){
+    display:grid;
+    grid-template-columns:minmax(0,42%) minmax(0,1fr);
+    align-items:center;
+    gap:5px;
+    width:100%;
+    min-width:0;
+}
+
+#editTagCombo > .combo-selected:not(:empty),
+#editCategoryCombo > .combo-selected:not(:empty){
+    grid-column:1;
+    grid-row:1;
+    display:flex;
+    flex-wrap:nowrap;
+    align-items:center;
+    gap:3px;
+    min-width:0;
+    max-width:100%;
+    height:24px;
+    margin:0;
+    overflow-x:auto;
+    overflow-y:hidden;
+    scrollbar-width:none;
+}
+
+#editTagCombo > .combo-selected:not(:empty)::-webkit-scrollbar,
+#editCategoryCombo > .combo-selected:not(:empty)::-webkit-scrollbar{display:none}
+
+#editTagCombo > .combo-selected:not(:empty) + .combo-row,
+#editCategoryCombo > .combo-selected:not(:empty) + .combo-row{
+    grid-column:2;
+    grid-row:1;
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 44px;
+    gap:5px;
+    width:100%;
+    min-width:0;
+}
+
+#editTagCombo > .combo-selected:not(:empty) + .combo-row input,
+#editCategoryCombo > .combo-selected:not(:empty) + .combo-row input{
+    min-width:0;
+    width:100%;
+    min-height:38px;
+}
+
+#editTagCombo > .combo-selected:not(:empty) + .combo-row .combo-toggle,
+#editCategoryCombo > .combo-selected:not(:empty) + .combo-row .combo-toggle{
+    width:44px;
+    min-width:44px;
+    min-height:38px;
+    grid-column:2;
+    grid-row:1;
+}
+
+#editModal #editTagSelected .selected-pill,
+#editModal #editCategorySelected .selected-pill{
+    flex:0 0 auto;
+    min-height:20px;
+    height:20px;
+    max-width:118px;
+    font-size:.66rem;
+    line-height:1;
+}
+
+#editModal #editTagSelected .selected-pill-label,
+#editModal #editCategorySelected .selected-pill-label{
+    min-width:0;
+    max-width:92px;
+    padding:.1rem .1rem .1rem .42rem;
+    font-size:.66rem;
+    line-height:1;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+#editModal #editTagSelected .selected-pill-remove,
+#editModal #editCategorySelected .selected-pill-remove{
+    flex:0 0 18px;
+    width:18px;
+    height:18px;
+    margin-right:1px;
+    font-size:.68rem;
+    line-height:18px;
+}
+</style>
+
+
+<style id="add-selected-pill-size-fix">
+/* 添加板块：标签 / 书架选中后保持与编辑框相同的紧凑布局。
+   倒三角固定在最右侧 44px，手机端选中后也不会被挤到下一行。 */
+#tagCombo,
+#categoryCombo{
+    height:54px;
+    min-height:54px;
+    min-width:0;
+}
+
+#tagCombo:has(> .combo-selected:not(:empty)),
+#categoryCombo:has(> .combo-selected:not(:empty)){
+    display:grid;
+    grid-template-columns:minmax(0,42%) minmax(0,1fr);
+    align-items:center;
+    gap:5px;
+    width:100%;
+    min-width:0;
+}
+
+#tagCombo > .combo-selected:not(:empty),
+#categoryCombo > .combo-selected:not(:empty){
+    grid-column:1;
+    grid-row:1;
+    display:flex;
+    flex-wrap:nowrap;
+    align-items:center;
+    gap:3px;
+    min-width:0;
+    max-width:100%;
+    height:24px;
+    margin:0;
+    overflow-x:auto;
+    overflow-y:hidden;
+    scrollbar-width:none;
+}
+
+#tagCombo > .combo-selected:not(:empty)::-webkit-scrollbar,
+#categoryCombo > .combo-selected:not(:empty)::-webkit-scrollbar{display:none}
+
+#tagCombo > .combo-selected:not(:empty) + .combo-row,
+#categoryCombo > .combo-selected:not(:empty) + .combo-row{
+    grid-column:2;
+    grid-row:1;
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 44px;
+    gap:5px;
+    width:100%;
+    min-width:0;
+}
+
+#tagCombo > .combo-selected:not(:empty) + .combo-row input,
+#categoryCombo > .combo-selected:not(:empty) + .combo-row input{
+    min-width:0;
+    width:100%;
+    min-height:38px;
+}
+
+#tagCombo > .combo-selected:not(:empty) + .combo-row .combo-toggle,
+#categoryCombo > .combo-selected:not(:empty) + .combo-row .combo-toggle{
+    width:44px;
+    min-width:44px;
+    min-height:38px;
+    grid-column:2;
+    grid-row:1;
+}
+
+#addSection #tagSelected .selected-pill,
+#addSection #categorySelected .selected-pill{
+    flex:0 0 auto;
+    min-height:20px;
+    height:20px;
+    max-width:118px;
+    font-size:.66rem;
+    line-height:1;
+}
+
+#addSection #tagSelected .selected-pill-label,
+#addSection #categorySelected .selected-pill-label{
+    min-width:0;
+    max-width:92px;
+    padding:.1rem .1rem .1rem .42rem;
+    font-size:.66rem;
+    line-height:1;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+#addSection #tagSelected .selected-pill-remove,
+#addSection #categorySelected .selected-pill-remove{
+    flex:0 0 18px;
+    width:18px;
+    height:18px;
+    margin-right:1px;
+    font-size:.68rem;
+    line-height:18px;
+}
+</style>
+
+
+<style id="institution-all-link-blue-fix">
+/* 所有出版字段中的 [文字](链接) 均强制显示为蓝色链接，保留 ★ 等原文本符号。 */
+.institution a,
+.institution-choice a,
+.combo-pill-select.institution-choice a,
+.manage-option-label a{
+    color:#1E40AF !important;
+    text-decoration:none;
+}
+.institution a:hover,
+.institution-choice a:hover,
+.combo-pill-select.institution-choice a:hover,
+.manage-option-label a:hover{
+    color:#1E3A8A !important;
+    text-decoration:underline;
+}
+</style>
+
+<style id="manage-actions-right-fix">
+/* 出版管理：完成按钮右下角对齐 */
+#manageModal .dialog-actions{
+    justify-content:flex-end;
+}
+
+#manageModal .dialog-actions .btn{
+    margin-left:auto;
+}
+</style>
+
+
+<style id="edit-dialog-scroll-fix">
+/* 编辑弹窗：内容区独立滚动，底部操作栏始终可见。 */
+#editModal > .dialog{
+    height:min(760px,calc(100vh - 24px));
+    height:min(760px,calc(100dvh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom)));
+    display:grid;
+    grid-template-columns:minmax(0,1fr);
+    grid-template-rows:minmax(0,1fr) auto;
+}
+#editModal .dialog-scroll{
+    grid-row:1;
+    min-width:0;
+    min-height:0;
+    overflow-y:scroll;
+    overflow-x:hidden;
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior-y:contain;
+    touch-action:pan-y;
+    scrollbar-gutter:stable;
+    scrollbar-width:auto;
+    scrollbar-color:#94a3b8 #f1f5f9;
+}
+#editModal .dialog-scroll::-webkit-scrollbar{width:8px}
+#editModal .dialog-scroll::-webkit-scrollbar-track{background:#f1f5f9}
+#editModal .dialog-scroll::-webkit-scrollbar-thumb{background:#94a3b8;border-radius:999px;border:2px solid #f1f5f9}
+#editModal .dialog-actions{
+    grid-row:2;
+    position:relative;
+    z-index:5;
+    width:100%;
+    min-width:0;
+}
+
+@media(max-width:700px){
+    #editModal{
+        top:var(--press-vv-top,0px)!important;
+        right:0!important;
+        bottom:auto!important;
+        left:0!important;
+        width:100%!important;
+        height:var(--press-vv-height,100dvh)!important;
+        padding:0!important;
+        align-items:stretch!important;
+        justify-content:stretch!important;
+        overflow:hidden!important;
+    }
+    #editModal > .dialog{
+        width:100%!important;
+        height:100%!important;
+        max-width:none!important;
+        max-height:none!important;
+        margin:0!important;
+        border-radius:0!important;
+        display:grid!important;
+        grid-template-rows:minmax(0,1fr) auto!important;
+        overflow:hidden!important;
+    }
+    #editModal .dialog-scroll{
+        min-height:0!important;
+        overflow-y:scroll!important;
+        padding:max(1.2rem,env(safe-area-inset-top)) 1.2rem 1.2rem!important;
+        scroll-padding-bottom:1rem;
+    }
+    #editModal .dialog-actions{
+        padding:.85rem 1.2rem max(.85rem,env(safe-area-inset-bottom))!important;
+        background:#fff!important;
+        box-shadow:0 -8px 20px rgba(15,23,42,.10)!important;
+    }
+
+    /* 手机端再次锁死已选下拉的右侧按钮列，避免任何字体/内容宽度把倒三角挤换行。 */
+    #tagCombo:has(> .combo-selected:not(:empty)),
+    #categoryCombo:has(> .combo-selected:not(:empty)),
+    #editTagCombo:has(> .combo-selected:not(:empty)),
+    #editCategoryCombo:has(> .combo-selected:not(:empty)){
+        grid-template-columns:minmax(0,38%) minmax(0,1fr)!important;
+    }
+    #tagCombo > .combo-selected:not(:empty) + .combo-row,
+    #categoryCombo > .combo-selected:not(:empty) + .combo-row,
+    #editTagCombo > .combo-selected:not(:empty) + .combo-row,
+    #editCategoryCombo > .combo-selected:not(:empty) + .combo-row{
+        grid-template-columns:minmax(0,1fr) 44px!important;
+        width:100%!important;
+        min-width:0!important;
+    }
+    #tagCombo > .combo-selected:not(:empty) + .combo-row .combo-toggle,
+    #categoryCombo > .combo-selected:not(:empty) + .combo-row .combo-toggle,
+    #editTagCombo > .combo-selected:not(:empty) + .combo-row .combo-toggle,
+    #editCategoryCombo > .combo-selected:not(:empty) + .combo-row .combo-toggle{
+        width:44px!important;
+        min-width:44px!important;
+        max-width:44px!important;
+        grid-column:2!important;
+        grid-row:1!important;
+    }
+}
+</style>
+
+
+<style id="edit-dialog-natural-height-fix">
+/* 编辑弹窗：内容较少时按内容自然收缩；只有内容超过可视高度时才滚动。
+   这样“标签 / 书架”后不会出现大片空白，同时底部操作按钮始终保留。 */
+#editModal > .dialog{
+    height:auto!important;
+    max-height:min(760px,calc(100vh - 24px))!important;
+    max-height:min(760px,calc(100dvh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom)))!important;
+    display:flex!important;
+    flex-direction:column!important;
+}
+#editModal .dialog-scroll{
+    flex:1 1 auto!important;
+    min-height:0!important;
+    overflow-y:auto!important;
+}
+#editModal .dialog-actions{
+    flex:0 0 auto!important;
+}
+#editModal .dialog-scroll > .edit-two-column-row:last-child .form-group{
+    margin-bottom:0!important;
+}
+
+@media(max-width:700px){
+    #editModal{
+        align-items:center!important;
+        justify-content:center!important;
+        padding:max(8px,env(safe-area-inset-top)) max(8px,env(safe-area-inset-right)) max(8px,env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left))!important;
+    }
+    #editModal > .dialog{
+        width:100%!important;
+        height:auto!important;
+        max-height:calc(var(--press-vv-height,100dvh) - 16px)!important;
+        border-radius:20px!important;
+    }
+    #editModal .dialog-scroll{
+        padding:1.2rem 1.2rem .8rem!important;
+        overflow-y:auto!important;
+    }
+}
+</style>
+
+
+
+<style id="return-top-anchor-style">
+#pageTopAnchor{
+    position:absolute;
+    top:0;
+    left:0;
+    width:1px;
+    height:1px;
+    overflow:hidden;
+    pointer-events:none;
+}
+</style>
+
+<style id="return-top-circle-style">
+#returnTopControl{
+    appearance:none;
+    -webkit-appearance:none;
+    position:fixed;
+    right:16px;
+    top:70%;
+    z-index:2147483647;
+    display:block;
+    width:25px;
+    height:25px;
+    margin:0;
+    padding:0;
+    border:0;
+    border-radius:50%;
+    background:#1E40AF;
+    cursor:pointer;
+    pointer-events:auto;
+    touch-action:manipulation;
+    text-decoration:none;
+    user-select:none;
+    -webkit-user-select:none;
+}
+#returnTopControl:focus-visible{
+    outline:2px solid #93c5fd;
+    outline-offset:3px;
+}
+</style>
+
 </head>
 <body>
-<div class="container">
-<h1>Pages <span class="cloud-status" id="cloudStatus"><span class="dot" id="statusDot"></span><span id="statusText">未配置</span></span></h1>
-<div class="toolbar">
-<div class="left-group">
-<button class="btn-sync" id="syncBtn">同步</button>
-<button class="btn-outline" id="configBtn">配置</button>
-<button class="btn-outline" id="exportBtn">导出</button>
-<button class="btn-outline" id="importBtn">导入</button>
-<input type="file" id="fileInput" accept=".json" style="display:none">
-</div>
-<div class="right-group"><span style="font-size:0.8rem;color:#94a3b8" id="lastSyncTime">未同步</span></div>
-</div>
+<div id="pageTopAnchor" aria-hidden="true"></div>
+<main class="container">
+<h1 class="page-title">Press <span class="cloud-status"><span class="status-dot" id="statusDot"></span><span id="statusText">正在读取公开数据…</span></span></h1>
 
-<div class="add-section">
+<section class="toolbar">
+<div class="toolbar-group">
+<button class="btn btn-sync hidden" id="syncBtn" type="button">同步</button>
+<button class="btn" id="configBtn" type="button">配置</button>
+<button class="btn" id="manageBtn" type="button">管理</button>
+<button class="btn" id="exportBtn" type="button">导出</button>
+</div>
+<span class="last-sync" id="lastSyncTime">公开阅读无需 Token</span>
+</section>
+
+<section class="add-section hidden" id="addSection">
 <h2>添加</h2>
 <div class="form-grid">
-<div class="form-group full-width"><label for="pageInput">标题</label><input type="text" id="pageInput" autofocus></div>
-<div class="form-group full-width"><label for="noteInput">提要</label><input type="text" id="noteInput"></div>
-<div class="form-group full-width"><label for="remarkInput">备注</label><div class="remark-combo" id="remarkCombo"><input type="text" id="remarkInput" autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-controls="remarkOptions"><div class="remark-dropdown hidden" id="remarkDropdown"><div id="remarkOptions"></div></div></div></div>
-<button class="btn-primary" id="addBtn">添加</button>
+<div class="form-group full">
+<label for="bookNameInput">书名</label>
+<input type="text" id="bookNameInput" autocomplete="off" autofocus>
+</div>
+<div class="code-bookno-row">
+<div class="form-group">
+<label for="bookNoInput">书号</label>
+<input type="text" id="bookNoInput" autocomplete="off">
+</div>
+<div class="form-group">
+<label for="codeInput">编码</label>
+<input type="text" id="codeInput" autocomplete="off" spellcheck="false">
+</div>
+</div>
+<div class="form-group full">
+<label for="institutionInput">出版</label>
+<div class="combo" id="institutionCombo">
+<div class="combo-row">
+<input type="text" id="institutionInput" autocomplete="off">
+<button class="combo-toggle" id="institutionToggle" type="button" aria-label="展开出版历史">▾</button>
+</div>
+<div class="combo-panel hidden" id="institutionPanel"><div id="institutionOptions"></div></div>
+</div>
+</div>
+<div class="three-fields-row">
+<div class="form-group">
+<label for="tagInput">标签</label>
+<div class="combo" id="tagCombo">
+<div class="combo-selected" id="tagSelected"></div>
+<div class="combo-row">
+<input type="text" id="tagInput" autocomplete="off">
+<button class="combo-toggle" id="tagToggle" type="button" aria-label="展开标签历史">▾</button>
+</div>
+<div class="combo-panel hidden" id="tagPanel"><div id="tagOptions"></div></div>
+</div>
+</div><div class="form-group">
+<label for="categoryInput">书架</label>
+<div class="combo" id="categoryCombo">
+<div class="combo-selected" id="categorySelected"></div>
+<div class="combo-row">
+<input type="text" id="categoryInput" autocomplete="off">
+<button class="combo-toggle" id="categoryToggle" type="button" aria-label="展开书架历史">▾</button>
+</div>
+<div class="combo-panel hidden" id="categoryPanel"><div id="categoryOptions"></div></div>
+</div>
+</div>
+</div>
+<button class="add-button" id="addBtn" type="button">添加</button>
+</div>
+</section>
+
+<section>
+<div class="list-header"><h2>总表</h2><span class="count-badge" id="countDisplay">0</span></div>
+<div class="press-list" id="pressList"><div class="empty-state">加载中…</div></div>
+</section>
+</main>
+
+<section class="overlay hidden" id="editModal">
+<div class="dialog">
+<div class="dialog-scroll">
+<h3>编辑</h3><p class="dialog-desc">修改标签时，一般仅新增标签不变更编码；删除原有标签或标签实际发生替换时会重新分配编码。例外：只要原有“24读书”条目新增“11图书”“13图书”或“23读书”，或已经具有相应组合后清空编码提交，均统一按组合专用区间自动重编码：11图书 + 24读书为 247001–247999，13图书 + 24读书为 248001–248999，23读书 + 24读书为 249001–249999；始终从对应区间选择最小可用编码。标签始终按开头两位数字升序显示。</p>
+
+<div class="form-group">
+<label for="editBookName">书名</label>
+<div class="edit-title-field">
+<input autocomplete="off" id="editBookName" type="text"/>
+<button class="clear-field-btn" id="clearEditBookName" type="button" aria-label="删除书名">×</button>
 </div>
 </div>
 
-<div class="list-header"><h2>总表</h2><span class="badge" id="countDisplay">0/0</span></div>
-<div class="table-wrapper"><table class="page-table" id="pageTable"><thead><tr><th>标题</th></tr></thead><tbody id="tableBody"><tr class="empty-row"><td>加载中...</td></tr></tbody></table></div>
+<div class="form-group">
+<label for="editInstitution">出版</label>
+<div class="combo" id="editInstitutionCombo">
+<div class="combo-row">
+<input autocomplete="off" id="editInstitution" type="text"/>
+<button aria-label="展开出版历史" class="combo-toggle" id="editInstitutionToggle" type="button">▾</button>
 </div>
-
-<div class="modal-overlay hidden" id="editModal">
-<div class="modal-box">
-<h3>编辑条目</h3>
-<div class="modal-sub" id="editModalTitle">标题：<span id="editTitleDisplay"></span></div>
-<div class="form-group"><label for="editPageInput">标题</label><input type="text" id="editPageInput"><div class="hint">格式：[标题](链接)</div></div>
-<div class="form-group"><label for="editNoteInput">提要</label><input type="text" id="editNoteInput"></div>
-<div class="form-group"><label for="editRemarkInput">备注</label><div class="remark-combo" id="editRemarkCombo"><input type="text" id="editRemarkInput" autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-controls="editRemarkOptions"><div class="remark-dropdown hidden" id="editRemarkDropdown"><div id="editRemarkOptions"></div></div></div></div>
-<div class="modal-actions"><button class="btn-modal delete" id="editDeleteBtn">删除</button><div class="modal-actions-right"><button class="btn-modal cancel" id="editCancelBtn">取消</button><button class="btn-modal save" id="editSaveBtn">保存</button></div></div>
+<div class="combo-panel hidden" id="editInstitutionPanel"><div id="editInstitutionOptions"></div></div>
 </div>
 </div>
 
-<div class="config-overlay hidden" id="configModal">
-<div class="config-box">
-<div class="config-scroll">
-<h3>GitHub 云端配置</h3>
-<div class="config-desc">配置后数据将保存到您的 GitHub 仓库，在任何设备上打开都能同步。</div>
-<div class="form-group"><label for="cfgToken">GitHub Personal Access Token *</label><input type="password" id="cfgToken" name="github-token" autocomplete="current-password" spellcheck="false" placeholder="ghp_xxxxxxxxxxxx"><label class="token-save-option" for="cfgRememberToken"><input type="checkbox" id="cfgRememberToken" checked><span>在本设备保存Token。若浏览器出现“保存密码”提示，请选择保存；开启浏览器密码同步后，其他设备可自动填充。</span></label><div class="hint"><a href="https://github.com/settings/tokens" target="_blank" rel="noopener noreferrer">创建 Token</a>（需要勾选 <strong>repo</strong> 权限，有效期建议选择 <strong>No expiration</strong>）</div></div>
-<div class="form-group"><label for="cfgOwner">仓库所有者 *</label><input type="text" id="cfgOwner" placeholder="你的GitHub用户名"></div>
-<div class="form-group"><label for="cfgRepo">仓库名称 *</label><input type="text" id="cfgRepo" placeholder="仓库名"><div class="hint">数据将保存在此仓库的 pages_data.json 文件中</div></div>
-<div class="form-group"><label for="cfgFile">数据文件名</label><input type="text" id="cfgFile" placeholder="pages_data.json" value="pages_data.json"></div>
-</div>
-<div class="config-actions"><button type="button" class="btn-config secondary" id="configCancelBtn">取消</button><button type="button" class="btn-config primary" id="configSaveBtn">保存并连接</button></div>
+<div class="code-bookno-row">
+<div class="form-group">
+<label for="editBookNo">书号</label>
+<div class="clearable-field">
+<input autocomplete="off" id="editBookNo" type="text"/>
+<button class="clear-field-btn" id="clearEditBookNo" type="button" aria-label="删除书号">×</button>
 </div>
 </div>
 
-<button class="back-to-top" id="backToTopBtn" type="button" aria-label="回到顶部" title="回到顶部"></button>
+<div class="form-group">
+<label for="editCode">编码</label>
+<div class="clearable-field">
+<input autocomplete="off" id="editCode" spellcheck="false" type="text"/>
+<button class="clear-field-btn" id="clearEditCode" type="button" aria-label="删除编码">×</button>
+</div>
+</div>
+</div>
+
+<div class="edit-two-column-row">
+<div class="form-group">
+<label for="editTag">标签</label>
+<div class="combo" id="editTagCombo">
+<div class="combo-selected" id="editTagSelected"></div>
+<div class="combo-row">
+<input autocomplete="off" id="editTag" type="text"/>
+<button aria-label="展开标签历史" class="combo-toggle" id="editTagToggle" type="button">▾</button>
+</div>
+<div class="combo-panel hidden" id="editTagPanel"><div id="editTagOptions"></div></div>
+</div>
+</div>
+
+<div class="form-group">
+<label for="editCategory">书架</label>
+<div class="combo" id="editCategoryCombo">
+<div class="combo-selected" id="editCategorySelected"></div>
+<div class="combo-row">
+<input autocomplete="off" id="editCategory" type="text"/>
+<button aria-label="展开书架历史" class="combo-toggle" id="editCategoryToggle" type="button">▾</button>
+</div>
+<div class="combo-panel hidden" id="editCategoryPanel"><div id="editCategoryOptions"></div></div>
+</div>
+</div>
+</div>
+
+</div>
+
+<div class="dialog-actions">
+<button class="btn btn-danger" id="editDelete" type="button">删除</button>
+<button class="btn" id="editCancel" type="button">取消</button>
+<button class="btn btn-primary" id="editSave" type="button">保存</button>
+</div>
+</div>
+</section>
+
+<section class="overlay hidden" id="configModal">
+<form class="dialog" id="configForm" autocomplete="on">
+<div class="dialog-scroll">
+<h3>GitHub 管理配置</h3>
+<p class="dialog-desc">任何人均可直接浏览 press_data.json 中的公开数据，无需 Token。只有配置 Token 后才可新增、编辑、删除、管理出版选项和同步。</p>
+<div class="form-group"><label for="cfgOwner">仓库所有者</label><input id="cfgOwner" name="github-owner" type="text" autocomplete="username"></div>
+<div class="form-group"><label for="cfg">仓库名称</label><input id="cfg" type="text" autocomplete="off"></div>
+<div class="form-group"><label for="cfgFile">数据文件路径</label><input id="cfgFile" type="text" value="press_data.json" autocomplete="off"></div>
+<div class="form-group"><label for="cfgToken">GitHub Personal Access Token</label><input id="cfgToken" name="github-token" type="password" autocomplete="current-password" spellcheck="false"></div>
+<label class="remember-row"><input type="checkbox" id="rememberToken" checked><span>在本设备保存 Token。取消勾选时，Token 仅保存到当前浏览器会话。</span></label>
+</div>
+<div class="dialog-actions"><button class="btn" id="configCancel" type="button">取消</button><button class="btn btn-primary" type="submit">保存并连接</button></div>
+</form>
+</section>
+
+<section class="overlay hidden" id="manageModal">
+<div class="dialog manage-dialog">
+<div class="manage-fixed-top">
+<h3>出版管理</h3>
+<p class="dialog-desc">“出版”下拉菜单完全按这里的行号排序。新增时指定行号即可直接插入对应位置；“移至行”的初始数字就是当前行号，修改后会立即换位。无需拖拽。</p>
+<div class="form-group">
+<label for="manageInstitutionInput">新增出版选项</label>
+<div class="manage-add-row">
+<input type="text" id="manageInstitutionInput" autocomplete="off" placeholder="出版选项名称">
+<input type="number" id="manageInstitutionLineInput" min="1" step="1" inputmode="numeric" aria-label="新增选项插入行号" placeholder="行号">
+<button class="btn btn-primary" id="manageInstitutionAdd" type="button">添加</button>
+</div>
+</div>
+</div>
+<div class="manage-table-scroll">
+<div class="manage-line-head" aria-hidden="true"><span>出版选项</span><span>移至行</span><span></span><span></span></div>
+<div class="manage-list" id="manageInstitutionOptions"></div>
+</div>
+<div class="dialog-actions"><button class="btn btn-primary" id="manageClose" type="button">完成</button></div>
+</div>
+</section>
+
+
+<button id="returnTopControl" type="button" aria-label="回到顶部" title="回到顶部"></button>
+<script>
+// 回到顶部无锚点版（desktop-chrome-v4-no-hash）
+// 核心原则：
+// 1) 控件使用 button，不再通过 href fragment 改变网址；
+// 2) 主页面直接把根滚动节点校正到 0，并在后续两帧补强；
+// 3) 弹窗打开时滚动弹窗自己的滚动容器，不影响主页面网址；
+// 4) 如旧网址已经带有 #pageTopAnchor，点击时使用 history.replaceState 静默移除；
+// 5) 暴露 __returnTopDebug()，可查看点击与滚动状态。
+(function(){
+    'use strict';
+
+    const control=document.getElementById('returnTopControl');
+    if(!control)return;
+
+    const debugState={
+        version:'desktop-chrome-v4-no-hash',
+        clickCount:0,
+        lastClickAt:0,
+        lastBefore:null,
+        lastAfterImmediate:null,
+        lastAfterFrame:null,
+        lastMode:'none'
+    };
+
+    function isVisible(id){
+        const el=document.getElementById(id);
+        return Boolean(el&&!el.classList.contains('hidden'));
+    }
+
+    function visibleModalScroller(){
+        if(isVisible('editModal'))return document.querySelector('#editModal .dialog-scroll');
+        if(isVisible('configModal'))return document.querySelector('#configForm .dialog-scroll');
+        if(isVisible('manageModal'))return document.querySelector('#manageModal .manage-table-scroll');
+        return null;
+    }
+
+    function rootScroller(){
+        return document.scrollingElement||document.documentElement||document.body;
+    }
+
+    function rootTop(){
+        return Math.max(
+            Number(window.scrollY)||0,
+            Number(window.pageYOffset)||0,
+            Number(document.documentElement?.scrollTop)||0,
+            Number(document.body?.scrollTop)||0,
+            Number(rootScroller()?.scrollTop)||0
+        );
+    }
+
+    function writeRootTopZero(){
+        const root=rootScroller();
+        try{window.scrollTo(0,0)}catch(_){}
+        if(root)root.scrollTop=0;
+        if(document.documentElement)document.documentElement.scrollTop=0;
+        if(document.body)document.body.scrollTop=0;
+    }
+
+    function clearReturnTopHash(){
+        if(location.hash!=='#pageTopAnchor')return;
+        try{
+            history.replaceState(history.state,'',`${location.pathname}${location.search}`);
+        }catch(_){}
+    }
+
+    function scrollModalToTop(scroller){
+        if(!scroller)return;
+        try{scroller.scrollTo({top:0,left:0,behavior:'auto'})}catch(_){}
+        scroller.scrollTop=0;
+        scroller.scrollLeft=0;
+        requestAnimationFrame(()=>{
+            scroller.scrollTop=0;
+        });
+    }
+
+    control.addEventListener('click',function(event){
+        event.preventDefault();
+        debugState.clickCount+=1;
+        debugState.lastClickAt=Date.now();
+        debugState.lastBefore=rootTop();
+        clearReturnTopHash();
+
+        const modalScroller=visibleModalScroller();
+        if(modalScroller){
+            debugState.lastMode='modal-no-hash';
+            scrollModalToTop(modalScroller);
+            debugState.lastAfterImmediate=modalScroller.scrollTop;
+            requestAnimationFrame(()=>{
+                debugState.lastAfterFrame=modalScroller.scrollTop;
+            });
+            return;
+        }
+
+        debugState.lastMode='js-scroll-no-hash';
+        writeRootTopZero();
+        clearReturnTopHash();
+        debugState.lastAfterImmediate=rootTop();
+
+        requestAnimationFrame(()=>{
+            writeRootTopZero();
+            clearReturnTopHash();
+            debugState.lastAfterFrame=rootTop();
+
+            requestAnimationFrame(()=>{
+                writeRootTopZero();
+                clearReturnTopHash();
+            });
+        });
+    },false);
+
+    window.__returnTopDebug=function(){
+        const modal=visibleModalScroller();
+        const root=rootScroller();
+        const r=control.getBoundingClientRect();
+        const hit=document.elementFromPoint(r.left+r.width/2,r.top+r.height/2);
+        return {
+            version:debugState.version,
+            clickCount:debugState.clickCount,
+            lastClickAt:debugState.lastClickAt,
+            lastMode:debugState.lastMode,
+            lastBefore:debugState.lastBefore,
+            lastAfterImmediate:debugState.lastAfterImmediate,
+            lastAfterFrame:debugState.lastAfterFrame,
+            locationHash:location.hash,
+            windowScrollY:window.scrollY,
+            documentElementScrollTop:document.documentElement?.scrollTop||0,
+            bodyScrollTop:document.body?.scrollTop||0,
+            rootTag:root?.tagName||null,
+            rootScrollTop:root?.scrollTop||0,
+            rootClientHeight:root?.clientHeight||0,
+            rootScrollHeight:root?.scrollHeight||0,
+            modalScroller:modal?{
+                className:modal.className,
+                scrollTop:modal.scrollTop,
+                clientHeight:modal.clientHeight,
+                scrollHeight:modal.scrollHeight
+            }:null,
+            controlHitId:hit?.id||'',
+            controlHitTag:hit?.tagName||''
+        };
+    };
+})();
+</script>
+
 <div class="toast hidden" id="toast"></div>
 
+
+
 <script>
-(function(){
-const CONFIG_KEY='pages_github_config',TOKEN_PERSISTED_KEY='pages_github_token_persisted_v1',WORKING_COPY_KEY='pages_working_copy_v1',REMARK_HISTORY_KEY='pages_remark_history_v1',REMARK_HIDDEN_KEY='pages_remark_hidden_v1';
-const DB_NAME='pages_app_storage_v1',DB_VERSION=1,DB_STORE='kv',OPFS_WORKING_COPY_FILE='pages-working-copy-v1.json';
-let pages=[],editingIndex=null,isSyncing=false,remarkHistory=[],remarkHidden=new Set(),backToTopAnimationFrame=null;
-let config={token:'',rememberToken:true,owner:'',repo:'',file:'pages_data.json'},memoryToken='',dbPromise=null,workingCopyQueue=Promise.resolve(),workingCopyRevision=0,localStateReady=false;
+(()=>{
+'use strict';
 
-const pageInput=document.getElementById('pageInput'),noteInput=document.getElementById('noteInput'),remarkCombo=document.getElementById('remarkCombo'),remarkInput=document.getElementById('remarkInput'),remarkDropdown=document.getElementById('remarkDropdown'),remarkOptions=document.getElementById('remarkOptions'),addBtn=document.getElementById('addBtn'),tableBody=document.getElementById('tableBody'),countDisplay=document.getElementById('countDisplay'),exportBtn=document.getElementById('exportBtn'),importBtn=document.getElementById('importBtn'),fileInput=document.getElementById('fileInput'),syncBtn=document.getElementById('syncBtn'),lastSyncTime=document.getElementById('lastSyncTime'),statusDot=document.getElementById('statusDot'),statusText=document.getElementById('statusText'),configBtn=document.getElementById('configBtn'),backToTopBtn=document.getElementById('backToTopBtn');
-const editModal=document.getElementById('editModal'),editTitleDisplay=document.getElementById('editTitleDisplay'),editPageInput=document.getElementById('editPageInput'),editNoteInput=document.getElementById('editNoteInput'),editRemarkCombo=document.getElementById('editRemarkCombo'),editRemarkInput=document.getElementById('editRemarkInput'),editRemarkDropdown=document.getElementById('editRemarkDropdown'),editRemarkOptions=document.getElementById('editRemarkOptions'),editDeleteBtn=document.getElementById('editDeleteBtn'),editCancelBtn=document.getElementById('editCancelBtn'),editSaveBtn=document.getElementById('editSaveBtn');
-const configModal=document.getElementById('configModal'),cfgToken=document.getElementById('cfgToken'),cfgRememberToken=document.getElementById('cfgRememberToken'),cfgOwner=document.getElementById('cfgOwner'),cfgRepo=document.getElementById('cfgRepo'),cfgFile=document.getElementById('cfgFile'),configCancelBtn=document.getElementById('configCancelBtn'),configSaveBtn=document.getElementById('configSaveBtn');
-const toast=document.getElementById('toast');let toastTimer=null;
+const PUBLIC_FILE='press_data.json',NS='press_public_v1';
+const DB_NAME=`${NS}:idb_v1`,DB_STORE='kv';
+const CONFIG_KEY='config',TOKEN_PERSISTED_KEY='token_persisted',META_KEY='meta',WORKCOPY_KEY='workcopy',PUBLIC_CACHE_KEY='public_cache';
+const OPFS_WORKCOPY_FILE='press_workcopy_v1.json';
+const MAX_BYTES=750*1024,AUTO_DELAY=1800,SYNC_RETRY_LIMIT=4,MIN_WRITE_GAP=1100,MAX_RETRY_DELAY=60000;
+const $=id=>document.getElementById(id);
+const statusDot=$('statusDot'),statusText=$('statusText'),syncBtn=$('syncBtn'),configBtn=$('configBtn'),manageBtn=$('manageBtn'),exportBtn=$('exportBtn'),lastSyncTime=$('lastSyncTime'),
+addSection=$('addSection'),bookNameInput=$('bookNameInput'),bookNoInput=$('bookNoInput'),categoryCombo=$('categoryCombo'),categorySelected=$('categorySelected'),categoryInput=$('categoryInput'),categoryToggle=$('categoryToggle'),categoryPanel=$('categoryPanel'),categoryOptions=$('categoryOptions'),institutionCombo=$('institutionCombo'),institutionInput=$('institutionInput'),institutionToggle=$('institutionToggle'),institutionPanel=$('institutionPanel'),institutionOptions=$('institutionOptions'),tagCombo=$('tagCombo'),tagSelected=$('tagSelected'),tagInput=$('tagInput'),tagToggle=$('tagToggle'),tagPanel=$('tagPanel'),tagOptions=$('tagOptions'),codeInput=$('codeInput'),addBtn=$('addBtn'),
+pressList=$('pressList'),countDisplay=$('countDisplay'),editModal=$('editModal'),editBookName=$('editBookName'),clearEditBookName=$('clearEditBookName'),editBookNo=$('editBookNo'),editCategoryCombo=$('editCategoryCombo'),editCategorySelected=$('editCategorySelected'),editCategory=$('editCategory'),editCategoryToggle=$('editCategoryToggle'),editCategoryPanel=$('editCategoryPanel'),editCategoryOptions=$('editCategoryOptions'),editInstitutionCombo=$('editInstitutionCombo'),editInstitution=$('editInstitution'),editInstitutionToggle=$('editInstitutionToggle'),editInstitutionPanel=$('editInstitutionPanel'),editInstitutionOptions=$('editInstitutionOptions'),editTagCombo=$('editTagCombo'),editTagSelected=$('editTagSelected'),editTag=$('editTag'),editTagToggle=$('editTagToggle'),editTagPanel=$('editTagPanel'),editTagOptions=$('editTagOptions'),editCode=$('editCode'),clearEditBookNo=$('clearEditBookNo'),clearEditCode=$('clearEditCode'),clearEditBookNoTop=$('clearEditBookNoTop'),clearEditCodeTop=$('clearEditCodeTop'),editDelete=$('editDelete'),editCancel=$('editCancel'),editSave=$('editSave'),
+configModal=$('configModal'),configForm=$('configForm'),cfgOwner=$('cfgOwner'),cfg=$('cfg'),cfgFile=$('cfgFile'),cfgToken=$('cfgToken'),rememberToken=$('rememberToken'),configCancel=$('configCancel'),manageModal=$('manageModal'),manageInstitutionInput=$('manageInstitutionInput'),manageInstitutionLineInput=$('manageInstitutionLineInput'),manageInstitutionAdd=$('manageInstitutionAdd'),manageInstitutionOptions=$('manageInstitutionOptions'),manageClose=$('manageClose'),toast=$('toast');
 
-const pinyinCollator=new Intl.Collator('zh-CN-u-co-pinyin',{usage:'sort',sensitivity:'base',numeric:true,ignorePunctuation:true});
-const generalCollator=new Intl.Collator('zh-CN',{usage:'sort',sensitivity:'base',numeric:true,ignorePunctuation:true});
-const strokeCollator=new Intl.Collator('zh-CN-u-co-stroke',{usage:'sort',sensitivity:'variant',numeric:true});
+let state={entries:[],institutions:[],categories:[],tags:[],releasedCodes:[]},addSelections={category:[],tag:[]},editSelections={category:[],tag:[]},editingId='',editInitialSnapshot='',config={owner:'',repo:'',file:'press_data.json',token:''},meta={target:'',fingerprint:null,sha:null,lastSyncAt:null,baseState:null,dirty:false,revision:0};
+let syncing=false,syncQueued=false,syncQueuedShowResult=false,autoTimer=null,retryTimer=null,toastTimer=null,editOverlayPointerDown=false,adminReady=false,lastWriteAt=0,syncFailureCount=0;
+const collator=new Intl.Collator('zh-CN-u-co-pinyin',{numeric:true,sensitivity:'base'});
 
-
-function openDb(){
-if(dbPromise)return dbPromise;
-dbPromise=new Promise((resolve,reject)=>{const request=indexedDB.open(DB_NAME,DB_VERSION);request.onupgradeneeded=()=>{const db=request.result;if(!db.objectStoreNames.contains(DB_STORE))db.createObjectStore(DB_STORE)};request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error||new Error('IndexedDB 打开失败'));request.onblocked=()=>console.warn('IndexedDB 升级被其他页面阻塞')});
-return dbPromise
+// 使用 Visual Viewport 驱动手机配置弹窗高度。虚拟键盘/地址栏变化时，保存按钮仍保持在可视区域内。
+function updateVisualViewport(){
+    const vv=window.visualViewport;
+    const h=Math.max(240,Math.round(vv?vv.height:window.innerHeight));
+    const top=Math.max(0,Math.round(vv?vv.offsetTop:0));
+    document.documentElement.style.setProperty('--press-vv-height',`${h}px`);
+    document.documentElement.style.setProperty('--press-vv-top',`${top}px`)
 }
-async function idbGet(key){const db=await openDb();return new Promise((resolve,reject)=>{const tx=db.transaction(DB_STORE,'readonly'),req=tx.objectStore(DB_STORE).get(key);req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error||new Error('IndexedDB 读取失败'))})}
-async function idbSet(key,value){const db=await openDb();return new Promise((resolve,reject)=>{const tx=db.transaction(DB_STORE,'readwrite');tx.objectStore(DB_STORE).put(value,key);tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error||new Error('IndexedDB 写入失败'));tx.onabort=()=>reject(tx.error||new Error('IndexedDB 写入中止'))})}
-async function idbDelete(key){const db=await openDb();return new Promise((resolve,reject)=>{const tx=db.transaction(DB_STORE,'readwrite');tx.objectStore(DB_STORE).delete(key);tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error||new Error('IndexedDB 删除失败'));tx.onabort=()=>reject(tx.error||new Error('IndexedDB 删除中止'))})}
-function isValidWorkingCopy(record){return Boolean(record&&record.version===1&&Array.isArray(record.pages)&&Number.isFinite(Number(record.savedAt)))}
-async function readOpfsWorkingCopy(){if(!navigator.storage?.getDirectory)throw new Error('OPFS 不可用');const root=await navigator.storage.getDirectory(),handle=await root.getFileHandle(OPFS_WORKING_COPY_FILE);const file=await handle.getFile();return JSON.parse(await file.text())}
-async function writeOpfsWorkingCopy(record){if(!navigator.storage?.getDirectory)throw new Error('OPFS 不可用');const root=await navigator.storage.getDirectory(),handle=await root.getFileHandle(OPFS_WORKING_COPY_FILE,{create:true}),writer=await handle.createWritable();try{await writer.write(JSON.stringify(record));await writer.close()}catch(error){try{await writer.abort()}catch{}throw error}}
-async function persistWorkingCopy(record){const results=await Promise.allSettled([idbSet(WORKING_COPY_KEY,record),writeOpfsWorkingCopy(record)]);if(!results.some(result=>result.status==='fulfilled'))throw new Error('IndexedDB 与 OPFS 均保存失败')}
-function saveWorkingCopy(){const record={version:1,savedAt:Date.now(),revision:++workingCopyRevision,pages:structuredClone(pages)};workingCopyQueue=workingCopyQueue.catch(()=>{}).then(()=>persistWorkingCopy(record)).catch(error=>console.error('保存 Pages 工作副本失败:',error));return workingCopyQueue}
-async function readBestWorkingCopy(){let idbRecord=null,opfsRecord=null;try{idbRecord=await idbGet(WORKING_COPY_KEY)}catch(error){console.warn('读取 IndexedDB 工作副本失败:',error)}try{opfsRecord=await readOpfsWorkingCopy()}catch(error){if(error?.name!=='NotFoundError')console.warn('读取 OPFS 工作副本失败:',error)}const valid=[idbRecord,opfsRecord].filter(isValidWorkingCopy).sort((a,b)=>Number(b.savedAt)-Number(a.savedAt));const best=valid[0]||null;if(best){const repairs=await Promise.allSettled([idbSet(WORKING_COPY_KEY,best),writeOpfsWorkingCopy(best)]);if(repairs.every(result=>result.status==='rejected'))console.warn('工作副本恢复后无法重新建立本地双副本')}return best}
-async function requestPersistentStorage(){try{if(navigator.storage?.persist)await navigator.storage.persist()}catch(error){console.warn('请求持久存储失败:',error)}}
-function persistRemarkHidden(){void idbSet(REMARK_HIDDEN_KEY,[...remarkHidden]).catch(error=>console.error('保存已删除备注选项失败:',error))}
-function persistRemarkHistory(){void idbSet(REMARK_HISTORY_KEY,[...remarkHistory]).catch(error=>console.error('保存备注历史失败:',error))}
-async function loadRemarkState(){try{const [storedHistory,storedHidden]=await Promise.all([idbGet(REMARK_HISTORY_KEY),idbGet(REMARK_HIDDEN_KEY)]);remarkHistory=Array.isArray(storedHistory)?storedHistory.map(normalizeRemarkValue).filter(Boolean):[];remarkHidden=new Set((Array.isArray(storedHidden)?storedHidden:[]).map(remarkHistoryKey).filter(Boolean))}catch(error){console.error('读取备注本地状态失败:',error);remarkHistory=[];remarkHidden=new Set()}}
-
-function normalizeSortText(v){return typeof v==='string'?v.normalize('NFKC').trim():''}
-function getStructuredSortInfo(v){
-const text=normalizeSortText(v);if(!text)return{type:99,text:'',dateKey:null,numberKey:null};
-const dm=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-if(dm){const y=Number(dm[1]),m=Number(dm[2]),d=Number(dm[3]),date=new Date(Date.UTC(y,m-1,d));if(date.getUTCFullYear()===y&&date.getUTCMonth()===m-1&&date.getUTCDate()===d)return{type:0,text,dateKey:y*10000+m*100+d,numberKey:null}}
-if(/^https?:\/\//i.test(text))return{type:5,text,dateKey:null,numberKey:null};
-const first=Array.from(text)[0]||'';
-if(/^\p{Script=Han}$/u.test(first))return{type:1,text,dateKey:null,numberKey:null};
-if(/^[A-Za-z]$/.test(first))return{type:2,text,dateKey:null,numberKey:null};
-const nm=text.match(/^[+-]?(?:\d+(?:\.\d+)?|\.\d+)/);if(nm)return{type:3,text,dateKey:null,numberKey:Number(nm[0])};
-return{type:4,text,dateKey:null,numberKey:null}
-}
-function compareStructuredText(a0,b0){
-const a=getStructuredSortInfo(a0),b=getStructuredSortInfo(b0);if(a.type!==b.type)return a.type-b.type;if(a.type===0&&a.dateKey!==b.dateKey)return a.dateKey-b.dateKey;
-if(a.type===1){let r=pinyinCollator.compare(a.text,b.text);if(r!==0)return r;r=strokeCollator.compare(a.text,b.text);if(r!==0)return r}
-if(a.type===2){const r=a.text.localeCompare(b.text,'en',{sensitivity:'base',numeric:true});if(r!==0)return r}
-if(a.type===3&&a.numberKey!==b.numberKey)return a.numberKey-b.numberKey;
-const r=generalCollator.compare(a.text,b.text);if(r!==0)return r;return a.text<b.text?-1:a.text>b.text?1:0
+updateVisualViewport();
+window.addEventListener('resize',updateVisualViewport,{passive:true});
+if(window.visualViewport){
+    window.visualViewport.addEventListener('resize',updateVisualViewport,{passive:true});
+    window.visualViewport.addEventListener('scroll',updateVisualViewport,{passive:true})
 }
 
-function normalizeRemarkValue(v){return typeof v==='string'?v.normalize('NFKC').trim():''}
-function remarkHistoryKey(v){return normalizeRemarkValue(v).toLocaleLowerCase('zh-CN')}
-function normalizeRemarks(v){const seen=new Set();return(Array.isArray(v)?v:[v]).map(normalizeRemarkValue).filter(item=>{const key=remarkHistoryKey(item);if(!item||seen.has(key))return false;seen.add(key);return true})}
-function getRemarkSortInfo(v){
-const text=normalizeRemarkValue(v),first=Array.from(text)[0]||'';
-if(/^\p{Script=Han}$/u.test(first))return{type:0,text,dateKey:null,numberKey:null};
-if(/^[A-Za-z]$/.test(first))return{type:1,text,dateKey:null,numberKey:null};
-const dm=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-if(dm){const y=Number(dm[1]),m=Number(dm[2]),d=Number(dm[3]),date=new Date(Date.UTC(y,m-1,d));if(date.getUTCFullYear()===y&&date.getUTCMonth()===m-1&&date.getUTCDate()===d)return{type:3,text,dateKey:y*10000+m*100+d,numberKey:null}}
-const nm=text.match(/^(\d+(?:\.\d+)?)/);if(nm)return{type:2,text,dateKey:null,numberKey:Number(nm[1])};
-return{type:4,text,dateKey:null,numberKey:null}
+function clean(v){return String(v??'').normalize('NFKC').trim()}
+function cleanTitle(v){return String(v??'').trim()}
+function esc(v){const d=document.createElement('div');d.textContent=String(v??'');return d.innerHTML}
+function attr(v){return esc(v).replace(/"/g,'&quot;')}
+function uid(){return crypto?.randomUUID?crypto.randomUUID():`press_${Date.now()}_${Math.random().toString(36).slice(2,9)}`}
+function key(v){return clean(v).toLocaleLowerCase('zh-CN')}
+function uniq(values){const m=new Map();for(const raw of values||[]){const v=clean(raw);if(v&&!m.has(key(v)))m.set(key(v),v)}return [...m.values()]}
+function sortAuto(values){return uniq(values).sort((a,b)=>collator.compare(a,b))}
+function compareBookNo(a,b){
+    const aa=clean(a),bb=clean(b);
+    if(aa&&!bb)return-1;
+    if(!aa&&bb)return 1;
+    if(!aa&&!bb)return 0;
+
+    // 含“-”的书号排在最前，并保持原有自然排序规则。
+    // 其次是含“·”的书号：先比较“·”前数字，再比较“·”后数字。
+    // 其它书号仍按原有自然排序规则排列。
+    const group=s=>s.includes('-')?0:(s.includes('·')?1:2);
+    const ga=group(aa),gb=group(bb);
+    if(ga!==gb)return ga-gb;
+
+    if(ga===1){
+        const [aLeftRaw='',aRightRaw='']=aa.split('·',2);
+        const [bLeftRaw='',bRightRaw='']=bb.split('·',2);
+        const aLeft=Number(clean(aLeftRaw)),bLeft=Number(clean(bLeftRaw));
+        const aRight=Number(clean(aRightRaw)),bRight=Number(clean(bRightRaw));
+        if(Number.isFinite(aLeft)&&Number.isFinite(bLeft)&&aLeft!==bLeft)return aLeft-bLeft;
+        if(Number.isFinite(aRight)&&Number.isFinite(bRight)&&aRight!==bRight)return aRight-bRight;
+    }
+
+    return collator.compare(aa,bb)
 }
-function compareRemarkOptions(a0,b0){
-const a=getRemarkSortInfo(a0),b=getRemarkSortInfo(b0);if(a.type!==b.type)return a.type-b.type;
-if(a.type===0){let r=pinyinCollator.compare(a.text,b.text);if(r!==0)return r;r=strokeCollator.compare(a.text,b.text);if(r!==0)return r}
-else if(a.type===1){const r=a.text.localeCompare(b.text,'en',{sensitivity:'base',numeric:true});if(r!==0)return r}
-else if(a.type===2){if(a.numberKey!==b.numberKey)return a.numberKey-b.numberKey;const r=a.text.localeCompare(b.text,'zh-CN',{sensitivity:'base',numeric:true});if(r!==0)return r}
-else if(a.type===3&&a.dateKey!==b.dateKey)return a.dateKey-b.dateKey;
-return generalCollator.compare(a.text,b.text)
+function normalizeMulti(value){
+    const values=Array.isArray(value)?value:[value];
+    return uniq(values)
 }
-function saveRemarkHidden(){persistRemarkHidden()}
-function saveRemarkHistory(){persistRemarkHistory()}
-function rebuildRemarkHistory(){const seen=new Map(),candidates=[...remarkHistory];pages.forEach(item=>candidates.push(...normalizeRemarks(item&&item.remark)));candidates.forEach(raw=>{const value=normalizeRemarkValue(raw),key=remarkHistoryKey(value);if(value&&!remarkHidden.has(key)&&!seen.has(key))seen.set(key,value)});remarkHistory=[...seen.values()].sort(compareRemarkOptions);saveRemarkHistory()}
-function rememberRemark(v){if(Array.isArray(v)){v.forEach(rememberRemark);return}const n=normalizeRemarkValue(v);if(!n)return;const key=remarkHistoryKey(n);if(remarkHidden.delete(key))saveRemarkHidden();if(!remarkHistory.some(item=>remarkHistoryKey(item)===key)){remarkHistory.push(n);remarkHistory.sort(compareRemarkOptions);saveRemarkHistory()}}
-
-function setupRemarkCombo({input,dropdown,options,combo,submit,manageOptions=false}){
-let selected=[],filtered=[],activeIndex=-1,suppressMenuOpen=false;const tags=document.createElement('div');tags.className='remark-tags';combo.insertBefore(tags,input);input.removeAttribute('placeholder');options.setAttribute('role','listbox');options.setAttribute('aria-multiselectable','true');
-function closeMenu(){dropdown.classList.add('hidden');input.setAttribute('aria-expanded','false');activeIndex=-1}
-function renderTags(){tags.replaceChildren();selected.forEach((value,index)=>{const tag=document.createElement('span');tag.className='remark-tag';const label=document.createElement('span');label.textContent=value;const remove=document.createElement('button');remove.type='button';remove.className='remark-remove';remove.textContent='×';remove.setAttribute('aria-label','移除备注：'+value);remove.addEventListener('click',()=>{selected.splice(index,1);renderTags();input.focus();renderMenu(true)});tag.append(label,remove);tags.append(tag)})}
-function add(value){selected=normalizeRemarks([...selected,value]);input.value='';renderTags()}
-function choose(value){const index=selected.findIndex(item=>remarkHistoryKey(item)===remarkHistoryKey(value));if(index>=0)selected.splice(index,1);else add(value);input.value='';renderTags();suppressMenuOpen=true;closeMenu();input.focus({preventScroll:true});closeMenu();setTimeout(()=>{closeMenu();suppressMenuOpen=false},0)}
-function setActive(index){activeIndex=filtered.length?(index+filtered.length)%filtered.length:-1;[...options.children].forEach((node,i)=>{const button=node.matches('.remark-option')?node:node.querySelector('.remark-option');if(button)button.classList.toggle('is-active',i===activeIndex)});if(activeIndex>=0){const node=options.children[activeIndex];if(node)node.scrollIntoView({block:'nearest'})}}
-function renameHistoryOption(oldValue){const oldNormalized=normalizeRemarkValue(oldValue);if(!oldNormalized)return;const result=prompt('修改备注选项：',oldNormalized);if(result===null)return;const newNormalized=normalizeRemarkValue(result);if(!newNormalized){alert('备注选项不能为空。');return}
-const oldKey=remarkHistoryKey(oldNormalized),newKey=remarkHistoryKey(newNormalized);if(newKey!==oldKey&&remarkHistory.some(item=>remarkHistoryKey(item)===newKey)){alert('该备注选项已经存在。');return}
-pages.forEach(item=>{if(!item)return;item.remark=normalizeRemarks(item.remark).map(remark=>remarkHistoryKey(remark)===oldKey?newNormalized:remark);item.remark=normalizeRemarks(item.remark)});
-remarkHidden.add(oldKey);remarkHidden.delete(newKey);remarkHistory=remarkHistory.filter(item=>remarkHistoryKey(item)!==oldKey&&remarkHistoryKey(item)!==newKey);remarkHistory.push(newNormalized);remarkHistory.sort(compareRemarkOptions);selected=normalizeRemarks(selected.map(item=>remarkHistoryKey(item)===oldKey?newNormalized:item));saveRemarkHidden();saveRemarkHistory();input.value='';renderTags();closeMenu();applySortAndRender();if(isConfigValid())syncToCloud(false)}
-function deleteHistoryOption(value){const normalized=normalizeRemarkValue(value);if(!normalized)return;if(!confirm(`确定删除备注“${normalized}”吗？\n该备注会同时从总表中所有已保存条目里移除。`))return;const key=remarkHistoryKey(normalized);pages.forEach(item=>{if(!item)return;item.remark=normalizeRemarks(item.remark).filter(remark=>remarkHistoryKey(remark)!==key)});remarkHidden.add(key);remarkHistory=remarkHistory.filter(item=>remarkHistoryKey(item)!==key);selected=selected.filter(item=>remarkHistoryKey(item)!==key);saveRemarkHidden();saveRemarkHistory();input.value='';renderTags();closeMenu();applySortAndRender();if(isConfigValid())syncToCloud(false)}
-function createOptionButton(value,checked){const button=document.createElement('button');button.type='button';button.className='remark-option';button.textContent=(checked?'✓ ':'')+value;button.setAttribute('role','option');button.setAttribute('aria-selected',String(checked));button.addEventListener('pointerdown',event=>{event.preventDefault();event.stopPropagation();choose(value)});button.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();closeMenu()});return button}
-function renderMenu(forceOpen=false){const query=remarkHistoryKey(input.value);filtered=remarkHistory.filter(item=>remarkHistoryKey(item).includes(query));if(query&&!filtered.some(item=>remarkHistoryKey(item)===query))filtered.unshift(normalizeRemarkValue(input.value));options.replaceChildren();
-filtered.forEach(value=>{const checked=selected.some(item=>remarkHistoryKey(item)===remarkHistoryKey(value)),optionButton=createOptionButton(value,checked);if(!manageOptions){options.append(optionButton);return}
-const row=document.createElement('div');row.className='remark-option-row';const actions=document.createElement('div');actions.className='remark-option-actions';const editButton=document.createElement('button');editButton.type='button';editButton.className='remark-manage-btn edit';editButton.textContent='改';editButton.setAttribute('aria-label','修改备注选项：'+value);editButton.addEventListener('pointerdown',event=>{event.preventDefault();event.stopPropagation();renameHistoryOption(value)});editButton.addEventListener('click',event=>{event.preventDefault();event.stopPropagation()});const deleteButton=document.createElement('button');deleteButton.type='button';deleteButton.className='remark-manage-btn delete';deleteButton.textContent='删';deleteButton.setAttribute('aria-label','删除备注选项：'+value);deleteButton.addEventListener('pointerdown',event=>{event.preventDefault();event.stopPropagation();deleteHistoryOption(value)});deleteButton.addEventListener('click',event=>{event.preventDefault();event.stopPropagation()});actions.append(editButton,deleteButton);row.append(optionButton,actions);options.append(row)});
-activeIndex=-1;if(!filtered.length)options.innerHTML='<div class="remark-empty">输入新备注，按回车添加</div>';if(forceOpen){dropdown.classList.remove('hidden');input.setAttribute('aria-expanded','true')}}
-input.addEventListener('focus',()=>{if(suppressMenuOpen){closeMenu();return}renderMenu(true)});input.addEventListener('input',()=>{if(suppressMenuOpen){closeMenu();return}renderMenu(true)});
-input.addEventListener('keydown',event=>{if(event.isComposing||event.keyCode===229)return;if(['ArrowDown','ArrowUp','Enter','Escape'].includes(event.key)){event.preventDefault();event.stopImmediatePropagation()}
-if(event.key==='ArrowDown'||event.key==='ArrowUp'){if(dropdown.classList.contains('hidden'))renderMenu(true);setActive(activeIndex<0?(event.key==='ArrowDown'?0:filtered.length-1):activeIndex+(event.key==='ArrowDown'?1:-1))}
-else if(event.key==='Escape')closeMenu();else if(event.key==='Enter'){if(activeIndex>=0)choose(filtered[activeIndex]);else if(input.value.trim()){add(input.value);renderMenu(true)}else{closeMenu();submit()}}});
-document.addEventListener('mousedown',event=>{if(!combo.contains(event.target))closeMenu()});
-return{setValues(value){selected=normalizeRemarks(value);input.value='';renderTags();closeMenu()},getValues(){if(input.value.trim())add(input.value);return[...selected]},closeMenu}
+function tagPrefixNumber(value){
+    const match=clean(value).match(/^(\d{2})/);
+    return match?Number(match[1]):Number.POSITIVE_INFINITY
+}
+function compareTagsByPrefix(a,b){
+    const aa=clean(a),bb=clean(b);
+    const ap=tagPrefixNumber(aa),bp=tagPrefixNumber(bb);
+    if(ap!==bp)return ap-bp;
+    return collator.compare(aa,bb)
+}
+function sortTags(values){
+    const list=Array.isArray(values)?values:[values];
+    return uniq(list).sort(compareTagsByPrefix)
+}
+function renderInstitution(raw){
+    const s=clean(raw);
+    const re=/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/gi;
+    let html='',last=0,m;
+    while((m=re.exec(s))){
+        html+=esc(s.slice(last,m.index));
+        html+=`<a href="${attr(m[2])}" target="_blank" rel="noopener noreferrer">${esc(m[1])}</a>`;
+        last=m.index+m[0].length
+    }
+    return html+esc(s.slice(last))
+}
+function renderInstitutionChoice(raw){
+    return renderInstitution(raw);
+}
+function renderBookName(raw){
+    const s=String(raw??'').trim();
+    const re=/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/gi;
+    let html='',last=0,m;
+    while((m=re.exec(s))){
+        html+=esc(s.slice(last,m.index));
+        html+=`<a href="${attr(m[2])}" target="_blank" rel="noopener noreferrer">${esc(m[1])}</a>`;
+        last=m.index+m[0].length
+    }
+    return html+esc(s.slice(last))
+}
+// 原有“24读书”条目在编辑时新增指定标签，使用以下专用编码区间。
+// “24读书 + 指定图书标签”的统一专用编码区间。
+// 无论是本次给原有“24读书”条目新增指定标签，还是已有该组合后清空编码重新提交，均使用同一组区间。
+const SPECIAL_24_ADDITION_RULES=[
+    {addedTag:'11图书',tag:'24读书 + 11图书',ranges:[[247001,247999]]},
+    {addedTag:'13图书',tag:'24读书 + 13图书',ranges:[[248001,248999]]},
+    {addedTag:'23读书',tag:'24读书 + 23读书',ranges:[[249001,249999]]}
+];
+const SPECIAL_24_CLEAR_CODE_RULES=SPECIAL_24_ADDITION_RULES;
+const SPECIAL_24_RESERVED_RANGES=SPECIAL_24_ADDITION_RULES.flatMap(rule=>rule.ranges);
+function isSpecial24ReservedCode(value){
+    const n=Number(clean(value));
+    return Number.isInteger(n)&&SPECIAL_24_RESERVED_RANGES.some(([start,end])=>n>=start&&n<=end)
+}
+function special24AdditionRule(oldTags,newTags){
+    const oldKeys=new Set(sortTags(oldTags).map(key));
+    if(!oldKeys.has(key('24读书')))return null;
+    const newKeys=new Set(sortTags(newTags).map(key));
+    const candidates=SPECIAL_24_ADDITION_RULES
+        .filter(rule=>newKeys.has(key(rule.addedTag))&&!oldKeys.has(key(rule.addedTag)))
+        .sort((a,b)=>compareTagsByPrefix(a.addedTag,b.addedTag));
+    return candidates[0]||null
+}
+// 清空编码后重新自动分配时，不要求该专用标签是“本次刚新增”。
+// 只要当前标签组合同时包含“24读书”和 11/13/23 图书之一，就使用对应的清空编码专用区间。
+function special24CombinationRule(tags){
+    const selectedKeys=new Set(sortTags(tags).map(key));
+    if(!selectedKeys.has(key('24读书')))return null;
+    const candidates=SPECIAL_24_CLEAR_CODE_RULES
+        .filter(rule=>selectedKeys.has(key(rule.addedTag)))
+        .sort((a,b)=>compareTagsByPrefix(a.addedTag,b.addedTag));
+    return candidates[0]||null
+}
+function validCode(v){return /^(1\d{5}|2\d{5})$/.test(clean(v))}
+function randomCode(usedSet){
+    const used=usedSet||new Set(state.entries.map(x=>x.code));
+    if(used.size>=200000)throw new Error('可用编码已用尽');
+    if(crypto?.getRandomValues){
+        const buf=new Uint32Array(1);
+        for(let i=0;i<2000;i++){
+            crypto.getRandomValues(buf);
+            const code=String(100000+(buf[0]%200000));
+            if(!used.has(code)&&!isSpecial24ReservedCode(code))return code
+        }
+    }
+    const start=100000+Math.floor(Math.random()*200000);
+    for(let i=0;i<200000;i++){
+        const n=100000+((start-100000+i)%200000);
+        const code=String(n);
+        if(!used.has(code)&&!isSpecial24ReservedCode(code))return code
+    }
+    throw new Error('无法生成唯一编码')
+}
+function nextCode(usedSet){
+    const used=usedSet||new Set(state.entries.map(x=>x.code));
+    // 删除条目释放的自动编码优先复用；只有释放池为空时才重新随机生成。
+    const released=(state.releasedCodes||[]).find(code=>validCode(code)&&!isSpecial24ReservedCode(code)&&!used.has(code));
+    return released||randomCode(used)
 }
 
-function getRemarkDateSortKey(value){const text=normalizeSortText(value),match=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);if(!match)return Number.POSITIVE_INFINITY;const y=Number(match[1]),m=Number(match[2]),d=Number(match[3]),date=new Date(Date.UTC(y,m-1,d));if(date.getUTCFullYear()!==y||date.getUTCMonth()!==m-1||date.getUTCDate()!==d)return Number.POSITIVE_INFINITY;return y*10000+m*100+d}
-function compareFirstRemarkText(a0,b0){function info(value){const text=normalizeSortText(value);if(!text)return{type:99,text:'',numberKey:null};if(/^https?:\/\//i.test(text))return{type:5,text,numberKey:null};const first=Array.from(text)[0]||'';if(/^\p{Script=Han}$/u.test(first))return{type:1,text,numberKey:null};if(/^[A-Za-z]$/.test(first))return{type:2,text,numberKey:null};const nm=text.match(/^[+-]?(?:\d+(?:\.\d+)?|\.\d+)/);if(nm)return{type:3,text,numberKey:Number(nm[0])};return{type:4,text,numberKey:null}}
-const a=info(a0),b=info(b0);if(a.type!==b.type)return a.type-b.type;if(a.type===1){let r=pinyinCollator.compare(a.text,b.text);if(r!==0)return r;r=strokeCollator.compare(a.text,b.text);if(r!==0)return r}if(a.type===2){const r=a.text.localeCompare(b.text,'en',{sensitivity:'base',numeric:true});if(r!==0)return r}if(a.type===3&&a.numberKey!==b.numberKey)return a.numberKey-b.numberKey;const r=generalCollator.compare(a.text,b.text);if(r!==0)return r;return a.text<b.text?-1:a.text>b.text?1:0}
-function sortPages(){pages.sort((a,b)=>{const ar=normalizeRemarks(a&&a.remark),br=normalizeRemarks(b&&b.remark),a1=ar[0]||'',b1=br[0]||'',a2=ar[1]||'',b2=br[1]||'',ha2=Boolean(a2),hb2=Boolean(b2),ha1=Boolean(a1),hb1=Boolean(b1);
-if(ha2!==hb2)return ha2?-1:1;if(ha2&&hb2){const ad=getRemarkDateSortKey(a2),bd=getRemarkDateSortKey(b2);if(ad!==bd)return ad-bd;const r1=compareFirstRemarkText(a1,b1);if(r1!==0)return r1;if(!Number.isFinite(ad)){const r2=compareStructuredText(a2,b2);if(r2!==0)return r2}return compareStructuredText(a&&a.title,b&&b.title)}
-if(ha1!==hb1)return ha1?-1:1;if(ha1&&hb1){const r=compareFirstRemarkText(a1,b1);if(r!==0)return r;return compareStructuredText(a&&a.title,b&&b.title)}return compareStructuredText(a&&a.title,b&&b.title)})}
+// 指定标签的自动编码区间。新增条目未手动填写编码时，以及编辑时清空编码或删除/替换原有标签触发系统自动重编码时使用。
+// 每个标签可以对应一个或多个区间；始终按区间与编码数值从小到大寻找第一个未使用编码。
+// 手动填写编码不受这些自动编码区间限制。
+const AUTO_CODE_RULES=[
+    {tag:'11图书',ranges:[[110001,119999],[150001,169999],[190001,199999]]},
+    {tag:'13图书',ranges:[[130001,139999],[170001,179999]]},
+    {tag:'14图书',ranges:[[140001,149999],[180001,189999]]},
+    {tag:'21读书',ranges:[[210001,219999],[250001,269999],[290001,299999]]},
+    {tag:'23读书',ranges:[[230001,239999],[270001,279999]]},
+    {tag:'24读书',ranges:[[240001,247000],[280001,289999]]}
+];
+function autoCodeRuleForTags(tags){
+    const selectedKeys=new Set(normalizeMulti(tags).map(key));
+    return AUTO_CODE_RULES.find(rule=>selectedKeys.has(key(rule.tag)))||null
+}
+function nextCodeInRange(rule,usedSet){
+    const used=usedSet||new Set(state.entries.map(x=>clean(x.code)).filter(Boolean));
+    const ranges=[...(rule.ranges||[])].sort((a,b)=>a[0]-b[0]);
+    for(const range of ranges){
+        const start=Number(range[0]),end=Number(range[1]);
+        for(let n=start;n<=end;n++){
+            const code=String(n);
+            if(!used.has(code))return code
+        }
+    }
+    const rangeText=ranges.map(([start,end])=>`[${start},${end}]`).join('、');
+    throw new Error(`标签“${rule.tag}”的自动编码区间 ${rangeText} 已用尽`)
+}
+function normEntry(x,usedCodes){
+    if(!x||typeof x!=='object')return null;
+    const bookName=cleanTitle(x.bookName);if(!bookName)return null;
+    const bookNo=clean(x.bookNo),institution=clean(x.institution);
+    const category=normalizeMulti(x.category),tag=sortTags(x.tag);
+    let code=clean(x.code);
 
-function parsePageInput(input){const raw=String(input||'').trim(),match=raw.match(/^\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)$/i);if(match)return{title:match[1].trim(),url:match[2].trim(),titleMode:'markdown'};if(/^https?:\/\/[^\s]+$/i.test(raw))return{title:raw,url:raw,titleMode:'url'};return{title:raw,url:'',titleMode:'text'}}
-function escapeHtml(text){if(!text)return'';const div=document.createElement('div');div.textContent=text;return div.innerHTML}
+    // 手工填写的编码允许原样保存，不受自动编码格式限制。
+    // 只有编码为空，或导入/旧数据中出现重复编码时，才自动生成一个唯一编码。
+    if(!code||usedCodes.has(code))code=randomCode(usedCodes);
 
-async function loadConfig(){let parsed={};let persistedToken='';try{parsed=await idbGet(CONFIG_KEY)||{};persistedToken=String(await idbGet(TOKEN_PERSISTED_KEY)||'')}catch(error){console.error('读取 Pages 配置失败:',error)}const rememberToken=typeof parsed.rememberToken==='boolean'?parsed.rememberToken:true;memoryToken=rememberToken?persistedToken:'';config={token:memoryToken,rememberToken,owner:typeof parsed.owner==='string'?parsed.owner:'',repo:typeof parsed.repo==='string'?parsed.repo:'',file:typeof parsed.file==='string'&&parsed.file.trim()?parsed.file.trim():'pages_data.json'};cfgToken.value=config.token;cfgRememberToken.checked=config.rememberToken;cfgOwner.value=config.owner;cfgRepo.value=config.repo;cfgFile.value=config.file;return Boolean(config.owner||config.repo||config.token)}
-async function saveConfig(){config.token=cfgToken.value.trim();memoryToken=config.token;config.rememberToken=cfgRememberToken.checked;config.owner=cfgOwner.value.trim();config.repo=cfgRepo.value.trim();config.file=cfgFile.value.trim()||'pages_data.json';await idbSet(CONFIG_KEY,{rememberToken:config.rememberToken,owner:config.owner,repo:config.repo,file:config.file});if(config.rememberToken)await idbSet(TOKEN_PERSISTED_KEY,config.token);else await idbDelete(TOKEN_PERSISTED_KEY)}
-function isConfigValid(){return config.token&&config.owner&&config.repo&&config.file}
+    usedCodes.add(code);
+    return{id:clean(x.id)||uid(),bookName,bookNo,institution,category,tag,code,codeEditCount:Math.min(1,Math.max(0,Number(x.codeEditCount)||0))}
+}
+function norm(v){
+    const s=Array.isArray(v)?{entries:v}:(v&&typeof v==='object'?v:{});
+    const usedCodes=new Set();
+    const entries=(Array.isArray(s.entries)?s.entries:[]).map(x=>normEntry(x,usedCodes)).filter(Boolean);
+    // releasedCodes 只保存当前未被任何条目占用的合法编码，并保留释放先后顺序。
+    const releasedCodes=uniq(Array.isArray(s.releasedCodes)?s.releasedCodes:[])
+        .filter(code=>validCode(code)&&!usedCodes.has(code));
 
-async function githubApi(method,endpoint,body=null){const url=`https://api.github.com/repos/${config.owner}/${config.repo}/${endpoint}`,headers={'Authorization':`token ${config.token}`,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},options={method,headers};if(body)options.body=JSON.stringify(body);const response=await fetch(url,options);if(!response.ok){const error=await response.json().catch(()=>({}));throw new Error(error.message||`HTTP ${response.status}`)}return response.json()}
-async function loadFromGitHub(){if(!isConfigValid())throw new Error('请先配置 GitHub 连接');try{const data=await githubApi('GET',`contents/${config.file}`),decoded=decodeURIComponent(escape(atob(data.content)));return JSON.parse(decoded)}catch(e){if(e.message.includes('404'))return null;throw e}}
+    // 出版、书架使用历史数组自身的顺序，供人工调整。
+    // 旧数据没有对应历史字段时，仅首次按现有条目出现顺序建立历史。
+    const institutions=uniq(
+        Array.isArray(s.institutions)?s.institutions:entries.map(x=>x.institution).filter(Boolean)
+    );
+    const categories=uniq(
+        Array.isArray(s.categories)?s.categories:entries.flatMap(x=>x.category)
+    );
 
-async function syncToCloud(showToastMsg=true){if(isSyncing)return;if(!isConfigValid()){showToast('请先点击 "配置" 按钮设置 GitHub 连接','error');return}if(pages.length===0){showToast('没有数据需要同步','info');return}
-isSyncing=true;syncBtn.disabled=true;setCloudStatus('syncing','同步中...');
-try{let sha=null;try{const res=await fetch(`https://api.github.com/repos/${config.owner}/${config.repo}/contents/${config.file}`,{headers:{'Authorization':`token ${config.token}`}});if(res.status===200){const data=await res.json();sha=data.sha}}catch(e){}
-const content=btoa(unescape(encodeURIComponent(JSON.stringify(pages,null,2)))),body={message:`更新数据 - ${new Date().toLocaleString()}`,content};if(sha)body.sha=sha;
-const res=await fetch(`https://api.github.com/repos/${config.owner}/${config.repo}/contents/${config.file}`,{method:'PUT',headers:{'Authorization':`token ${config.token}`,'Content-Type':'application/json'},body:JSON.stringify(body)}),result=await res.json();
-if(res.status===200||res.status===201){void saveWorkingCopy();const now=new Date();lastSyncTime.textContent=`已同步 ${now.toLocaleString()}`;if(showToastMsg)showToast(`成功同步 ${pages.length} 个条目到 GitHub`,'success');setCloudStatus('online','已连接')}else throw new Error(result.message||'未知错误')}
-catch(e){console.error('同步失败:',e);showToast(`同步失败：${e.message}`,'error');setCloudStatus('offline','同步失败')}finally{isSyncing=false;syncBtn.disabled=false}}
+    // 标签不能人工排序，严格按开头两位数字从小到大排列；同前缀再按自然顺序。
+    const tags=sortTags(
+        Array.isArray(s.tags)?s.tags:entries.flatMap(x=>x.tag)
+    );
 
-async function loadFromCloud(){if(!isConfigValid()){setCloudStatus('offline','未配置');await loadWorkingCopy();return}setCloudStatus('syncing','加载中...');
-try{const data=await loadFromGitHub();if(data&&Array.isArray(data)&&data.length>0){pages=data.filter(item=>item.title&&item.title.trim()!=='');applySortAndRender();const now=new Date();lastSyncTime.textContent=`已同步 ${now.toLocaleString()}`;setCloudStatus('online','已连接');showToast(`从 GitHub 加载了 ${pages.length} 个条目`,'success')}
-else{showToast('云端无数据，从本地工作副本加载','info');await loadWorkingCopy();if(pages.length>0)setTimeout(()=>syncToCloud(false),500)}}catch(e){console.error('加载云端数据失败:',e);showToast(`加载云端失败：${e.message}，从本地工作副本加载`,'error');await loadWorkingCopy()}}
+    // 总表：先按“出版”下拉菜单顺序；出版相同再按书号排序。
+    // 已从出版历史中删除、但仍被旧条目使用的出版放在已配置出版之后。
+    const institutionOrder=new Map(institutions.map((v,i)=>[key(v),i]));
+    entries.sort((a,b)=>{
+        const ai=institutionOrder.has(key(a.institution))?institutionOrder.get(key(a.institution)):Number.MAX_SAFE_INTEGER;
+        const bi=institutionOrder.has(key(b.institution))?institutionOrder.get(key(b.institution)):Number.MAX_SAFE_INTEGER;
+        if(ai!==bi)return ai-bi;
+        if(ai===Number.MAX_SAFE_INTEGER){
+            const byInstitution=collator.compare(a.institution,b.institution);
+            if(byInstitution!==0)return byInstitution
+        }
+        const byNo=compareBookNo(a.bookNo,b.bookNo);
+        if(byNo!==0)return byNo;
+        const byName=collator.compare(a.bookName,b.bookName);
+        if(byName!==0)return byName;
+        return a.code.localeCompare(b.code)
+    });
+    return{schemaVersion:3,entries,institutions,categories,tags,releasedCodes}
+}
+function fingerprint(v=state){return JSON.stringify(norm(v))}
+function admin(){return Boolean(config.owner&&config.repo&&config.file&&config.token)}
+function base(){return location.pathname.replace(/[^/]*$/,'')}
+function publicUrl(){return `${location.origin}${base()}${PUBLIC_FILE}?v=${Date.now()}`}
+function target(){return `${config.owner}/${config.repo}/${config.file}`}
+function pathEncode(p){return String(p).split('/').filter(Boolean).map(encodeURIComponent).join('/')}
+let storageDbPromise=null,workCopyCache=null,publicCacheValue=null,persistedToken='',storageReady=false,workCopyWriteChain=Promise.resolve(),metaWriteChain=Promise.resolve();
+function openStorageDb(){
+    if(storageDbPromise)return storageDbPromise;
+    storageDbPromise=new Promise((resolve,reject)=>{
+        const req=indexedDB.open(DB_NAME,1);
+        req.onupgradeneeded=()=>{const db=req.result;if(!db.objectStoreNames.contains(DB_STORE))db.createObjectStore(DB_STORE)};
+        req.onsuccess=()=>resolve(req.result);
+        req.onerror=()=>reject(req.error||new Error('IndexedDB 打开失败'));
+    });
+    return storageDbPromise
+}
+async function idbGet(key){try{const db=await openStorageDb();return await new Promise((resolve,reject)=>{const tx=db.transaction(DB_STORE,'readonly'),req=tx.objectStore(DB_STORE).get(key);req.onsuccess=()=>resolve(req.result??null);req.onerror=()=>reject(req.error)})}catch(e){console.error('IndexedDB 读取失败:',key,e);return null}}
+async function idbSet(key,value){const db=await openStorageDb();return new Promise((resolve,reject)=>{const tx=db.transaction(DB_STORE,'readwrite');tx.objectStore(DB_STORE).put(value,key);tx.oncomplete=()=>resolve(true);tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error||new Error('IndexedDB 写入中止'))})}
+async function idbDelete(key){try{const db=await openStorageDb();await new Promise((resolve,reject)=>{const tx=db.transaction(DB_STORE,'readwrite');tx.objectStore(DB_STORE).delete(key);tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error)});return true}catch(e){console.error('IndexedDB 删除失败:',key,e);return false}}
+async function opfsWriteWorkCopy(record){if(!navigator.storage?.getDirectory)return false;try{const root=await navigator.storage.getDirectory(),handle=await root.getFileHandle(OPFS_WORKCOPY_FILE,{create:true}),writable=await handle.createWritable();await writable.write(JSON.stringify(record));await writable.close();return true}catch(e){console.warn('OPFS 写入失败:',e);return false}}
+async function opfsReadWorkCopy(){if(!navigator.storage?.getDirectory)return null;try{const root=await navigator.storage.getDirectory(),handle=await root.getFileHandle(OPFS_WORKCOPY_FILE),file=await handle.getFile(),raw=await file.text();const record=JSON.parse(raw);return record&&record.state?record:null}catch(e){return null}}
+function recordTime(record){const t=Date.parse(record?.savedAt||'');return Number.isFinite(t)?t:0}
+async function bootstrapStorage(){
+    try{if(navigator.storage?.persist)navigator.storage.persist().catch(()=>{})}catch(e){}
+    const [cfg,tok,m,workIdb,pub,workOpfs]=await Promise.all([idbGet(CONFIG_KEY),idbGet(TOKEN_PERSISTED_KEY),idbGet(META_KEY),idbGet(WORKCOPY_KEY),idbGet(PUBLIC_CACHE_KEY),opfsReadWorkCopy()]);
+    storageMemory.config=cfg&&typeof cfg==='object'?cfg:{};
+    persistedToken=typeof tok==='string'?tok:'';
+    storageMemory.meta=m&&typeof m==='object'?m:{};
+    publicCacheValue=pub&&pub.state?norm(pub.state):null;
+    const candidates=[workIdb,workOpfs].filter(x=>x&&x.state);
+    const newest=candidates.sort((a,b)=>recordTime(b)-recordTime(a))[0]||null;
+    workCopyCache=newest?norm(newest.state):null;
+    if(newest){
+        const normalizedRecord={savedAt:newest.savedAt||new Date().toISOString(),state:workCopyCache};
+        idbSet(WORKCOPY_KEY,normalizedRecord).catch(()=>{});opfsWriteWorkCopy(normalizedRecord).catch(()=>{});
+    }
+    storageReady=true
+}
+const storageMemory={config:{},meta:{}};
+function show(msg,type='info'){toast.textContent=msg;toast.className=`toast ${type}`;clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.classList.add('hidden'),3000)}
+function status(kind,text){statusDot.className=`status-dot ${kind}`;statusText.textContent=text}
+function emptyState(){return{entries:[],institutions:[],categories:[],tags:[],releasedCodes:[]}}
+function saveLocal(snapshot=state){
+    const normalized=norm(snapshot);
+    if(snapshot===state)state=normalized;
+    workCopyCache=normalized;
+    if(!storageReady)return true;
+    const record={savedAt:new Date().toISOString(),state:normalized};
+    workCopyWriteChain=workCopyWriteChain.then(async()=>{
+        const results=await Promise.allSettled([idbSet(WORKCOPY_KEY,record),opfsWriteWorkCopy(record)]);
+        if(results.every(r=>r.status==='rejected'))throw new Error('本地工作副本保存失败')
+    }).catch(e=>console.error(e));
+    return true
+}
+function loadLocal(){return workCopyCache?norm(workCopyCache):null}
+async function savePublicCache(snapshot){publicCacheValue=norm(snapshot);try{await idbSet(PUBLIC_CACHE_KEY,{savedAt:new Date().toISOString(),state:publicCacheValue});return true}catch(e){console.error('公开缓存保存失败:',e);return false}}
+function loadPublicCache(){return publicCacheValue?norm(publicCacheValue):null}
+function currentRevision(){return Math.max(0,Number(meta.revision)||0)}
+function hasLocalContent(snapshot){
+    const s=snapshot?norm(snapshot):null;
+    return Boolean(s&&(s.entries.length||s.institutions.length||s.categories.length||s.tags.length||s.releasedCodes.length))
+}
+function hasUnsyncedLocal(snapshot=loadLocal()){
+    if(!snapshot)return false;
+    if(meta.dirty)return true;
+    try{
+        if(meta.baseState&&typeof meta.baseState==='object')return fingerprint(snapshot)!==fingerprint(meta.baseState);
+        if(typeof meta.fingerprint==='string')return fingerprint(snapshot)!==meta.fingerprint
+    }catch(e){}
+    return false
+}
+function updateAdmin(){
+    const on=admin(),editable=on&&adminReady,wasHidden=addSection.classList.contains('hidden');
+    addSection.classList.toggle('hidden',!editable);
+    syncBtn.classList.toggle('hidden',!on);
+    syncBtn.disabled=Boolean(syncing||!editable);
+    manageBtn.disabled=Boolean(on&&!editable);
+    if(!on)manageModal.classList.add('hidden');
+    if(editable&&wasHidden)setTimeout(()=>bookNameInput.focus(),40)
+}
+function institutionMeta(which){
+    const edit=which==='edit';
+    return{
+        label:'出版',historyKey:'institutions',
+        input:edit?editInstitution:institutionInput,
+        panel:edit?editInstitutionPanel:institutionPanel,
+        options:edit?editInstitutionOptions:institutionOptions,
+        combo:edit?editInstitutionCombo:institutionCombo,
+        toggle:edit?editInstitutionToggle:institutionToggle
+    }
+}
+function multiMeta(type,which){
+    const edit=which==='edit';
+    const map={
+        category:{
+            label:'书架',historyKey:'categories',
+            input:edit?editCategory:categoryInput,
+            panel:edit?editCategoryPanel:categoryPanel,
+            options:edit?editCategoryOptions:categoryOptions,
+            selectedBox:edit?editCategorySelected:categorySelected
+        },
+        tag:{
+            label:'标签',historyKey:'tags',
+            input:edit?editTag:tagInput,
+            panel:edit?editTagPanel:tagPanel,
+            options:edit?editTagOptions:tagOptions,
+            selectedBox:edit?editTagSelected:tagSelected
+        }
+    };
+    const meta=map[type];
+    meta.selection=edit?editSelections[type]:addSelections[type];
+    return meta
+}
+function sortHistory(type,values){
+    return type==='tag'?sortTags(values):uniq(values)
+}
+function multiAllowsMultiple(type,which){
+    // 只有“编辑条目 → 标签”允许多选；添加标签与书架继续严格单选。
+    return type==='tag'&&which==='edit'
+}
+function renderMultiSelected(type,which){
+    const meta=multiMeta(type,which);
+    const displaySelection=type==='tag'?sortTags(meta.selection):meta.selection;
+    meta.selectedBox.innerHTML=displaySelection.map(v=>`
+        <span class="selected-pill">
+            <span class="selected-pill-label">${esc(v)}</span>
+            <button class="selected-pill-remove" type="button" data-remove-value="${attr(v)}" aria-label="移除${meta.label} ${attr(v)}">×</button>
+        </span>
+    `).join('')
+}
+function renderMultiOptions(type,which){
+    const meta=multiMeta(type,which);
+    const q=key(meta.input.value);
+    const history=sortHistory(type,state[meta.historyKey]);
+    // 部分搜索：输入任意连续文字，只显示包含该文字的历史选项。
+    const values=history.filter(v=>!q||key(v).includes(q));
+    const selectedKeys=new Set(meta.selection.map(key));
+    // 标签、书架的下拉菜单维护功能只保留在“添加”板块。
+    // 编辑弹窗只允许选择已有选项，不提供新增、改名、删除或拖拽排序。
+    const canManage=which==='add';
+    const manualOrder=canManage&&type==='category';
+    const list=values.length
+        ? `<div class="combo-option-list">${values.map(v=>{
+            const dragHandle=manualOrder?`<button class="combo-drag" type="button" data-drag-value="${attr(v)}" aria-label="拖动${meta.label} ${attr(v)} 调整顺序" title="按住拖动排序">≡</button>`:'';
+            const manageButtons=canManage?`
+                <button class="combo-pill-edit" type="button" data-edit-value="${attr(v)}" aria-label="编辑${meta.label} ${attr(v)}" title="编辑">✓</button>
+                <button class="combo-pill-delete" type="button" data-delete-value="${attr(v)}" aria-label="删除${meta.label} ${attr(v)}">×</button>`:'';
+            return `<span class="combo-pill${selectedKeys.has(key(v))?' selected':''}${manualOrder?' manual-order':''}"${manualOrder?` data-drag-value="${attr(v)}"`:''}>
+                ${dragHandle}
+                <button class="combo-pill-select" type="button" data-select-value="${attr(v)}" aria-pressed="${selectedKeys.has(key(v))?'true':'false'}">${esc(v)}</button>${manageButtons}
+            </span>`
+        }).join('')}</div>`
+        : `<div class="combo-empty">${q?`没有匹配的${meta.label}`:`暂无${meta.label}`}</div>`;
+    const current=clean(meta.input.value);
+    const canAdd=canManage&&current&&!history.some(v=>key(v)===key(current));
+    meta.options.innerHTML=list+(canAdd?`<button class="combo-add" type="button" data-add-current="1">＋ 添加“${esc(current)}”到${meta.label}</button>`:'')
+}
+function renderMultiField(type,which){
+    renderMultiSelected(type,which);
+    const meta=multiMeta(type,which);
+    const locked=meta.selection.length>0&&!multiAllowsMultiple(type,which);
+    meta.input.readOnly=locked;
+    meta.input.setAttribute('aria-readonly',locked?'true':'false');
+    meta.input.title=locked?`请先删除当前${meta.label}，再选择或输入新的${meta.label}`:'';
+    renderMultiOptions(type,which)
+}
+function renderCategoryOptions(which){renderMultiField('category',which)}
+function renderTagOptions(which){renderMultiField('tag',which)}
+function renderInstitutionOptions(which){
+    const meta=institutionMeta(which);
+    const q=key(meta.input.value);
+    const history=uniq(state.institutions);
+    // “出版”下拉菜单在添加和编辑界面只负责选择已有出版。
+    // 出版选项的新增、改名、删除和排序全部只保留在“出版管理”页面。
+    const values=history.filter(v=>!q||key(v).includes(q));
+    const list=values.length
+        ? `<div class="combo-option-list">${values.map(v=>`
+            <span class="combo-pill${key(meta.input.value)===key(v)?' selected':''}">
+                <button class="combo-pill-select institution-choice" type="button" data-select-value="${attr(v)}">${renderInstitutionChoice(v)}</button>
+            </span>
+        `).join('')}</div>`
+        : `<div class="combo-empty">${q?'没有匹配的出版':'暂无出版'}</div>`;
+    meta.options.innerHTML=list
+}
+function renderManageInstitutionOptions(){
+    const history=uniq(state.institutions);
+    manageInstitutionOptions.innerHTML=history.length
+        ? history.map((v,index)=>`
+            <div class="manage-option-row" data-manage-value="${attr(v)}">
+                <span class="manage-option-label">${renderInstitutionChoice(v)}</span>
+                <input class="manage-line-input" type="number" min="1" max="${history.length}" step="1" inputmode="numeric" value="${index+1}" data-move-value="${attr(v)}" aria-label="将出版 ${attr(v)} 移至行号">
+                <button class="combo-pill-edit" type="button" data-edit-value="${attr(v)}" aria-label="编辑出版 ${attr(v)}" title="编辑">✓</button>
+                <button class="combo-pill-delete" type="button" data-delete-value="${attr(v)}" aria-label="删除出版 ${attr(v)}">×</button>
+            </div>
+        `).join('')
+        : '<div class="manage-empty">暂无出版选项</div>';
+    if(manageInstitutionLineInput){
+        manageInstitutionLineInput.max=String(history.length+1);
+        if(!clean(manageInstitutionLineInput.value))manageInstitutionLineInput.value=String(history.length+1)
+    }
+}
+function openManage(){
+    if(!admin()){show('请先完成管理配置','error');return}
+    if(!adminReady){show('正在读取云端最新数据，请稍后再管理','info');return}
+    manageInstitutionInput.value='';
+    manageInstitutionLineInput.value=String(uniq(state.institutions).length+1);
+    renderManageInstitutionOptions();
+    manageModal.classList.remove('hidden');
+    setTimeout(()=>manageInstitutionInput.focus(),30)
+}
+function closeManage(){manageModal.classList.add('hidden')}
+function parseManagedLine(raw,max){
+    const n=Number(raw);
+    if(!Number.isInteger(n)||n<1||n>max)return null;
+    return n
+}
+function revealManagedInstitution(value){
+    requestAnimationFrame(()=>{
+        const targetKey=key(value);
+        const row=[...manageInstitutionOptions.querySelectorAll('.manage-option-row[data-manage-value]')]
+            .find(el=>key(el.dataset.manageValue)===targetKey);
+        if(row)row.scrollIntoView({block:'nearest',behavior:'auto'})
+    })
+}
+function addManagedInstitution(){
+    const value=clean(manageInstitutionInput.value);
+    const history=uniq(state.institutions);
+    if(!value){show('出版选项不能为空','error');manageInstitutionInput.focus();return}
+    if(history.some(v=>key(v)===key(value))){
+        show(`出版选项“${value}”已存在`,'error');
+        manageInstitutionInput.focus();
+        manageInstitutionInput.select();
+        return
+    }
+    const line=parseManagedLine(manageInstitutionLineInput.value,history.length+1);
+    if(line===null){
+        show(`请输入 1–${history.length+1} 的有效行号`,'error');
+        manageInstitutionLineInput.focus();
+        manageInstitutionLineInput.select();
+        return
+    }
+    history.splice(line-1,0,value);
+    state.institutions=history;
+    manageInstitutionInput.value='';
+    manageInstitutionLineInput.value=String(history.length+1);
+    render();
+    if(admin())schedule();
+    revealManagedInstitution(value);
+    show(`已插入第 ${line} 行`,'success');
+    manageInstitutionInput.focus()
+}
+function moveManagedInstitution(value,lineRaw){
+    const history=uniq(state.institutions);
+    const sourceIndex=history.findIndex(v=>key(v)===key(value));
+    if(sourceIndex<0)return;
+    const line=parseManagedLine(lineRaw,history.length);
+    if(line===null){
+        show(`请输入 1–${history.length} 的有效行号`,'error');
+        renderManageInstitutionOptions();
+        return
+    }
+    const currentLine=sourceIndex+1;
+    if(line===currentLine){renderManageInstitutionOptions();return}
+    const [item]=history.splice(sourceIndex,1);
+    history.splice(line-1,0,item);
+    state.institutions=history;
+    render();
+    if(admin())schedule();
+    revealManagedInstitution(value);
+    show(`已从第 ${currentLine} 行移至第 ${line} 行`,'success')
+}
+function reorderHistoryOption(type,sourceValue,targetValue,after){
+    // 仅“书架”保留拖拽排序；“出版”已改为管理页行号排序。
+    if(type!=='category')return;
+    const historyKey=multiMeta(type,'add').historyKey;
+    const history=uniq(state[historyKey]),sourceKey=key(sourceValue),targetKey=key(targetValue);
+    const sourceIndex=history.findIndex(v=>key(v)===sourceKey);
+    if(sourceIndex<0||sourceKey===targetKey)return;
+    const [item]=history.splice(sourceIndex,1);
+    let targetIndex=history.findIndex(v=>key(v)===targetKey);
+    if(targetIndex<0)return;
+    if(after)targetIndex+=1;
+    history.splice(targetIndex,0,item);
+    state[historyKey]=history;
+    render();
+    if(admin())schedule()
+}
+function setupManualDrag(optionsEl,type){
+    let drag=null,autoScrollFrame=0;
+    function clearMarks(){
+        optionsEl.querySelectorAll('.drag-before,.drag-after').forEach(el=>el.classList.remove('drag-before','drag-after'))
+    }
+    function scrollContainer(){
+        // 下拉菜单在自身面板内滚动；“出版管理”则滚动整个弹窗内容区。
+        return optionsEl.closest('.combo-panel')||optionsEl.closest('.dialog-scroll')
+    }
+    function updateDropTarget(clientX,clientY){
+        if(!drag)return;
+        clearMarks();
+        const hit=document.elementFromPoint(clientX,clientY);
+        const target=hit?.closest?.('.combo-pill[data-drag-value]');
+        if(!target||!optionsEl.contains(target)||target===drag.row){
+            drag.targetValue='';
+            return
+        }
+        const rect=target.getBoundingClientRect();
+        drag.after=clientY>=rect.top+rect.height/2;
+        drag.targetValue=target.dataset.dragValue;
+        target.classList.add(drag.after?'drag-after':'drag-before')
+    }
+    function autoScrollStep(){
+        autoScrollFrame=0;
+        if(!drag)return;
+        const scroller=scrollContainer();
+        if(scroller){
+            const rect=scroller.getBoundingClientRect();
+            const edge=Math.min(82,Math.max(46,rect.height*.18));
+            let speed=0;
+            if(drag.clientY<rect.top+edge){
+                const strength=Math.min(1,Math.max(0,(rect.top+edge-drag.clientY)/edge));
+                speed=-(4+24*strength)
+            }else if(drag.clientY>rect.bottom-edge){
+                const strength=Math.min(1,Math.max(0,(drag.clientY-(rect.bottom-edge))/edge));
+                speed=4+24*strength
+            }
+            if(speed){
+                const before=scroller.scrollTop;
+                scroller.scrollTop+=speed;
+                if(scroller.scrollTop!==before)updateDropTarget(drag.clientX,drag.clientY)
+            }
+        }
+        autoScrollFrame=requestAnimationFrame(autoScrollStep)
+    }
+    function cleanup(){
+        if(autoScrollFrame){cancelAnimationFrame(autoScrollFrame);autoScrollFrame=0}
+        clearMarks();
+        if(drag?.row)drag.row.classList.remove('dragging');
+        document.body.classList.remove('reordering');
+        drag=null
+    }
+    optionsEl.addEventListener('pointerdown',e=>{
+        const handle=e.target.closest('.combo-drag[data-drag-value]');
+        if(!handle||!optionsEl.contains(handle))return;
+        const row=handle.closest('.combo-pill[data-drag-value]');
+        if(!row)return;
+        e.preventDefault();
+        e.stopPropagation();
+        drag={pointerId:e.pointerId,sourceValue:handle.dataset.dragValue,row,targetValue:'',after:false,handle,clientX:e.clientX,clientY:e.clientY};
+        row.classList.add('dragging');
+        document.body.classList.add('reordering');
+        try{handle.setPointerCapture(e.pointerId)}catch(err){}
+        autoScrollFrame=requestAnimationFrame(autoScrollStep)
+    });
+    optionsEl.addEventListener('pointermove',e=>{
+        if(!drag||e.pointerId!==drag.pointerId)return;
+        e.preventDefault();
+        drag.clientX=e.clientX;
+        drag.clientY=e.clientY;
+        updateDropTarget(e.clientX,e.clientY)
+    });
+    function finish(e){
+        if(!drag||e.pointerId!==drag.pointerId)return;
+        e.preventDefault();
+        const sourceValue=drag.sourceValue,targetValue=drag.targetValue,after=drag.after;
+        try{drag.handle.releasePointerCapture(e.pointerId)}catch(err){}
+        cleanup();
+        if(targetValue)reorderHistoryOption(type,sourceValue,targetValue,after)
+    }
+    optionsEl.addEventListener('pointerup',finish);
+    optionsEl.addEventListener('pointercancel',e=>{if(drag&&e.pointerId===drag.pointerId)cleanup()})
+}
+function render(){
+    state=norm(state);countDisplay.textContent=String(state.entries.length);updateAdmin();renderInstitutionOptions('add');renderInstitutionOptions('edit');renderManageInstitutionOptions();renderCategoryOptions('add');renderCategoryOptions('edit');renderTagOptions('add');renderTagOptions('edit');
+    pressList.innerHTML=state.entries.length?state.entries.map(x=>{
+        const editLink=(admin()&&adminReady)?`<button class="edit-btn" data-id="${attr(x.id)}" type="button">编辑</button>`:'';
+        // 总表显示顺序固定为：
+        // 出版 → 标签 → 编码 → 书号 → 书架
+        const publication=x.institution;
+        const tagValue=x.tag;
+        const bookshelf=x.category;
+        const metaRows=[];
+        if(publication){
+            metaRows.push(`<div class="meta-row institution"><span class="meta-label">出版：</span>${renderInstitution(publication)}</div>`)
+        }
+        if(x.bookNo){
+            metaRows.push(`<div class="meta-row"><span class="meta-label">书号：</span>${esc(x.bookNo)}</div>`)
+        }
+        if(tagValue.length){
+            metaRows.push(`<div class="meta-row"><span class="meta-label">标签：</span>${esc(tagValue.join('、'))}</div>`)
+        }
+        if(x.code){
+            metaRows.push(`<div class="meta-row code-row"><span class="code-text"><span class="meta-label">编码：</span>${esc(x.code)}</span></div>`)
+        }
+        if(bookshelf.length){
+            metaRows.push(`<div class="meta-row bookshelf-row"><span class="bookshelf-text"><span class="meta-label">书架：</span>${esc(bookshelf.join('、'))}</span></div>`)
+        }
+        const metaHtml=metaRows.join('');
+        return `<article class="press-item"><div class="press-head"><div class="press-content"><div class="book-title">${renderBookName(x.bookName)}</div>${metaHtml?`<div class="meta">${metaHtml}</div>`:''}</div>${editLink}</div></article>`
+    }).join(''):'<div class="empty-state">暂无条目</div>'
+}
+function addHistoryOption(type,value,notify=false){
+    const meta=multiMeta(type,'add');
+    const historyKey=meta.historyKey,label=meta.label;
+    const v=clean(value);
+    if(!v)return false;
+    if(state[historyKey].some(x=>key(x)===key(v)))return false;
+    state[historyKey].push(v);
+    state[historyKey]=sortHistory(type,state[historyKey]);
+    saveLocal();
+    if(admin())schedule();
+    renderMultiField(type,'add');
+    renderMultiField(type,'edit');
+    if(notify)show(`已加入${label}下拉菜单`,'success');
+    return true
+}
+function editInstitutionHistory(value){
+    const oldValue=clean(value),oldKey=key(oldValue);
+    const index=state.institutions.findIndex(v=>key(v)===oldKey);
+    if(index<0)return;
 
-async function loadWorkingCopy(){const record=await readBestWorkingCopy();if(record){pages=record.pages.filter(item=>item&&item.title&&String(item.title).trim()!=='')}else pages=[{title:'10个必知技巧',url:'https://example.com/10-tips',note:'数字开头示例'},{title:'2个方法',url:'https://example.com/2-methods',note:'数字开头示例'},{title:'Apple',url:'https://apple.com',note:'英文开头'},{title:'GitHub',url:'https://github.com',note:'英文开头'},{title:'大',url:'https://example.com/da',note:'中文 - D'},{title:'丹',url:'https://example.com/dan',note:'中文 - D'},{title:'东',url:'https://example.com/dong',note:'中文 - D'},{title:'访问',url:'https://example.com/visit',note:'中文 - F'},{title:'苹',url:'https://example.com/ping',note:'中文 - P'}];applySortAndRender()}
-function applySortAndRender(){sortPages();rebuildRemarkHistory();renderTable();saveWorkingCopy()}
-function renderTable(){const remarkedCount=pages.reduce((count,item)=>count+(normalizeRemarks(item&&item.remark).length?1:0),0);countDisplay.textContent=`${remarkedCount}/${pages.length}`;if(pages.length===0){tableBody.innerHTML='<tr class="empty-row"><td>列表为空，添加一个吧！</td></tr>';return}
-let html='';pages.forEach((item,index)=>{const title=escapeHtml(item.title||''),url=escapeHtml(item.url||''),note=escapeHtml(item.note||''),remarkValues=normalizeRemarks(item.remark),displayHtml=url?`<a href="${url}" target="_blank" rel="noopener noreferrer" draggable="false">${title}</a>`:title,noteHtml=note?`<div class="title-note">${note}</div>`:'',remarkHtml=remarkValues.length?`<div class="title-remark">${remarkValues.map(value=>`<div class="remark-line">${escapeHtml(value)}</div>`).join('')}</div>`:'<div class="title-remark"></div>';html+=`<tr data-index="${index}"><td class="col-title">${displayHtml}${noteHtml}${remarkHtml}<button class="row-edit-link edit-btn" data-index="${index}" type="button">编辑</button></td></tr>`});tableBody.innerHTML=html;
-document.querySelectorAll('#tableBody .col-title > a').forEach(link=>{link.addEventListener('dragstart',e=>e.preventDefault());link.addEventListener('click',function(e){const selection=window.getSelection(),hasSelected=selection&&!selection.isCollapsed&&(this.contains(selection.anchorNode)||this.contains(selection.focusNode));if(hasSelected)e.preventDefault()})});
-document.querySelectorAll('#tableBody .edit-btn').forEach(btn=>btn.addEventListener('click',function(e){e.stopPropagation();const index=this.getAttribute('data-index');if(index!==null){const idx=parseInt(index,10);if(!isNaN(idx)&&idx>=0&&idx<pages.length)openEditModal(idx)}}))}
+    const nextRaw=prompt('修改出版选项：',state.institutions[index]);
+    if(nextRaw===null)return;
+    const nextValue=clean(nextRaw);
+    if(!nextValue){show('出版选项不能为空','error');return}
+    if(key(nextValue)===oldKey)return;
 
-function openEditModal(index){editingIndex=index;const item=pages[index];editTitleDisplay.textContent=item.title;if(item.url){const mode=item.titleMode||(item.title===item.url?'url':'markdown');editPageInput.value=mode==='url'?item.url:`[${item.title}](${item.url})`}else editPageInput.value=item.title;editNoteInput.value=item.note||'';editRemarkPicker.setValues(item.remark);editModal.classList.remove('hidden');setTimeout(()=>editPageInput.focus(),100)}
-function closeEditModal(){editModal.classList.add('hidden');editingIndex=null}
-function saveEdit(){if(editingIndex===null||editingIndex<0||editingIndex>=pages.length){alert('编辑出错，请重试。');closeEditModal();return}const raw=editPageInput.value.trim();if(!raw){alert('请填写 Page 字段。');editPageInput.focus();return}const parsed=parsePageInput(raw);if(!parsed.title){alert('请正确填写格式：[标题](链接)');editPageInput.focus();return}pages[editingIndex].title=parsed.title;pages[editingIndex].url=parsed.url;pages[editingIndex].titleMode=parsed.titleMode;pages[editingIndex].note=editNoteInput.value.trim();pages[editingIndex].remark=editRemarkPicker.getValues();rememberRemark(pages[editingIndex].remark);closeEditModal();applySortAndRender();if(isConfigValid())syncToCloud(false)}
-function deleteEditingEntry(){if(editingIndex===null||editingIndex<0||editingIndex>=pages.length){alert('删除出错，请重试。');closeEditModal();return}const item=pages[editingIndex];if(!confirm(`确定要删除 "${item.title}" 吗？`))return;pages.splice(editingIndex,1);closeEditModal();applySortAndRender();if(isConfigValid())syncToCloud(false)}
-function addPage(){const raw=pageInput.value.trim(),note=noteInput.value.trim(),remark=remarkPicker.getValues();if(!raw){alert('请填写“标题”字段。');pageInput.focus();return}const parsed=parsePageInput(raw);if(!parsed.title){alert('请正确填写格式：[标题](链接)');pageInput.focus();return}pages.push({title:parsed.title,url:parsed.url,titleMode:parsed.titleMode,note,remark});rememberRemark(remark);applySortAndRender();if(isConfigValid())syncToCloud(false);pageInput.value='';noteInput.value='';remarkPicker.setValues([]);pageInput.focus()}
+    if(state.institutions.some((v,i)=>i!==index&&key(v)===key(nextValue))){
+        show(`出版选项“${nextValue}”已存在，请换一个名称`,'error');
+        return
+    }
 
-function exportData(){if(pages.length===0){alert('列表为空，没有什么可导出的。');return}const jsonStr=JSON.stringify(pages,null,2),blob=new Blob([jsonStr],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`pages_backup_${new Date().toISOString().slice(0,10)}.json`;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);showToast('导出成功','success')}
-function importData(file){const reader=new FileReader();reader.onload=function(e){try{const imported=JSON.parse(e.target.result);if(!Array.isArray(imported)){alert('文件格式错误：不是一个有效的列表。');return}const valid=imported.filter(item=>item.title&&item.title.trim()!=='');if(valid.length===0){alert('文件中没有找到有效的条目。');return}if(pages.length>0&&!confirm(`当前有 ${pages.length} 个条目，导入将完全替换当前列表。确定继续吗？`))return;pages=valid;applySortAndRender();showToast(`成功导入 ${pages.length} 个条目`,'success');if(isConfigValid())syncToCloud(false)}catch(err){alert('解析文件失败，请确保是有效的 JSON 文件。')}};reader.readAsText(file)}
-function setCloudStatus(status,text){statusDot.className='dot '+status;statusText.textContent=text}
-function showToast(message,type='info'){toast.textContent=message;toast.className='toast '+type;toast.classList.remove('hidden');clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.classList.add('hidden'),3000)}
+    // 保留“出版”人工排序的位置，只替换当前历史选项文字。
+    state.institutions[index]=nextValue;
+    state.institutions=uniq(state.institutions);
 
-function syncConfigVisualViewport(){const vv=window.visualViewport,height=vv?vv.height:window.innerHeight,top=vv?vv.offsetTop:0;document.documentElement.style.setProperty('--config-vv-height',`${Math.max(1,Math.round(height))}px`);document.documentElement.style.setProperty('--config-vv-top',`${Math.max(0,Math.round(top))}px`)}
-function isMobileConfigLayout(){return window.matchMedia('(max-width: 700px)').matches}
-function openConfigModal(){cfgToken.value=config.token||'';cfgRememberToken.checked=config.rememberToken!==false;cfgOwner.value=config.owner||'';cfgRepo.value=config.repo||'';cfgFile.value=config.file||'pages_data.json';syncConfigVisualViewport();configModal.classList.remove('hidden');const scroll=configModal.querySelector('.config-scroll');if(scroll)scroll.scrollTop=0;if(!isMobileConfigLayout())requestAnimationFrame(()=>cfgToken.focus({preventScroll:true}))}
-function closeConfigModal(){configModal.classList.add('hidden')}
-async function saveConfigAndConnect(){const token=cfgToken.value.trim(),owner=cfgOwner.value.trim(),repo=cfgRepo.value.trim(),file=cfgFile.value.trim()||'pages_data.json';if(!token){showToast('请输入 GitHub Token','error');cfgToken.focus();return}if(!owner){showToast('请输入仓库所有者','error');cfgOwner.focus();return}if(!repo){showToast('请输入仓库名称','error');cfgRepo.focus();return}config.token=token;config.owner=owner;config.repo=repo;config.file=file;try{await saveConfig()}catch(error){console.error('保存配置失败:',error);showToast('保存配置失败：浏览器本地数据库不可用','error');return}closeConfigModal();showToast('配置已保存，正在连接...','info');await loadFromCloud()}
+    // 当前添加/编辑界面的临时输入若正好使用旧选项，则同步为新文字。
+    [institutionInput,editInstitution].forEach(input=>{
+        if(key(input.value)===oldKey)input.value=nextValue
+    });
 
-addBtn.addEventListener('click',addPage);
-document.querySelectorAll('.add-section .form-group input, .add-section .form-group textarea').forEach(input=>{if(input===remarkInput)return;input.addEventListener('keydown',function(e){if(e.key==='Enter'){if(this.tagName==='TEXTAREA'){if(e.ctrlKey||e.shiftKey){e.preventDefault();addPage()}}else{e.preventDefault();addPage()}}})});
-exportBtn.addEventListener('click',exportData);importBtn.addEventListener('click',()=>fileInput.click());fileInput.addEventListener('change',function(){if(this.files&&this.files.length>0){importData(this.files[0]);this.value=''}});
-syncBtn.addEventListener('click',()=>{if(pages.length===0){showToast('没有数据需要同步','info');return}syncToCloud(true)});
-if(window.visualViewport){window.visualViewport.addEventListener('resize',syncConfigVisualViewport);window.visualViewport.addEventListener('scroll',syncConfigVisualViewport)}
-window.addEventListener('resize',syncConfigVisualViewport);window.addEventListener('orientationchange',syncConfigVisualViewport);syncConfigVisualViewport();configBtn.addEventListener('click',openConfigModal);
+    saveLocal();
+    if(admin())schedule();
+    renderInstitutionOptions('add');
+    renderInstitutionOptions('edit');
+    renderManageInstitutionOptions();
+    show(`已修改出版选项为“${nextValue}”`,'success')
+}
+function deleteInstitutionHistory(value){
+    const targetKey=key(value);
+    if(!confirm(`确定从出版下拉菜单中删除“${value}”吗？\n\n已经保存的条目不会改变。`))return;
+    state.institutions=state.institutions.filter(v=>key(v)!==targetKey);
+    saveLocal();
+    if(admin())schedule();
+    renderInstitutionOptions('add');renderInstitutionOptions('edit');renderManageInstitutionOptions();
+    render();
+    show('已从出版下拉菜单删除','success')
+}
+function commitInstitution(which,notify=false){
+    const meta=institutionMeta(which),value=clean(meta.input.value);
+    if(!value)return false;
+    // 添加/编辑界面不再维护出版下拉菜单；新建、改名、删除、排序统一到“出版管理”。
+    const exists=state.institutions.some(v=>key(v)===key(value));
+    meta.input.value=value;
+    renderInstitutionOptions(which);
+    return exists
+}
+function removeSelection(type,which,value,keepPanelOpen=false){
+    const meta=multiMeta(type,which),targetKey=key(value);
+    const nextRaw=meta.selection.filter(v=>key(v)!==targetKey);
+    const next=type==='tag'?sortTags(nextRaw):nextRaw;
+    if(which==='edit')editSelections[type]=next;
+    else addSelections[type]=next;
+    meta.input.value='';
+    renderMultiField(type,which);
+    meta.panel.classList.toggle('hidden',!keepPanelOpen)
+}
+function toggleSelection(type,which,value){
+    const meta=multiMeta(type,which),targetKey=key(value);
+    const allowMultiple=multiAllowsMultiple(type,which);
+    const exists=meta.selection.some(v=>key(v)===targetKey);
 
-function fastScrollToTop(duration=10){const startY=window.scrollY||window.pageYOffset||0;if(startY<=0)return;if(backToTopAnimationFrame!==null){cancelAnimationFrame(backToTopAnimationFrame);backToTopAnimationFrame=null}const startTime=performance.now(),easeOutCubic=progress=>1-Math.pow(1-progress,3);function step(now){const progress=Math.min(1,(now-startTime)/duration),eased=easeOutCubic(progress);window.scrollTo(0,Math.round(startY*(1-eased)));if(progress<1)backToTopAnimationFrame=requestAnimationFrame(step);else{backToTopAnimationFrame=null;window.scrollTo(0,0)}}backToTopAnimationFrame=requestAnimationFrame(step)}
-backToTopBtn.addEventListener('click',()=>fastScrollToTop(10));
-configCancelBtn.addEventListener('click',closeConfigModal);configSaveBtn.addEventListener('click',saveConfigAndConnect);configModal.addEventListener('click',function(e){if(e.target===this)closeConfigModal()});editDeleteBtn.addEventListener('click',deleteEditingEntry);editCancelBtn.addEventListener('click',closeEditModal);editSaveBtn.addEventListener('click',saveEdit);
+    // 已选项再次点击 = 删除该选择。编辑标签多选时保持下拉菜单打开。
+    if(exists){
+        removeSelection(type,which,value,allowMultiple);
+        return true
+    }
 
-let editOverlayPointerDown=false;editModal.addEventListener('pointerdown',function(e){editOverlayPointerDown=e.target===this});editModal.addEventListener('pointerup',function(e){const shouldClose=editOverlayPointerDown&&e.target===this;editOverlayPointerDown=false;if(shouldClose)closeEditModal()});editModal.addEventListener('pointercancel',()=>{editOverlayPointerDown=false});
-document.querySelectorAll('#editModal .form-group input, #editModal .form-group textarea').forEach(input=>{if(input===editRemarkInput)return;input.addEventListener('keydown',function(e){if(e.key==='Enter'){if(this.tagName==='TEXTAREA'){if(e.ctrlKey||e.shiftKey){e.preventDefault();saveEdit()}}else{e.preventDefault();saveEdit()}}})});
+    // 除“编辑标签”外，标签 / 书架都必须先删除原选择，才能选择新的选项。
+    if(meta.selection.length&&!allowMultiple){
+        meta.panel.classList.add('hidden');
+        show(`请先删除当前${meta.label}，再选择新的${meta.label}`,'error');
+        return false
+    }
 
-const remarkPicker=setupRemarkCombo({input:remarkInput,dropdown:remarkDropdown,options:remarkOptions,combo:remarkCombo,submit:addPage,manageOptions:true});
-const editRemarkPicker=setupRemarkCombo({input:editRemarkInput,dropdown:editRemarkDropdown,options:editRemarkOptions,combo:editRemarkCombo,submit:saveEdit});
-window.addEventListener('pagehide',()=>{if(localStateReady)void saveWorkingCopy()});document.addEventListener('visibilitychange',()=>{if(localStateReady&&document.visibilityState==='hidden')void saveWorkingCopy()});
-(async function initialize(){void requestPersistentStorage();await Promise.all([loadRemarkState(),loadConfig()]);await loadFromCloud();localStateReady=true})().catch(error=>{console.error('Pages 初始化失败:',error);setCloudStatus('offline','本地存储初始化失败');showToast('本地存储初始化失败，请检查浏览器权限','error')});
+    const selectedValue=clean(value);
+    const nextRaw=allowMultiple?uniq([...meta.selection,selectedValue]):[selectedValue].filter(Boolean);
+    const next=type==='tag'?sortTags(nextRaw):nextRaw;
+    if(which==='edit')editSelections[type]=next;
+    else addSelections[type]=next;
+
+    meta.input.value='';
+    renderMultiField(type,which);
+
+    // 添加标签 / 书架及编辑书架仍单选并立即收起；编辑标签可连续多选。
+    meta.panel.classList.toggle('hidden',!allowMultiple);
+    return true
+}
+function editHistoryOption(type,value){
+    const meta=multiMeta(type,'add'),historyKey=meta.historyKey,label=meta.label;
+    const oldValue=clean(value),oldKey=key(oldValue);
+    const history=[...state[historyKey]];
+    const index=history.findIndex(v=>key(v)===oldKey);
+    if(index<0)return;
+
+    const nextRaw=prompt(`修改${label}选项：`,history[index]);
+    if(nextRaw===null)return;
+    const nextValue=clean(nextRaw);
+    if(!nextValue){show(`${label}选项不能为空`,'error');return}
+    if(key(nextValue)===oldKey)return;
+
+    if(history.some((v,i)=>i!==index&&key(v)===key(nextValue))){
+        show(`${label}选项“${nextValue}”已存在，请换一个名称`,'error');
+        return
+    }
+
+    history[index]=nextValue;
+    // 书架保留人工排列位置；标签继续按原自动排序规则。
+    state[historyKey]=type==='category'?uniq(history):sortHistory(type,history);
+
+    const renamePending=values=>uniq(values.map(v=>key(v)===oldKey?nextValue:v));
+    addSelections[type]=renamePending(addSelections[type]);
+    editSelections[type]=renamePending(editSelections[type]);
+
+    const addMeta=multiMeta(type,'add');
+    const editMeta=multiMeta(type,'edit');
+    if(key(addMeta.input.value)===oldKey)addMeta.input.value=nextValue;
+    if(key(editMeta.input.value)===oldKey)editMeta.input.value=nextValue;
+
+    saveLocal();
+    if(admin())schedule();
+    renderMultiField(type,'add');
+    renderMultiField(type,'edit');
+    show(`已修改${label}选项为“${nextValue}”`,'success')
+}
+function deleteHistoryOption(type,value){
+    const meta=multiMeta(type,'add'),targetKey=key(value);
+    if(!confirm(`确定从${meta.label}下拉菜单中删除“${value}”吗？\n\n已经保存的条目不会改变。`))return;
+    state[meta.historyKey]=state[meta.historyKey].filter(v=>key(v)!==targetKey);
+    addSelections[type]=addSelections[type].filter(v=>key(v)!==targetKey);
+    editSelections[type]=editSelections[type].filter(v=>key(v)!==targetKey);
+    saveLocal();
+    if(admin())schedule();
+    renderMultiField(type,'add');
+    renderMultiField(type,'edit');
+    show(`已从${meta.label}下拉菜单删除`,'success')
+}
+function commitTypedValue(type,which,notify=false){
+    const meta=multiMeta(type,which),value=clean(meta.input.value);
+    if(!value)return false;
+
+    const current=which==='edit'?editSelections[type]:addSelections[type];
+
+    // 除“编辑标签”外，已有选择时都不允许再写入第二个选项。
+    if(current.length&&!multiAllowsMultiple(type,which)){
+        meta.input.value='';
+        meta.panel.classList.add('hidden');
+        renderMultiField(type,which);
+        show(`请先删除当前${meta.label}，再输入新的${meta.label}`,'error');
+        return false
+    }
+
+    const history=sortHistory(type,state[meta.historyKey]);
+    const matched=history.find(v=>key(v)===key(value));
+    if(which==='edit'&&!matched){
+        // 编辑弹窗只能选择添加板块已经维护好的下拉菜单选项，不能在这里新增选项。
+        meta.input.value='';
+        show(`编辑窗口只能选择已有${meta.label}；如需新增或修改选项，请在添加板块操作`,'error');
+        renderMultiField(type,which);
+        return false
+    }
+
+    const selectedValue=matched||value;
+    if(which==='add')addHistoryOption(type,selectedValue,notify);
+
+    if(which==='edit'){
+        const next=multiAllowsMultiple(type,which)?uniq([...current,selectedValue]):[selectedValue];
+        editSelections[type]=type==='tag'?sortTags(next):next
+    }else{
+        addSelections[type]=[selectedValue]
+    }
+
+    meta.input.value='';
+    renderMultiField(type,which);
+    meta.panel.classList.toggle('hidden',!multiAllowsMultiple(type,which));
+    return true
+}
+function getEditSnapshot(){
+    return JSON.stringify({
+        bookName:editBookName.value,
+        bookNo:editBookNo.value,
+        institution:editInstitution.value,
+        category:[...editSelections.category],
+        tag:sortTags(editSelections.tag),
+        code:editCode.value,
+        categoryDraft:editCategory.value,
+        tagDraft:editTag.value
+    })
+}
+function editIsUnchanged(){
+    return Boolean(editingId)&&getEditSnapshot()===editInitialSnapshot
+}
+function addEntry(){
+    if(!admin()||!adminReady)return;
+    const bookName=cleanTitle(bookNameInput.value);
+    if(!bookName){show('书名不能为空','error');bookNameInput.focus();return}
+    commitInstitution('add');
+    commitTypedValue('category','add');
+    commitTypedValue('tag','add');
+    const category=[...addSelections.category];
+    const tag=sortTags(addSelections.tag);
+    const requestedCode=clean(codeInput.value);
+    const usedCodes=new Set(state.entries.map(x=>clean(x.code)).filter(Boolean));
+    let code;
+
+    if(requestedCode){
+        if(usedCodes.has(requestedCode)){
+            show(`编码“${requestedCode}”已存在，请修改代码后再提交`,'error');
+            codeInput.focus();
+            codeInput.select();
+            return
+        }
+        code=requestedCode
+    }else{
+        try{
+            const rule=autoCodeRuleForTags(tag);
+            code=rule?nextCodeInRange(rule,usedCodes):nextCode(usedCodes)
+        }catch(e){show(e.message,'error');return}
+    }
+
+    state.entries.push({
+        id:uid(),
+        bookName,
+        bookNo:clean(bookNoInput.value),
+        category,
+        institution:clean(institutionInput.value),
+        tag,
+        code
+    });
+    // 若本次使用的是已释放编码，则从释放池中移除，避免再次分配。
+    state.releasedCodes=(state.releasedCodes||[]).filter(v=>clean(v)!==code);
+    bookNameInput.value='';bookNoInput.value='';institutionInput.value='';categoryInput.value='';tagInput.value='';codeInput.value='';addSelections={category:[],tag:[]};
+    render();const locallySaved=schedule();bookNameInput.focus();if(locallySaved)show(`已保存到本机，等待同步 · 编码 ${code}`,'success')
+}
+function openEdit(id){
+    if(!admin()||!adminReady)return;
+    const x=state.entries.find(e=>e.id===id);if(!x)return;
+    editingId=id;
+    editBookName.value=x.bookName;
+    editBookNo.value=x.bookNo;
+    editInstitution.value=x.institution;
+    editCategory.value='';
+    editTag.value='';
+    editSelections={category:[...x.category],tag:sortTags(x.tag)};
+    editCode.value=x.code;
+    editCode.disabled=(Number(x.codeEditCount)||0)>=1;
+    editInitialSnapshot=getEditSnapshot();
+    renderInstitutionOptions('edit');renderCategoryOptions('edit');renderTagOptions('edit');editModal.classList.remove('hidden');setTimeout(()=>editBookName.focus(),30)
+}
+function saveEdit(){
+    const x=state.entries.find(e=>e.id===editingId);if(!x)return;
+    const bookName=cleanTitle(editBookName.value);
+    if(!bookName){show('书名不能为空','error');editBookName.focus();return}
+    commitInstitution('edit');
+    commitTypedValue('category','edit');
+    commitTypedValue('tag','edit');
+    x.bookName=bookName;
+    x.bookNo=clean(editBookNo.value);
+    x.institution=clean(editInstitution.value);
+    const oldTag=[...(x.tag||[])];
+    x.category=[...editSelections.category];
+    x.tag=sortTags(editSelections.tag);
+
+    const oldCode=clean(x.code);
+    const requestedCode=clean(editCode.value);
+    const codeChanged=requestedCode!==oldCode;
+    const newTagKeys=new Set(x.tag.map(key));
+    // 一般只有原有标签被删除/替换时才系统重编；仅新增标签通常不改变编码。
+    // 例外：原先已有“24读书”，本次新增 11图书 / 13图书 / 23读书时，分别改用 247xxx / 248xxx / 249xxx 组合专用区间。
+    const originalTagRemoved=oldTag.some(v=>!newTagKeys.has(key(v)));
+    const specialAdditionRule=special24AdditionRule(oldTag,x.tag);
+    const usedCodes=new Set(state.entries.filter(e=>e.id!==x.id).map(e=>clean(e.code)).filter(Boolean));
+
+    // 点击编码右侧 ×（或把编码清空）表示放弃人工指定，交由系统自动重新分配。
+    // 这属于系统自动改码，不占用、也不受“仅 1 次手动修改编码”限制。
+    // 若当前标签已是“24读书 + 11/13/23图书”组合，即使这些标签并非本次新增，清空编码后也必须进入对应的 247xxx / 248xxx / 249xxx 专用区间。
+    // 删除/替换原有标签，以及“24读书”本次新增指定标签的例外，同样触发系统自动重新分配；新增与清空编码统一使用同一组合专用区间。
+    const blankCodeReassign=codeChanged&&!requestedCode;
+    const specialCombinationRule=blankCodeReassign?special24CombinationRule(x.tag):null;
+    if(blankCodeReassign||originalTagRemoved||specialAdditionRule){
+        const usedForReassign=new Set(usedCodes);
+        // 暂时把旧编码视为占用，确保系统确实分配一个不同的新编码。
+        if(oldCode)usedForReassign.add(oldCode);
+        const rule=specialAdditionRule||specialCombinationRule||autoCodeRuleForTags(x.tag);
+        let newCode;
+        try{
+            newCode=rule?nextCodeInRange(rule,usedForReassign):nextCode(usedForReassign);
+        }catch(e){
+            show(e.message,'error');
+            return
+        }
+        x.code=newCode;
+        if(oldCode&&validCode(oldCode)){
+            state.releasedCodes=uniq([...(state.releasedCodes||[]),oldCode]);
+        }
+        state.releasedCodes=(state.releasedCodes||[]).filter(v=>clean(v)!==x.code);
+    }else if(codeChanged&&(Number(x.codeEditCount)||0)>=1){
+        // 只有“直接输入另一个非空编码”才属于人工改码，并受一次机会限制。
+        show('每个条目的编码只有1次手动修改机会；如需系统自动重编，请点击编码右侧 ×','error');
+        editCode.value=oldCode;
+        return
+    }else if(requestedCode){
+        if(usedCodes.has(requestedCode)){
+            show(`编码“${requestedCode}”已存在，请修改代码后再提交`,'error');
+            editCode.focus();
+            editCode.select();
+            return
+        }
+        if(requestedCode!==oldCode){
+            x.codeEditCount=1;
+            if(oldCode&&validCode(oldCode)){
+                state.releasedCodes=uniq([...(state.releasedCodes||[]),oldCode]);
+            }
+        }
+        x.code=requestedCode
+    }
+    if(oldCode!==x.code){
+        state.releasedCodes=(state.releasedCodes||[]).filter(v=>clean(v)!==x.code)
+    }
+    editModal.classList.add('hidden');editingId='';editInitialSnapshot='';editSelections={category:[],tag:[]};
+    render();const locallySaved=schedule();if(locallySaved)show(`已保存到本机，等待同步 · 编码 ${x.code}`,'success')
+}
+function deleteEntry(id){
+    const x=state.entries.find(e=>e.id===id);if(!x||!confirm(`确定删除“${x.bookName}”吗？`))return false;
+    const releasedCode=clean(x.code);
+    state.entries=state.entries.filter(e=>e.id!==id);
+    // 删除条目后，其自动编码立即释放，进入复用池，供后续新增条目优先使用。
+    if(validCode(releasedCode)&&!state.entries.some(e=>clean(e.code)===releasedCode)){
+        state.releasedCodes=uniq([...(state.releasedCodes||[]),releasedCode])
+    }
+    if(editingId===id){
+        editingId='';editInitialSnapshot='';editSelections={category:[],tag:[]};
+        editModal.classList.add('hidden')
+    }
+    render();const locallySaved=schedule();if(locallySaved)show(`已保存到本机，等待同步 · 编码 ${releasedCode} 已释放`,'success');return true
+}
+function downloadJson(){
+    const blob=new Blob([JSON.stringify(norm(state),null,2)],{type:'application/json;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+    a.href=url;a.download=`press_backup_${new Date().toISOString().slice(0,10)}.json`;a.click();URL.revokeObjectURL(url)
+}
+function loadConfig(){
+    const baseCfg=storageMemory.config||{};
+    config.owner=clean(baseCfg.owner);config.repo=clean(baseCfg.repo);config.file=clean(baseCfg.file)||'press_data.json';
+    config.token=clean(persistedToken||'')
+}
+async function persistConfigAndToken(){
+    storageMemory.config={owner:config.owner,repo:config.repo,file:config.file};
+    await idbSet(CONFIG_KEY,storageMemory.config);
+    if(rememberToken.checked){persistedToken=config.token;await idbSet(TOKEN_PERSISTED_KEY,config.token)}else{persistedToken='';await idbDelete(TOKEN_PERSISTED_KEY)}
+}
+async function saveConfigForm(e){
+    e.preventDefault();
+    const owner=clean(cfgOwner.value),repo=clean(cfg.value),file=clean(cfgFile.value)||'press_data.json',token=clean(cfgToken.value);
+    if(!owner||!repo||!token){show('请完整填写仓库和 Token','error');return}
+    config={owner,repo,file,token};
+    try{await persistConfigAndToken()}catch(err){console.error(err);show('配置保存失败，请检查浏览器存储权限','error');return}
+    configModal.classList.add('hidden');
+    adminReady=false;
+    updateAdmin();
+    render();
+    show('配置已保存，正在读取云端最新数据','success');
+    loadAdminState()
+}
+function openConfig(){
+    updateVisualViewport();
+    cfgOwner.value=config.owner||'';
+    cfg.value=config.repo||'';
+    cfgFile.value=config.file||'press_data.json';
+    cfgToken.value=config.token||'';
+    rememberToken.checked=Boolean(persistedToken);
+    configModal.classList.remove('hidden');
+    requestAnimationFrame(()=>{
+        updateVisualViewport();
+        const scroller=configForm.querySelector('.dialog-scroll');
+        if(scroller)scroller.scrollTop=0;
+    });
+    if(window.matchMedia('(min-width:701px) and (hover:hover) and (pointer:fine)').matches){
+        setTimeout(()=>cfgToken.focus({preventScroll:true}),30)
+    }
+}
+function loadMeta()function loadMeta(){
+    try{
+        const x=storageMemory.meta||{};
+        meta={
+            target:clean(x.target),
+            fingerprint:typeof x.fingerprint==='string'?x.fingerprint:null,
+            sha:clean(x.sha)||null,
+            lastSyncAt:clean(x.lastSyncAt)||null,
+            // baseState 是上次确认存在于 GitHub 的完整快照，用作三方合并基线。
+            baseState:x.baseState&&typeof x.baseState==='object'?norm(x.baseState):null,
+            // dirty/revision 单独持久化：网络失败或刷新页面后仍知道哪些内容尚未确认进入 GitHub。
+            dirty:Boolean(x.dirty),
+            revision:Math.max(0,Number(x.revision)||0)
+        }
+    }catch(e){
+        meta={target:'',fingerprint:null,sha:null,lastSyncAt:null,baseState:null,dirty:false,revision:0}
+    }
+}
+function saveMeta(){storageMemory.meta=structuredClone(meta);if(storageReady){const snapshot=structuredClone(storageMemory.meta);metaWriteChain=metaWriteChain.then(()=>idbSet(META_KEY,snapshot)).catch(e=>console.error('同步元数据保存失败:',e))}return true}
+function ensureTarget(){
+    const t=target();
+    if(meta.target!==t){
+        meta={target:t,fingerprint:null,sha:null,lastSyncAt:null,baseState:null,dirty:false,revision:0};
+        saveMeta();
+        return true
+    }
+    return false
+}
+function saveBaseline(snapshot,sha,{clearDirty=false,markSyncTime=false}={}){
+    const baseState=norm(snapshot);
+    meta.target=target();
+    meta.fingerprint=fingerprint(baseState);
+    meta.sha=sha||null;
+    meta.baseState=baseState;
+    if(clearDirty)meta.dirty=false;
+    if(markSyncTime)meta.lastSyncAt=new Date().toISOString();
+    saveMeta();
+    if(markSyncTime&&meta.lastSyncAt)lastSyncTime.textContent=`已同步 ${new Date(meta.lastSyncAt).toLocaleString()}`
+}
+function record(snapshot,sha){saveBaseline(snapshot,sha,{clearDirty:true,markSyncTime:true})}
+function markDirty(){
+    state=norm(state);
+    const saved=saveLocal(state);
+    if(!saved){show('本机工作副本保存失败，请立即导出备份','error');return false}
+    if(admin()){
+        ensureTarget();
+        meta.dirty=true;
+        meta.revision=currentRevision()+1;
+        saveMeta()
+    }
+    return true
+}
+function sleep(ms){return new Promise(resolve=>setTimeout(resolve,Math.max(0,ms||0)))}
+async function api(method,endpoint,body=null){
+    let r;
+    try{
+        r=await fetch(`https://api.github.com/repos/${encodeURIComponent(config.owner)}/${encodeURIComponent(config.repo)}/${endpoint}`,{
+            method,
+            headers:{
+                Authorization:`Bearer ${config.token}`,
+                Accept:'application/vnd.github+json',
+                'X-GitHub-Api-Version':'2026-03-10',
+                ...(body!==null?{'Content-Type':'application/json'}:{})
+            },
+            cache:'no-store',
+            ...(body!==null?{body:JSON.stringify(body)}:{})
+        })
+    }catch(cause){
+        const er=new Error(cause?.message||'网络请求失败');
+        er.cause=cause;
+        er.network=true;
+        throw er
+    }
+    const raw=await r.text();let data=null;if(raw)try{data=JSON.parse(raw)}catch(e){data={message:raw}};
+    if(!r.ok){
+        const er=new Error(data?.message||`HTTP ${r.status}`);
+        er.status=r.status;
+        er.data=data;
+        er.retryAfter=Number(r.headers.get('retry-after'))||0;
+        er.rateLimitRemaining=Number(r.headers.get('x-ratelimit-remaining'));
+        er.rateLimitReset=Number(r.headers.get('x-ratelimit-reset'))||0;
+        throw er
+    }
+    return data
+}
+function toB64(s){const bytes=new TextEncoder().encode(s);let bin='';for(let i=0;i<bytes.length;i+=0x8000)bin+=String.fromCharCode(...bytes.subarray(i,i+0x8000));return btoa(bin)}
+function fromB64(s){const bin=atob(String(s||'').replace(/\s/g,'')),bytes=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);return new TextDecoder().decode(bytes)}
+async function readRemote(){
+    try{
+        const d=await api('GET',`contents/${pathEncode(config.file)}`);
+        return{exists:true,sha:d.sha,state:norm(JSON.parse(fromB64(d.content)))}
+    }catch(e){
+        if(e.status===404)return{exists:false,sha:null,state:{entries:[],institutions:[],categories:[],tags:[],releasedCodes:[]}};
+        throw e
+    }
+}
+async function writeRemote(snapshot,sha){
+    const raw=JSON.stringify(norm(snapshot),null,2);
+    if(new TextEncoder().encode(raw).length>MAX_BYTES)throw new Error('数据超过 750 KB');
+    const wait=MIN_WRITE_GAP-(Date.now()-lastWriteAt);
+    if(wait>0)await sleep(wait);
+    lastWriteAt=Date.now();
+    const body={message:`更新 Press 数据 - ${new Date().toLocaleString()}`,content:toB64(raw)};
+    if(sha)body.sha=sha;
+    const r=await api('PUT',`contents/${pathEncode(config.file)}`,body);
+    return r?.content?.sha||null
+}
+function jsonEqual(a,b){return JSON.stringify(a)===JSON.stringify(b)}
+function entryShape(x){
+    if(!x)return null;
+    return{
+        id:clean(x.id),bookName:cleanTitle(x.bookName),bookNo:clean(x.bookNo),institution:clean(x.institution),
+        category:normalizeMulti(x.category),tag:normalizeMulti(x.tag),code:clean(x.code),
+        codeEditCount:Math.min(1,Math.max(0,Number(x.codeEditCount)||0))
+    }
+}
+function entryEqual(a,b){return jsonEqual(entryShape(a),entryShape(b))}
+function mergeScalar(baseValue,localValue,remoteValue){
+    if(jsonEqual(localValue,remoteValue))return{value:localValue,conflict:false};
+    if(jsonEqual(localValue,baseValue))return{value:remoteValue,conflict:false};
+    if(jsonEqual(remoteValue,baseValue))return{value:localValue,conflict:false};
+    // 同一字段被两端同时改成不同值时，以当前操作平台为准；其他字段仍继续三方合并。
+    return{value:localValue,conflict:true}
+}
+function mergeEntry(baseEntry,localEntry,remoteEntry){
+    if(!baseEntry){
+        if(localEntry&&!remoteEntry)return{entry:entryShape(localEntry),conflicts:0};
+        if(!localEntry&&remoteEntry)return{entry:entryShape(remoteEntry),conflicts:0};
+        if(!localEntry&&!remoteEntry)return{entry:null,conflicts:0};
+        if(entryEqual(localEntry,remoteEntry))return{entry:entryShape(localEntry),conflicts:0};
+        // UUID 撞车极罕见；若真的发生，仍以当前平台内容为准并记为冲突。
+        return{entry:entryShape(localEntry),conflicts:1}
+    }
+    if(!localEntry&&!remoteEntry)return{entry:null,conflicts:0};
+    if(!localEntry&&remoteEntry){
+        // 本地删除、远端未改：删除生效；远端已修改：保留远端修改，避免丢内容。
+        return entryEqual(remoteEntry,baseEntry)?{entry:null,conflicts:0}:{entry:entryShape(remoteEntry),conflicts:1}
+    }
+    if(localEntry&&!remoteEntry){
+        // 远端删除、本地未改：删除生效；本地已修改：保留本地修改，避免丢内容。
+        return entryEqual(localEntry,baseEntry)?{entry:null,conflicts:0}:{entry:entryShape(localEntry),conflicts:1}
+    }
+    if(entryEqual(localEntry,remoteEntry))return{entry:entryShape(localEntry),conflicts:0};
+    if(entryEqual(localEntry,baseEntry))return{entry:entryShape(remoteEntry),conflicts:0};
+    if(entryEqual(remoteEntry,baseEntry))return{entry:entryShape(localEntry),conflicts:0};
+
+    const b=entryShape(baseEntry),l=entryShape(localEntry),r=entryShape(remoteEntry);
+    const merged={id:l.id||r.id||b.id};
+    let conflicts=0;
+    for(const field of ['bookName','bookNo','institution','category','tag','code','codeEditCount']){
+        const part=mergeScalar(b[field],l[field],r[field]);
+        merged[field]=part.value;
+        if(part.conflict)conflicts++
+    }
+    return{entry:merged,conflicts}
+}
+function listKeys(values){return new Set((values||[]).map(key))}
+function mergeHistory(baseValues,localValues,remoteValues,autoSort=false){
+    const b=uniq(baseValues||[]),l=uniq(localValues||[]),r=uniq(remoteValues||[]);
+    if(jsonEqual(l,r))return autoSort?sortAuto(l):l;
+    if(jsonEqual(l,b))return autoSort?sortAuto(r):r;
+    if(jsonEqual(r,b))return autoSort?sortAuto(l):l;
+
+    const bs=listKeys(b),ls=listKeys(l),rs=listKeys(r);
+    const include=new Set();
+    // 共同基线中的旧项：任意一端明确删除，就视为删除；新增项：任意一端新增都保留。
+    for(const v of b){const k=key(v);if(ls.has(k)&&rs.has(k))include.add(k)}
+    for(const v of l){const k=key(v);if(!bs.has(k))include.add(k)}
+    for(const v of r){const k=key(v);if(!bs.has(k))include.add(k)}
+
+    const result=[];
+    const seen=new Set();
+    // 两边同时调整顺序时，以 GitHub 当前顺序为骨架，再补入仅本机新增的项，避免覆盖远端排序。
+    for(const source of [r,l]){
+        for(const v of source){
+            const k=key(v);
+            if(include.has(k)&&!seen.has(k)){seen.add(k);result.push(v)}
+        }
+    }
+    return autoSort?sortAuto(result):result
+}
+function resolveBaseState(localSnapshot,remoteSnapshot){
+    if(meta.baseState&&typeof meta.baseState==='object'){
+        try{
+            const b=norm(meta.baseState);
+            if(!meta.fingerprint||fingerprint(b)===meta.fingerprint)return b
+        }catch(e){}
+    }
+    // 兼容升级前旧版本只记录 fingerprint 的情况。
+    if(typeof meta.fingerprint==='string'){
+        if(fingerprint(localSnapshot)===meta.fingerprint)return norm(localSnapshot);
+        if(fingerprint(remoteSnapshot)===meta.fingerprint)return norm(remoteSnapshot)
+    }
+    return null
+}
+function repairMergedCodes(entries,remoteEntries){
+    const remoteIds=new Set((remoteEntries||[]).map(x=>clean(x.id)));
+    const byId=new Map(entries.map(x=>[clean(x.id),x]));
+    const ordered=[];
+    for(const x of remoteEntries||[]){const hit=byId.get(clean(x.id));if(hit)ordered.push(hit)}
+    for(const x of entries){if(!remoteIds.has(clean(x.id)))ordered.push(x)}
+
+    const used=new Set();
+    let reassigned=0;
+    for(const x of ordered){
+        let code=clean(x.code);
+        if(code&&!used.has(code)){used.add(code);continue}
+        const rule=autoCodeRuleForTags(x.tag);
+        code=rule?nextCodeInRange(rule,used):randomCode(used);
+        x.code=code;used.add(code);reassigned++
+    }
+    return reassigned
+}
+function mergeStates(baseState,localState,remoteState){
+    const local=norm(localState),remote=norm(remoteState),base=baseState?norm(baseState):null;
+    const bm=new Map((base?.entries||[]).map(x=>[clean(x.id),x]));
+    const lm=new Map(local.entries.map(x=>[clean(x.id),x]));
+    const rm=new Map(remote.entries.map(x=>[clean(x.id),x]));
+    const ids=[];const seen=new Set();
+    // 以远端当前顺序为主，随后补入本机独有条目。
+    for(const source of [remote.entries,local.entries,base?.entries||[]]){
+        for(const x of source){const id=clean(x.id);if(id&&!seen.has(id)){seen.add(id);ids.push(id)}}
+    }
+    const entries=[];let conflicts=0;
+    for(const id of ids){
+        const part=mergeEntry(bm.get(id)||null,lm.get(id)||null,rm.get(id)||null);
+        if(part.entry)entries.push(part.entry);
+        conflicts+=part.conflicts
+    }
+
+    const mergedRaw={
+        entries,
+        institutions:mergeHistory(base?.institutions||[],local.institutions,remote.institutions,false),
+        categories:mergeHistory(base?.categories||[],local.categories,remote.categories,false),
+        tags:mergeHistory(base?.tags||[],local.tags,remote.tags,true),
+        releasedCodes:uniq([...(local.releasedCodes||[]),...(remote.releasedCodes||[])])
+    };
+    const reassigned=repairMergedCodes(mergedRaw.entries,remote.entries);
+    return{state:norm(mergedRaw),conflicts,reassigned}
+}
+function errorText(e){
+    let detail='';
+    try{detail=JSON.stringify(e?.data||'')}catch(err){}
+    return `${e?.message||''} ${detail}`.toLowerCase()
+}
+function isShaConflictError(e){
+    if(e?.status===409)return true;
+    if(e?.status!==422)return false;
+    const text=errorText(e);
+    return /sha|conflict|does not match|expected.*sha|version/.test(text)
+}
+function retryDelayForError(e){
+    const statusCode=Number(e?.status)||0;
+    const text=errorText(e);
+    if(statusCode===401)return null;
+    if(statusCode===403||statusCode===429){
+        if(Number(e?.retryAfter)>0)return Math.min(MAX_RETRY_DELAY,Number(e.retryAfter)*1000);
+        if(Number(e?.rateLimitReset)>0){
+            const ms=Number(e.rateLimitReset)*1000-Date.now()+1200;
+            if(ms>0)return Math.min(MAX_RETRY_DELAY,ms)
+        }
+        return /secondary|rate limit|abuse/.test(text)?60000:15000
+    }
+    if(!statusCode||statusCode>=500){
+        return Math.min(MAX_RETRY_DELAY,2000*Math.pow(2,Math.min(syncFailureCount,5)))
+    }
+    if(statusCode===422&&/spam|abuse|too quickly|rate/.test(text))return 60000;
+    return null
+}
+function armRetry(e){
+    const delay=retryDelayForError(e);
+    if(delay===null||!admin()||!adminReady)return false;
+    clearTimeout(retryTimer);
+    retryTimer=setTimeout(()=>{
+        retryTimer=null;
+        if(admin()&&adminReady&&hasUnsyncedLocal(state))sync(false)
+    },delay);
+    lastSyncTime.textContent=`本地数据已保留 · ${Math.max(1,Math.ceil(delay/1000))} 秒后自动重试`;
+    return true
+}
+async function performSyncCycle(localIntent){
+    let lastError=null;
+    for(let attempt=0;attempt<SYNC_RETRY_LIMIT;attempt++){
+        // 每一次写入前都重新读取最新 SHA；409/明确的 SHA 冲突才在当前轮内部重试。
+        const remote=await readRemote();
+        const remoteState=remote.exists?remote.state:emptyState();
+        const baseState=resolveBaseState(localIntent,remoteState);
+        const mergedInfo=mergeStates(baseState,localIntent,remoteState);
+        const merged=mergedInfo.state;
+
+        if(remote.exists&&fingerprint(merged)===fingerprint(remoteState)){
+            return{merged,sha:remote.sha,remoteState,conflicts:mergedInfo.conflicts,reassigned:mergedInfo.reassigned,wrote:false}
+        }
+        try{
+            const sha=await writeRemote(merged,remote.exists?remote.sha:null);
+            return{merged,sha,remoteState,conflicts:mergedInfo.conflicts,reassigned:mergedInfo.reassigned,wrote:true}
+        }catch(e){
+            lastError=e;
+            if(isShaConflictError(e)&&attempt<SYNC_RETRY_LIMIT-1){
+                await sleep(300*(attempt+1));
+                continue
+            }
+            throw e
+        }
+    }
+    throw lastError||new Error('多次刷新后仍无法写入 GitHub')
+}
+async function sync(showResult=true){
+    if(!admin()){show('请先配置 Token','error');return false}
+    if(!adminReady){
+        syncQueued=true;
+        syncQueuedShowResult=syncQueuedShowResult||showResult;
+        show('正在读取云端最新数据，完成后会自动同步','info');
+        return false
+    }
+    if(syncing){
+        // 绝不丢弃同步期间到来的新请求；当前轮结束后继续处理最新 state。
+        syncQueued=true;
+        syncQueuedShowResult=syncQueuedShowResult||showResult;
+        return true
+    }
+
+    clearTimeout(autoTimer);autoTimer=null;
+    clearTimeout(retryTimer);retryTimer=null;
+    syncing=true;
+    updateAdmin();
+    status('syncing','同步中…');
+    let wantsResult=showResult||syncQueuedShowResult;
+    syncQueued=false;
+    syncQueuedShowResult=false;
+
+    try{
+        ensureTarget();
+        while(true){
+            const startRevision=currentRevision();
+            const localIntent=norm(state);
+            const result=await performSyncCycle(localIntent);
+            syncFailureCount=0;
+
+            const latestLocal=norm(state);
+            const latestRevision=currentRevision();
+            const changedDuringSync=latestRevision!==startRevision||fingerprint(latestLocal)!==fingerprint(localIntent);
+
+            if(changedDuringSync){
+                // 本轮同步时用户又有新录入：禁止旧 merged 覆盖页面。
+                // 以本轮开始快照为基线，把“最新本地修改”和“刚确认的云端结果”再次三方合并。
+                state=mergeStates(localIntent,latestLocal,result.merged).state;
+                render();
+                if(!saveLocal(state))throw new Error('本机工作副本保存失败，请立即导出备份');
+                const stillDirty=fingerprint(state)!==fingerprint(result.merged);
+                saveBaseline(result.merged,result.sha,{clearDirty:!stillDirty,markSyncTime:true});
+                meta.dirty=stillDirty;
+                saveMeta();
+                if(stillDirty){
+                    syncQueued=true;
+                    status('syncing','已合并云端更新 · 继续同步本地修改')
+                }
+            }else{
+                // 只有本轮期间没有任何新本地修改，才允许同步结果直接成为当前页面状态。
+                state=result.merged;
+                render();
+                if(!saveLocal(state))throw new Error('本机工作副本保存失败，请立即导出备份');
+                record(state,result.sha);
+                status('online','公开阅读 · 管理已连接')
+            }
+
+            if(syncQueued||meta.dirty){
+                wantsResult=wantsResult||syncQueuedShowResult;
+                syncQueued=false;
+                syncQueuedShowResult=false;
+                continue
+            }
+
+            if(result.reassigned>0){
+                show(`已同步；${result.reassigned} 个重复编码已重新分配`,'success')
+            }else if(wantsResult){
+                show(result.conflicts>0?'已合并同步；同字段冲突以本机修改为准':'已同步 GitHub 最新数据','success')
+            }
+            return true
+        }
+    }catch(e){
+        console.error(e);
+        syncFailureCount++;
+        // 失败只改变同步状态，不得用远端旧数据覆盖 state；当前页面内容再次写入本地保险。
+        saveLocal(state);
+        if(admin()){
+            ensureTarget();
+            if(meta.baseState&&fingerprint(state)!==fingerprint(meta.baseState))meta.dirty=true;
+            else if(!meta.baseState&&hasLocalContent(state))meta.dirty=true;
+            saveMeta()
+        }
+        const retrying=armRetry(e);
+        status('offline','同步暂时失败 · 本地数据已保留');
+        const suffix=retrying?'，将自动重试':'';
+        show(`同步暂时失败，但本地录入不会丢失${suffix}：${e.message}`,'error');
+        return false
+    }finally{
+        syncing=false;
+        updateAdmin()
+    }
+}
+function armSync(delay=AUTO_DELAY,showResult=false){
+    if(!admin()||!adminReady)return;
+    syncQueued=true;
+    syncQueuedShowResult=syncQueuedShowResult||showResult;
+    if(syncing)return;
+    clearTimeout(autoTimer);
+    autoTimer=setTimeout(()=>{
+        autoTimer=null;
+        const sr=syncQueuedShowResult;
+        syncQueuedShowResult=false;
+        syncQueued=false;
+        sync(sr)
+    },Math.max(0,delay))
+}
+function schedule(){
+    const saved=markDirty();
+    if(!saved)return false;
+    if(!admin())return true;
+    status('syncing','本地已保存 · 等待同步');
+    lastSyncTime.textContent='本地修改已安全保存，等待同步';
+    clearTimeout(retryTimer);retryTimer=null;
+    armSync(AUTO_DELAY,false);
+    return true
+}
+async function loadPublic(){
+    status('syncing','正在读取公开数据…');
+    try{
+        const r=await fetch(publicUrl(),{cache:'no-store'});if(!r.ok)throw new Error(`HTTP ${r.status}`);
+        state=norm(await r.json());render();status('online','公开阅读');lastSyncTime.textContent=`公开数据 · ${state.entries.length} 条`;
+        // 如果浏览器里还有管理模式的未同步数据，公开读取绝不能覆盖那份安全缓存。
+        savePublicCache(state).catch(()=>{})
+    }catch(e){
+        console.error(e);
+        const local=loadPublicCache();state=local||emptyState();render();status('offline','公开数据读取失败');
+        lastSyncTime.textContent=local?'暂时显示本机公开缓存':'请确认 press_data.json 与网页位于同一发布目录'
+    }
+}
+async function loadAdminState(){
+    adminReady=false;
+    updateAdmin();
+    status('syncing','正在读取管理数据…');
+    const targetChanged=ensureTarget();
+    let cached=loadLocal();
+    if(cached){
+        state=cached;
+        render();
+        if(!targetChanged&&hasUnsyncedLocal(cached)){
+            status('syncing','正在恢复本地待同步数据…');
+            lastSyncTime.textContent='检测到上次未完成同步的本地数据'
+        }
+    }
+
+    try{
+        const remote=await readRemote();
+        cached=loadLocal()||cached;
+        const pending=Boolean(!targetChanged&&cached&&hasUnsyncedLocal(cached));
+
+        if(remote.exists){
+            if(pending){
+                const baseState=resolveBaseState(cached,remote.state);
+                state=mergeStates(baseState,cached,remote.state).state;
+                render();
+                if(!saveLocal(state))throw new Error('本机工作副本保存失败，请立即导出备份');
+                // 远端当前版本成为新的可靠基线，但本地合并结果仍标记为待同步。
+                saveBaseline(remote.state,remote.sha,{clearDirty:false,markSyncTime:false});
+                meta.dirty=fingerprint(state)!==fingerprint(remote.state);
+                if(meta.dirty&&currentRevision()===0)meta.revision=1;
+                saveMeta();
+                adminReady=true;
+                updateAdmin();
+                render();
+                status(meta.dirty?'syncing':'online',meta.dirty?'本地数据已恢复 · 等待同步':'公开阅读 · 管理已连接');
+                lastSyncTime.textContent=meta.dirty?'已恢复未同步录入，正在安全合并':'云端与本地已一致';
+                if(meta.dirty)armSync(250,false)
+            }else{
+                state=remote.state;
+                render();
+                if(!saveLocal(state))throw new Error('本机工作副本保存失败，请立即导出备份');
+                record(state,remote.sha);
+                adminReady=true;
+                updateAdmin();
+                render();
+                status('online','公开阅读 · 管理已连接')
+            }
+        }else{
+            state=cached||emptyState();
+            render();
+            if(!saveLocal(state))throw new Error('本机工作副本保存失败，请立即导出备份');
+            adminReady=true;
+            updateAdmin();
+            render();
+            if(hasLocalContent(state)){
+                meta.dirty=true;
+                if(currentRevision()===0)meta.revision=1;
+                saveMeta();
+                status('syncing','本地数据已保留 · 正在创建云端文件');
+                lastSyncTime.textContent='云端数据文件尚未创建';
+                armSync(250,false)
+            }else{
+                saveBaseline(emptyState(),null,{clearDirty:true,markSyncTime:false});
+                status('online','公开阅读 · 管理已连接');
+                lastSyncTime.textContent='云端数据文件尚未创建'
+            }
+        }
+    }catch(e){
+        console.error(e);
+        state=loadLocal()||cached||emptyState();
+        render();
+        saveLocal(state);
+        adminReady=true;
+        updateAdmin();
+        render();
+        status('offline','管理云端读取失败 · 本地数据已保留');
+        lastSyncTime.textContent=hasLocalContent(state)?'可继续录入；恢复网络后自动重试':'没有可恢复的本地数据';
+        if(meta.dirty)armRetry(e)
+    }
+}
+
+function allMultiPanels(){
+    return [institutionPanel,editInstitutionPanel,categoryPanel,editCategoryPanel,tagPanel,editTagPanel]
+}
+function setupInstitutionCombo(which){
+    const meta=institutionMeta(which);
+    let keyboardIndex=-1;
+
+    function keyboardOptions(){
+        return [...meta.options.querySelectorAll('.combo-pill-select[data-select-value]')]
+    }
+    function clearKeyboardActive(){
+        keyboardIndex=-1;
+        keyboardOptions().forEach(option=>{
+            option.classList.remove('keyboard-active');
+            option.removeAttribute('aria-selected')
+        })
+    }
+    function setKeyboardActive(nextIndex){
+        const options=keyboardOptions();
+        if(!options.length){keyboardIndex=-1;return false}
+        keyboardIndex=((nextIndex%options.length)+options.length)%options.length;
+        options.forEach((option,index)=>{
+            const active=index===keyboardIndex;
+            option.classList.toggle('keyboard-active',active);
+            if(active)option.setAttribute('aria-selected','true');
+            else option.removeAttribute('aria-selected')
+        });
+        options[keyboardIndex].scrollIntoView({block:'nearest'});
+        return true
+    }
+    function openForKeyboard(){
+        if(meta.panel.classList.contains('hidden')){
+            allMultiPanels().forEach(panel=>panel.classList.add('hidden'));
+            meta.panel.classList.remove('hidden');
+            renderInstitutionOptions(which);
+            keyboardIndex=-1
+        }
+    }
+    function selectKeyboardValue(value){
+        meta.input.value=value;
+        keyboardIndex=-1;
+        renderInstitutionOptions(which);
+        meta.panel.classList.add('hidden');
+        meta.input.focus()
+    }
+
+    meta.toggle.addEventListener('click',e=>{
+        e.stopPropagation();
+        const willOpen=meta.panel.classList.contains('hidden');
+        allMultiPanels().forEach(panel=>panel.classList.add('hidden'));
+        keyboardIndex=-1;
+        if(willOpen){
+            meta.panel.classList.remove('hidden');
+            renderInstitutionOptions(which)
+        }
+    });
+    meta.input.addEventListener('click',e=>{
+        e.stopPropagation();
+        allMultiPanels().forEach(panel=>panel.classList.add('hidden'));
+        meta.panel.classList.remove('hidden');
+        keyboardIndex=-1;
+        renderInstitutionOptions(which)
+    });
+    meta.input.addEventListener('input',()=>{
+        // 输入搜索词时自动展开，并立即刷新匹配结果。
+        meta.panel.classList.remove('hidden');
+        keyboardIndex=-1;
+        renderInstitutionOptions(which)
+    });
+    meta.input.addEventListener('keydown',e=>{
+        // 出版菜单支持与标签/书架一致的键盘浏览：
+        // ↑ / ↓ 移动高亮，Enter 选中，Escape 收起。
+        if(e.key==='ArrowDown'||e.key==='ArrowUp'){
+            e.preventDefault();
+            e.stopPropagation();
+            openForKeyboard();
+            const options=keyboardOptions();
+            if(!options.length)return;
+            if(keyboardIndex<0){
+                setKeyboardActive(e.key==='ArrowDown'?0:options.length-1)
+            }else{
+                setKeyboardActive(keyboardIndex+(e.key==='ArrowDown'?1:-1))
+            }
+            return
+        }
+        if(e.key==='Enter'){
+            if(!meta.panel.classList.contains('hidden')&&keyboardIndex>=0){
+                const option=keyboardOptions()[keyboardIndex];
+                if(option){
+                    e.preventDefault();
+                    e.stopPropagation();
+                    selectKeyboardValue(option.dataset.selectValue);
+                    return
+                }
+            }
+
+            const currentValue=clean(meta.input.value);
+            const confirmedValue=currentValue&&state.institutions.some(v=>key(v)===key(currentValue));
+
+            // 添加界面：出版已经确认、下拉已收起时，再按 Enter 直接触发主“添加”。
+            if(which==='add'&&meta.panel.classList.contains('hidden')&&confirmedValue){
+                e.preventDefault();
+                e.stopPropagation();
+                keyboardIndex=-1;
+                addEntry();
+                return
+            }
+
+            e.preventDefault();
+            e.stopPropagation();
+            keyboardIndex=-1;
+            commitInstitution(which,true);
+            meta.panel.classList.add('hidden');
+            meta.input.focus()
+        }
+        if(e.key==='Escape'&&!meta.panel.classList.contains('hidden')){
+            e.preventDefault();
+            e.stopPropagation();
+            clearKeyboardActive();
+            meta.panel.classList.add('hidden')
+        }
+    });
+    meta.options.addEventListener('click',e=>{
+        e.stopPropagation();
+        const select=e.target.closest('.combo-pill-select[data-select-value]');
+        if(select){
+            clearKeyboardActive();
+            meta.input.value=select.dataset.selectValue;
+            renderInstitutionOptions(which);
+            meta.panel.classList.add('hidden');
+            meta.input.focus()
+        }
+    });
+    meta.combo.addEventListener('click',e=>e.stopPropagation())
+}
+function setupMultiCombo(type,which){
+    const meta=multiMeta(type,which);
+    const toggle=type==='category'
+        ? (which==='edit'?editCategoryToggle:categoryToggle)
+        : (which==='edit'?editTagToggle:tagToggle);
+    const combo=type==='category'
+        ? (which==='edit'?editCategoryCombo:categoryCombo)
+        : (which==='edit'?editTagCombo:tagCombo);
+    let keyboardIndex=-1;
+
+    function keyboardOptions(){
+        return [...meta.options.querySelectorAll('.combo-pill-select[data-select-value]')]
+    }
+    function clearKeyboardActive(){
+        keyboardIndex=-1;
+        keyboardOptions().forEach(option=>{
+            option.classList.remove('keyboard-active');
+            option.removeAttribute('aria-selected')
+        })
+    }
+    function setKeyboardActive(nextIndex){
+        const options=keyboardOptions();
+        if(!options.length){keyboardIndex=-1;return false}
+        keyboardIndex=((nextIndex%options.length)+options.length)%options.length;
+        options.forEach((option,index)=>{
+            const active=index===keyboardIndex;
+            option.classList.toggle('keyboard-active',active);
+            if(active)option.setAttribute('aria-selected','true');
+            else option.removeAttribute('aria-selected')
+        });
+        options[keyboardIndex].scrollIntoView({block:'nearest'});
+        return true
+    }
+    function openForKeyboard(){
+        if(meta.panel.classList.contains('hidden')){
+            allMultiPanels().forEach(panel=>panel.classList.add('hidden'));
+            meta.panel.classList.remove('hidden');
+            renderMultiField(type,which);
+            keyboardIndex=-1
+        }
+    }
+    function selectKeyboardValue(value){
+        keyboardIndex=-1;
+        toggleSelection(type,which,value);
+        if(!multiAllowsMultiple(type,which))meta.panel.classList.add('hidden')
+    }
+
+    toggle.addEventListener('click',e=>{
+        e.stopPropagation();
+
+        // 单选字段已有选择时不允许再次打开；编辑标签允许继续打开并增加标签。
+        if(multiMeta(type,which).selection.length&&!multiAllowsMultiple(type,which)){
+            allMultiPanels().forEach(panel=>panel.classList.add('hidden'));
+            keyboardIndex=-1;
+            return
+        }
+
+        const willOpen=meta.panel.classList.contains('hidden');
+        allMultiPanels().forEach(panel=>panel.classList.add('hidden'));
+        keyboardIndex=-1;
+        if(willOpen){
+            meta.panel.classList.remove('hidden');
+            renderMultiField(type,which)
+        }
+    });
+    meta.input.addEventListener('click',e=>{
+        e.stopPropagation();
+
+        // 单选字段已有选择时输入栏锁定；编辑标签仍可继续搜索并增加标签。
+        if(multiMeta(type,which).selection.length&&!multiAllowsMultiple(type,which)){
+            allMultiPanels().forEach(panel=>panel.classList.add('hidden'));
+            keyboardIndex=-1;
+            return
+        }
+
+        allMultiPanels().forEach(panel=>panel.classList.add('hidden'));
+        meta.panel.classList.remove('hidden');
+        keyboardIndex=-1;
+        renderMultiField(type,which)
+    });
+    meta.input.addEventListener('input',()=>{
+        if(multiMeta(type,which).selection.length&&!multiAllowsMultiple(type,which)){
+            meta.input.value='';
+            meta.panel.classList.add('hidden');
+            keyboardIndex=-1;
+            return
+        }
+        // 输入搜索词时自动展开，并立即刷新匹配结果。
+        meta.panel.classList.remove('hidden');
+        keyboardIndex=-1;
+        renderMultiOptions(type,which)
+    });
+    meta.input.addEventListener('keydown',e=>{
+        if(e.key==='ArrowDown'||e.key==='ArrowUp'){
+            e.preventDefault();
+            e.stopPropagation();
+            openForKeyboard();
+            const options=keyboardOptions();
+            if(!options.length)return;
+            if(keyboardIndex<0){
+                setKeyboardActive(e.key==='ArrowDown'?0:options.length-1)
+            }else{
+                setKeyboardActive(keyboardIndex+(e.key==='ArrowDown'?1:-1))
+            }
+            return
+        }
+        if(e.key==='Enter'){
+            if(!meta.panel.classList.contains('hidden')&&keyboardIndex>=0){
+                const option=keyboardOptions()[keyboardIndex];
+                if(option){
+                    e.preventDefault();
+                    e.stopPropagation();
+                    selectKeyboardValue(option.dataset.selectValue);
+                    return
+                }
+            }
+
+            // 添加界面：当前多选输入框已经清空，说明该字段已完成。
+            // 此时 Enter 直接等同于点击主“添加”按钮。
+            if(which==='add'&&!clean(meta.input.value)){
+                e.preventDefault();
+                e.stopPropagation();
+                keyboardIndex=-1;
+                meta.panel.classList.add('hidden');
+                addEntry();
+                return
+            }
+
+            e.preventDefault();
+            e.stopPropagation();
+            keyboardIndex=-1;
+            commitTypedValue(type,which,true);
+            meta.panel.classList.add('hidden');
+            meta.input.focus()
+        }
+        if(e.key==='Escape'&&!meta.panel.classList.contains('hidden')){
+            e.preventDefault();
+            e.stopPropagation();
+            clearKeyboardActive();
+            meta.panel.classList.add('hidden')
+        }
+    });
+    meta.options.addEventListener('click',e=>{
+        e.stopPropagation();
+        const edit=e.target.closest('.combo-pill-edit[data-edit-value]');
+        if(which==='add'&&edit){clearKeyboardActive();return editHistoryOption(type,edit.dataset.editValue)}
+        const del=e.target.closest('.combo-pill-delete[data-delete-value]');
+        if(which==='add'&&del){clearKeyboardActive();return deleteHistoryOption(type,del.dataset.deleteValue)}
+        const add=e.target.closest('.combo-add[data-add-current]');
+        if(which==='add'&&add){
+            clearKeyboardActive();
+            commitTypedValue(type,which,true);
+            meta.panel.classList.add('hidden');
+            return
+        }
+        const select=e.target.closest('.combo-pill-select[data-select-value]');
+        if(select){
+            clearKeyboardActive();
+            return toggleSelection(type,which,select.dataset.selectValue)
+        }
+    });
+    meta.selectedBox.addEventListener('click',e=>{
+        e.stopPropagation();
+        const remove=e.target.closest('.selected-pill-remove[data-remove-value]');
+        if(remove){
+            clearKeyboardActive();
+            return removeSelection(type,which,remove.dataset.removeValue)
+        }
+    });
+    combo.addEventListener('click',e=>e.stopPropagation())
+}
+setupInstitutionCombo('add');
+setupInstitutionCombo('edit');
+setupMultiCombo('category','add');
+setupMultiCombo('category','edit');
+setupManualDrag(categoryOptions,'category');
+setupMultiCombo('tag','add');
+setupMultiCombo('tag','edit');
+
+document.addEventListener('click',()=>{
+    allMultiPanels().forEach(panel=>panel.classList.add('hidden'))
+});
+
+addBtn.addEventListener('click',addEntry);
+[bookNameInput,bookNoInput,codeInput].forEach(input=>{
+    input.addEventListener('keydown',e=>{
+        if(e.key!=='Enter')return;
+        e.preventDefault();
+        e.stopPropagation();
+        addEntry()
+    })
+});
+pressList.addEventListener('click',e=>{const edit=e.target.closest('.edit-btn');if(edit)return openEdit(edit.dataset.id)});
+editDelete.addEventListener('click',()=>{if(editingId)deleteEntry(editingId)});
+editCancel.addEventListener('click',()=>{editingId='';editInitialSnapshot='';editSelections={category:[],tag:[]};editModal.classList.add('hidden')});
+editSave.addEventListener('click',saveEdit);
+clearEditBookName?.addEventListener('click',()=>{editBookName.value='';editBookName.focus()});
+clearEditBookNo?.addEventListener('click',()=>{editBookNo.value='';editBookNo.focus()});
+clearEditCode?.addEventListener('click',()=>{editCode.value='';if(!editCode.disabled)editCode.focus()});
+clearEditBookNoTop?.addEventListener('click',()=>{editBookNo.value='';editBookNo.focus()});
+clearEditCodeTop?.addEventListener('click',()=>{editCode.value='';if(!editCode.disabled)editCode.focus()});
+
+// 只有“按下”和“松开”都发生在遮罩层本身时，才视为真正点击弹窗外。
+// 从输入框/下拉框内部开始拖选文字，即使鼠标松到遮罩层，也不会关闭弹窗。
+editModal.addEventListener('pointerdown',e=>{
+    editOverlayPointerDown=e.target===editModal
+});
+editModal.addEventListener('pointerup',e=>{
+    const genuineOutsideClick=editOverlayPointerDown&&e.target===editModal;
+    editOverlayPointerDown=false;
+    if(!genuineOutsideClick)return;
+    if(!editIsUnchanged())return;
+    editingId='';
+    editInitialSnapshot='';
+    editSelections={category:[],tag:[]};
+    editModal.classList.add('hidden')
+});
+editModal.addEventListener('pointercancel',()=>{
+    editOverlayPointerDown=false
+});
+
+configBtn.addEventListener('click',openConfig);
+manageBtn.addEventListener('click',openManage);
+manageClose.addEventListener('click',closeManage);
+manageInstitutionAdd.addEventListener('click',addManagedInstitution);
+[manageInstitutionInput,manageInstitutionLineInput].forEach(input=>input.addEventListener('keydown',e=>{
+    if(e.key==='Enter'){e.preventDefault();addManagedInstitution()}
+}));
+manageInstitutionOptions.addEventListener('click',e=>{
+    e.stopPropagation();
+    const edit=e.target.closest('.combo-pill-edit[data-edit-value]');
+    if(edit)return editInstitutionHistory(edit.dataset.editValue);
+    const del=e.target.closest('.combo-pill-delete[data-delete-value]');
+    if(del)return deleteInstitutionHistory(del.dataset.deleteValue)
+});
+manageInstitutionOptions.addEventListener('change',e=>{
+    const lineInput=e.target.closest('.manage-line-input[data-move-value]');
+    if(lineInput)moveManagedInstitution(lineInput.dataset.moveValue,lineInput.value)
+});
+manageInstitutionOptions.addEventListener('keydown',e=>{
+    const lineInput=e.target.closest('.manage-line-input[data-move-value]');
+    if(!lineInput||e.key!=='Enter')return;
+    e.preventDefault();
+    moveManagedInstitution(lineInput.dataset.moveValue,lineInput.value)
+});
+manageModal.addEventListener('click',e=>{if(e.target===manageModal)closeManage()});
+configCancel.addEventListener('click',()=>configModal.classList.add('hidden'));
+configForm.addEventListener('submit',saveConfigForm);
+// 不新增“强制刷新”按钮：现有“同步”按钮与自动同步共用安全串行队列，写入前自动读取最新 SHA 并合并。
+syncBtn.addEventListener('click',()=>sync(true));
+exportBtn.addEventListener('click',downloadJson);
+document.addEventListener('keydown',e=>{
+    if(e.key!=='Escape')return;
+    institutionPanel.classList.add('hidden');
+    editInstitutionPanel.classList.add('hidden');
+    categoryPanel.classList.add('hidden');
+    editCategoryPanel.classList.add('hidden');
+    tagPanel.classList.add('hidden');
+    editTagPanel.classList.add('hidden');
+    editModal.classList.add('hidden');
+    configModal.classList.add('hidden');
+    manageModal.classList.add('hidden')
+});
+async function initializeApp(){
+    await bootstrapStorage();
+    loadConfig();loadMeta();
+    if(admin()){const cached=loadLocal();if(cached)state=cached}
+    updateAdmin();renderInstitutionOptions('add');renderInstitutionOptions('edit');renderManageInstitutionOptions();renderCategoryOptions('add');renderCategoryOptions('edit');renderTagOptions('add');renderTagOptions('edit');
+    if(admin())await loadAdminState();else await loadPublic();
+}
+initializeApp().catch(error=>{console.error('Press 初始化失败:',error);status('offline','初始化失败');render()});
+
+// 网络恢复或重新回到页面时，如果仍有 dirty 数据，自动继续串行同步。
+window.addEventListener('online',()=>{if(admin()&&adminReady&&meta.dirty)armSync(250,false)});
+document.addEventListener('visibilitychange',()=>{if(document.hidden){if(storageReady&&admin()&&meta.dirty)saveLocal(state)}else if(admin()&&adminReady&&meta.dirty)armSync(350,false)});
+window.addEventListener('pagehide',()=>{if(storageReady&&admin()&&meta.dirty)saveLocal(state)});
 })();
 </script>
 </body>

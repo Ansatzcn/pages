@@ -186,7 +186,9 @@ if(a.type===3&&a.numberKey!==b.numberKey)return a.numberKey-b.numberKey;
 const r=generalCollator.compare(a.text,b.text);if(r!==0)return r;return a.text<b.text?-1:a.text>b.text?1:0
 }
 
-function normalizeRemarkValue(v){return typeof v==='string'?v.normalize('NFKC').trim():''}
+/* NFC 只做标准组合，不会把全角括号转换成半角括号 */
+function normalizeRemarkValue(v){return typeof v==='string'?v.normalize('NFC').trim():''}
+
 function remarkHistoryKey(v){return normalizeRemarkValue(v).toLocaleLowerCase('zh-CN')}
 function normalizeRemarks(v){const seen=new Set();return(Array.isArray(v)?v:[v]).map(normalizeRemarkValue).filter(item=>{const key=remarkHistoryKey(item);if(!item||seen.has(key))return false;seen.add(key);return true})}
 function getRemarkSortInfo(v){
@@ -241,7 +243,6 @@ const newNormalized=normalizeRemarkValue(result);if(!newNormalized){alert('备�
 const oldKey=remarkHistoryKey(oldNormalized),newKey=remarkHistoryKey(newNormalized);
 if(newKey!==oldKey&&remarkHistory.some(item=>remarkHistoryKey(item)===newKey)){alert('该备注选项已经存在。');return}
 
-/* 同步修改总表内所有使用该备注的条目 */
 pages.forEach(item=>{
 if(!item)return;
 item.remark=normalizeRemarks(item.remark).map(remark=>remarkHistoryKey(remark)===oldKey?newNormalized:remark);
@@ -267,7 +268,6 @@ const normalized=normalizeRemarkValue(value);if(!normalized)return;
 if(!confirm(`确定删除备注“${normalized}”吗？\n该备注会同时从总表中所有已保存条目里移除。`))return;
 const key=remarkHistoryKey(normalized);
 
-/* 同步从总表所有条目移除此备注 */
 pages.forEach(item=>{
 if(!item)return;
 item.remark=normalizeRemarks(item.remark).filter(remark=>remarkHistoryKey(remark)!==key)
@@ -377,20 +377,8 @@ a2Date=getRemarkDateSortKey(a2),b2Date=getRemarkDateSortKey(b2),
 aGroup=Number.isFinite(a1Date)?0:Number.isFinite(a2Date)?1:2,
 bGroup=Number.isFinite(b1Date)?0:Number.isFinite(b2Date)?1:2;
 
-/*
-排序大组：
-0 第一标签为日期
-1 第二标签为日期
-2 其余条目
-*/
 if(aGroup!==bGroup)return aGroup-bGroup;
 
-/*
-第一标签为日期：
-先日期从小到大；
-日期相同，再按第二标签的新标签规则；
-最后按标题原规则。
-*/
 if(aGroup===0){
 if(a1Date!==b1Date)return a1Date-b1Date;
 const r2=compareStructuredRemarkText(a2,b2);
@@ -398,12 +386,6 @@ if(r2!==0)return r2;
 return compareStructuredText(a&&a.title,b&&b.title)
 }
 
-/*
-第二标签为日期：
-先按第一标签排序；
-第一标签相同，再按第二标签；
-最后按标题。
-*/
 if(aGroup===1){
 const r1=compareFirstRemarkText(a1,b1);
 if(r1!==0)return r1;
@@ -412,7 +394,6 @@ if(r2!==0)return r2;
 return compareStructuredText(a&&a.title,b&&b.title)
 }
 
-/* 其余条目继续使用原有规则 */
 return compareLegacyPages(a,b)
 })
 }

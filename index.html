@@ -147,7 +147,6 @@ const pinyinCollator=new Intl.Collator('zh-CN-u-co-pinyin',{usage:'sort',sensiti
 const generalCollator=new Intl.Collator('zh-CN',{usage:'sort',sensitivity:'base',numeric:true,ignorePunctuation:true});
 const strokeCollator=new Intl.Collator('zh-CN-u-co-stroke',{usage:'sort',sensitivity:'variant',numeric:true});
 
-
 function openDb(){
 if(dbPromise)return dbPromise;
 dbPromise=new Promise((resolve,reject)=>{const request=indexedDB.open(DB_NAME,DB_VERSION);request.onupgradeneeded=()=>{const db=request.result;if(!db.objectStoreNames.contains(DB_STORE))db.createObjectStore(DB_STORE)};request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error||new Error('IndexedDB 打开失败'));request.onblocked=()=>console.warn('IndexedDB 升级被其他页面阻塞')});
@@ -155,7 +154,7 @@ return dbPromise
 }
 async function idbGet(key){const db=await openDb();return new Promise((resolve,reject)=>{const tx=db.transaction(DB_STORE,'readonly'),req=tx.objectStore(DB_STORE).get(key);req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error||new Error('IndexedDB 读取失败'))})}
 async function idbSet(key,value){const db=await openDb();return new Promise((resolve,reject)=>{const tx=db.transaction(DB_STORE,'readwrite');tx.objectStore(DB_STORE).put(value,key);tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error||new Error('IndexedDB 写入失败'));tx.onabort=()=>reject(tx.error||new Error('IndexedDB 写入中止'))})}
-async function idbDelete(key){const db=await openDb();return new Promise((resolve,reject)=>{const tx=db.transaction(DB_STORE,'readwrite');tx.objectStore(DB_STORE).delete(key);tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error||new Error('IndexedDB 删除失败'));tx.onabort=()=>reject(tx.error||new Error('IndexedDB 删除中止'))})}
+async function idbDelete(key){const db=await openDb();return new Promise((resolve,reject)=>{const tx=db.transaction(DB_STORE,'readwrite');tx.objectStore(DB_STORE).delete(key);tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error||new Error('IndexedDB 删除失败'));tx.onabort=()=>reject(tx.error||new Error('IndexedDB 写入中止'))})}
 function isValidWorkingCopy(record){return Boolean(record&&record.version===1&&Array.isArray(record.pages)&&Number.isFinite(Number(record.savedAt)))}
 async function readOpfsWorkingCopy(){if(!navigator.storage?.getDirectory)throw new Error('OPFS 不可用');const root=await navigator.storage.getDirectory(),handle=await root.getFileHandle(OPFS_WORKING_COPY_FILE);const file=await handle.getFile();return JSON.parse(await file.text())}
 async function writeOpfsWorkingCopy(record){if(!navigator.storage?.getDirectory)throw new Error('OPFS 不可用');const root=await navigator.storage.getDirectory(),handle=await root.getFileHandle(OPFS_WORKING_COPY_FILE,{create:true}),writer=await handle.createWritable();try{await writer.write(JSON.stringify(record));await writer.close()}catch(error){try{await writer.abort()}catch{}throw error}}
@@ -199,14 +198,30 @@ if(dm){const y=Number(dm[1]),m=Number(dm[2]),d=Number(dm[3]),date=new Date(Date.
 const nm=text.match(/^(\d+(?:\.\d+)?)/);if(nm)return{type:2,text,dateKey:null,numberKey:Number(nm[1])};
 return{type:4,text,dateKey:null,numberKey:null}
 }
-function compareRemarkOptions(a0,b0){
+function getParenthesizedNumberInfo(value){
+const text=normalizeRemarkValue(value),numberPattern=/[（(]\s*([+-]?(?:\d+(?:\.\d+)?|\.\d+))\s*[）)]/,match=text.match(numberPattern),withoutNumber=text.replace(/[（(]\s*[+-]?(?:\d+(?:\.\d+)?|\.\d+)\s*[）)]/g,' ').replace(/\s+/g,' ').trim();
+return{hasNumber:Boolean(match),number:match?Number(match[1]):null,text,withoutNumber}
+}
+function compareRemarkOptionsBase(a0,b0){
 const a=getRemarkSortInfo(a0),b=getRemarkSortInfo(b0);if(a.type!==b.type)return a.type-b.type;
 if(a.type===0){let r=pinyinCollator.compare(a.text,b.text);if(r!==0)return r;r=strokeCollator.compare(a.text,b.text);if(r!==0)return r}
 else if(a.type===1){const r=a.text.localeCompare(b.text,'en',{sensitivity:'base',numeric:true});if(r!==0)return r}
 else if(a.type===2){if(a.numberKey!==b.numberKey)return a.numberKey-b.numberKey;const r=a.text.localeCompare(b.text,'zh-CN',{sensitivity:'base',numeric:true});if(r!==0)return r}
 else if(a.type===3&&a.dateKey!==b.dateKey)return a.dateKey-b.dateKey;
-return generalCollator.compare(a.text,b.text)
+const r=generalCollator.compare(a.text,b.text);if(r!==0)return r;return a.text<b.text?-1:a.text>b.text?1:0
 }
+function compareLabelByParenthesizedNumber(a0,b0,baseComparator){
+const a=getParenthesizedNumberInfo(a0),b=getParenthesizedNumberInfo(b0);
+if(a.hasNumber!==b.hasNumber)return a.hasNumber?-1:1;
+if(a.hasNumber&&b.hasNumber){
+if(a.number!==b.number)return b.number-a.number;
+const r=baseComparator(a.withoutNumber,b.withoutNumber);
+if(r!==0)return r;
+return baseComparator(a.text,b.text)
+}
+return baseComparator(a.text,b.text)
+}
+function compareRemarkOptions(a0,b0){return compareLabelByParenthesizedNumber(a0,b0,compareRemarkOptionsBase)}
 function saveRemarkHidden(){persistRemarkHidden()}
 function saveRemarkHistory(){persistRemarkHistory()}
 function rebuildRemarkHistory(){const seen=new Map(),candidates=[...remarkHistory];pages.forEach(item=>candidates.push(...normalizeRemarks(item&&item.remark)));candidates.forEach(raw=>{const value=normalizeRemarkValue(raw),key=remarkHistoryKey(value);if(value&&!remarkHidden.has(key)&&!seen.has(key))seen.set(key,value)});remarkHistory=[...seen.values()].sort(compareRemarkOptions);saveRemarkHistory()}
@@ -219,11 +234,56 @@ function renderTags(){tags.replaceChildren();selected.forEach((value,index)=>{co
 function add(value){selected=normalizeRemarks([...selected,value]);input.value='';renderTags()}
 function choose(value){const index=selected.findIndex(item=>remarkHistoryKey(item)===remarkHistoryKey(value));if(index>=0)selected.splice(index,1);else add(value);input.value='';renderTags();suppressMenuOpen=true;closeMenu();input.focus({preventScroll:true});closeMenu();setTimeout(()=>{closeMenu();suppressMenuOpen=false},0)}
 function setActive(index){activeIndex=filtered.length?(index+filtered.length)%filtered.length:-1;[...options.children].forEach((node,i)=>{const button=node.matches('.remark-option')?node:node.querySelector('.remark-option');if(button)button.classList.toggle('is-active',i===activeIndex)});if(activeIndex>=0){const node=options.children[activeIndex];if(node)node.scrollIntoView({block:'nearest'})}}
-function renameHistoryOption(oldValue){const oldNormalized=normalizeRemarkValue(oldValue);if(!oldNormalized)return;const result=prompt('修改备注选项：',oldNormalized);if(result===null)return;const newNormalized=normalizeRemarkValue(result);if(!newNormalized){alert('备注选项不能为空。');return}
-const oldKey=remarkHistoryKey(oldNormalized),newKey=remarkHistoryKey(newNormalized);if(newKey!==oldKey&&remarkHistory.some(item=>remarkHistoryKey(item)===newKey)){alert('该备注选项已经存在。');return}
-pages.forEach(item=>{if(!item)return;item.remark=normalizeRemarks(item.remark).map(remark=>remarkHistoryKey(remark)===oldKey?newNormalized:remark);item.remark=normalizeRemarks(item.remark)});
-remarkHidden.add(oldKey);remarkHidden.delete(newKey);remarkHistory=remarkHistory.filter(item=>remarkHistoryKey(item)!==oldKey&&remarkHistoryKey(item)!==newKey);remarkHistory.push(newNormalized);remarkHistory.sort(compareRemarkOptions);selected=normalizeRemarks(selected.map(item=>remarkHistoryKey(item)===oldKey?newNormalized:item));saveRemarkHidden();saveRemarkHistory();input.value='';renderTags();closeMenu();applySortAndRender();if(isConfigValid())syncToCloud(false)}
-function deleteHistoryOption(value){const normalized=normalizeRemarkValue(value);if(!normalized)return;if(!confirm(`确定删除备注“${normalized}”吗？\n该备注会同时从总表中所有已保存条目里移除。`))return;const key=remarkHistoryKey(normalized);pages.forEach(item=>{if(!item)return;item.remark=normalizeRemarks(item.remark).filter(remark=>remarkHistoryKey(remark)!==key)});remarkHidden.add(key);remarkHistory=remarkHistory.filter(item=>remarkHistoryKey(item)!==key);selected=selected.filter(item=>remarkHistoryKey(item)!==key);saveRemarkHidden();saveRemarkHistory();input.value='';renderTags();closeMenu();applySortAndRender();if(isConfigValid())syncToCloud(false)}
+function renameHistoryOption(oldValue){
+const oldNormalized=normalizeRemarkValue(oldValue);if(!oldNormalized)return;
+const result=prompt('修改备注选项：',oldNormalized);if(result===null)return;
+const newNormalized=normalizeRemarkValue(result);if(!newNormalized){alert('备注选项不能为空。');return}
+const oldKey=remarkHistoryKey(oldNormalized),newKey=remarkHistoryKey(newNormalized);
+if(newKey!==oldKey&&remarkHistory.some(item=>remarkHistoryKey(item)===newKey)){alert('该备注选项已经存在。');return}
+
+/* 同步修改总表内所有使用该备注的条目 */
+pages.forEach(item=>{
+if(!item)return;
+item.remark=normalizeRemarks(item.remark).map(remark=>remarkHistoryKey(remark)===oldKey?newNormalized:remark);
+item.remark=normalizeRemarks(item.remark)
+});
+
+remarkHidden.add(oldKey);
+remarkHidden.delete(newKey);
+remarkHistory=remarkHistory.filter(item=>remarkHistoryKey(item)!==oldKey&&remarkHistoryKey(item)!==newKey);
+remarkHistory.push(newNormalized);
+remarkHistory.sort(compareRemarkOptions);
+selected=normalizeRemarks(selected.map(item=>remarkHistoryKey(item)===oldKey?newNormalized:item));
+saveRemarkHidden();
+saveRemarkHistory();
+input.value='';
+renderTags();
+closeMenu();
+applySortAndRender();
+if(isConfigValid())syncToCloud(false)
+}
+function deleteHistoryOption(value){
+const normalized=normalizeRemarkValue(value);if(!normalized)return;
+if(!confirm(`确定删除备注“${normalized}”吗？\n该备注会同时从总表中所有已保存条目里移除。`))return;
+const key=remarkHistoryKey(normalized);
+
+/* 同步从总表所有条目移除此备注 */
+pages.forEach(item=>{
+if(!item)return;
+item.remark=normalizeRemarks(item.remark).filter(remark=>remarkHistoryKey(remark)!==key)
+});
+
+remarkHidden.add(key);
+remarkHistory=remarkHistory.filter(item=>remarkHistoryKey(item)!==key);
+selected=selected.filter(item=>remarkHistoryKey(item)!==key);
+saveRemarkHidden();
+saveRemarkHistory();
+input.value='';
+renderTags();
+closeMenu();
+applySortAndRender();
+if(isConfigValid())syncToCloud(false)
+}
 function createOptionButton(value,checked){const button=document.createElement('button');button.type='button';button.className='remark-option';button.textContent=(checked?'✓ ':'')+value;button.setAttribute('role','option');button.setAttribute('aria-selected',String(checked));button.addEventListener('pointerdown',event=>{event.preventDefault();event.stopPropagation();choose(value)});button.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();closeMenu()});return button}
 function renderMenu(forceOpen=false){const query=remarkHistoryKey(input.value);filtered=remarkHistory.filter(item=>remarkHistoryKey(item).includes(query));if(query&&!filtered.some(item=>remarkHistoryKey(item)===query))filtered.unshift(normalizeRemarkValue(input.value));options.replaceChildren();
 filtered.forEach(value=>{const checked=selected.some(item=>remarkHistoryKey(item)===remarkHistoryKey(value)),optionButton=createOptionButton(value,checked);if(!manageOptions){options.append(optionButton);return}
@@ -238,18 +298,124 @@ return{setValues(value){selected=normalizeRemarks(value);input.value='';renderTa
 }
 
 function getRemarkDateSortKey(value){const text=normalizeSortText(value),match=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);if(!match)return Number.POSITIVE_INFINITY;const y=Number(match[1]),m=Number(match[2]),d=Number(match[3]),date=new Date(Date.UTC(y,m-1,d));if(date.getUTCFullYear()!==y||date.getUTCMonth()!==m-1||date.getUTCDate()!==d)return Number.POSITIVE_INFINITY;return y*10000+m*100+d}
-function compareFirstRemarkText(a0,b0){function info(value){const text=normalizeSortText(value);if(!text)return{type:99,text:'',numberKey:null};if(/^https?:\/\//i.test(text))return{type:5,text,numberKey:null};const first=Array.from(text)[0]||'';if(/^\p{Script=Han}$/u.test(first))return{type:1,text,numberKey:null};if(/^[A-Za-z]$/.test(first))return{type:2,text,numberKey:null};const nm=text.match(/^[+-]?(?:\d+(?:\.\d+)?|\.\d+)/);if(nm)return{type:3,text,numberKey:Number(nm[0])};return{type:4,text,numberKey:null}}
-const a=info(a0),b=info(b0);if(a.type!==b.type)return a.type-b.type;if(a.type===1){let r=pinyinCollator.compare(a.text,b.text);if(r!==0)return r;r=strokeCollator.compare(a.text,b.text);if(r!==0)return r}if(a.type===2){const r=a.text.localeCompare(b.text,'en',{sensitivity:'base',numeric:true});if(r!==0)return r}if(a.type===3&&a.numberKey!==b.numberKey)return a.numberKey-b.numberKey;const r=generalCollator.compare(a.text,b.text);if(r!==0)return r;return a.text<b.text?-1:a.text>b.text?1:0}
 
-function compareLegacyPages(a,b){const ar=normalizeRemarks(a&&a.remark),br=normalizeRemarks(b&&b.remark),a1=ar[0]||'',b1=br[0]||'',a2=ar[1]||'',b2=br[1]||'',ha2=Boolean(a2),hb2=Boolean(b2),ha1=Boolean(a1),hb1=Boolean(b1);
-if(ha2!==hb2)return ha2?-1:1;if(ha2&&hb2){const ad=getRemarkDateSortKey(a2),bd=getRemarkDateSortKey(b2);if(ad!==bd)return ad-bd;const r1=compareFirstRemarkText(a1,b1);if(r1!==0)return r1;if(!Number.isFinite(ad)){const r2=compareStructuredText(a2,b2);if(r2!==0)return r2}return compareStructuredText(a&&a.title,b&&b.title)}
-if(ha1!==hb1)return ha1?-1:1;if(ha1&&hb1){const r=compareFirstRemarkText(a1,b1);if(r!==0)return r;return compareStructuredText(a&&a.title,b&&b.title)}return compareStructuredText(a&&a.title,b&&b.title)}
+function compareFirstRemarkTextBase(a0,b0){
+function info(value){
+const text=normalizeSortText(value);
+if(!text)return{type:99,text:'',numberKey:null};
+if(/^https?:\/\//i.test(text))return{type:5,text,numberKey:null};
+const first=Array.from(text)[0]||'';
+if(/^\p{Script=Han}$/u.test(first))return{type:1,text,numberKey:null};
+if(/^[A-Za-z]$/.test(first))return{type:2,text,numberKey:null};
+const nm=text.match(/^[+-]?(?:\d+(?:\.\d+)?|\.\d+)/);
+if(nm)return{type:3,text,numberKey:Number(nm[0])};
+return{type:4,text,numberKey:null}
+}
+const a=info(a0),b=info(b0);
+if(a.type!==b.type)return a.type-b.type;
+if(a.type===1){
+let r=pinyinCollator.compare(a.text,b.text);if(r!==0)return r;
+r=strokeCollator.compare(a.text,b.text);if(r!==0)return r
+}
+if(a.type===2){
+const r=a.text.localeCompare(b.text,'en',{sensitivity:'base',numeric:true});
+if(r!==0)return r
+}
+if(a.type===3&&a.numberKey!==b.numberKey)return a.numberKey-b.numberKey;
+const r=generalCollator.compare(a.text,b.text);
+if(r!==0)return r;
+return a.text<b.text?-1:a.text>b.text?1:0
+}
 
-function sortPages(){pages.sort((a,b)=>{const ar=normalizeRemarks(a&&a.remark),br=normalizeRemarks(b&&b.remark),a1=ar[0]||'',b1=br[0]||'',a2=ar[1]||'',b2=br[1]||'',a1Date=getRemarkDateSortKey(a1),b1Date=getRemarkDateSortKey(b1),a2Date=getRemarkDateSortKey(a2),b2Date=getRemarkDateSortKey(b2),aGroup=Number.isFinite(a1Date)?0:Number.isFinite(a2Date)?1:2,bGroup=Number.isFinite(b1Date)?0:Number.isFinite(b2Date)?1:2;
+function compareFirstRemarkText(a0,b0){
+return compareLabelByParenthesizedNumber(a0,b0,compareFirstRemarkTextBase)
+}
+
+function compareStructuredRemarkText(a0,b0){
+return compareLabelByParenthesizedNumber(a0,b0,compareStructuredText)
+}
+
+function compareLegacyPages(a,b){
+const ar=normalizeRemarks(a&&a.remark),br=normalizeRemarks(b&&b.remark),
+a1=ar[0]||'',b1=br[0]||'',a2=ar[1]||'',b2=br[1]||'',
+ha2=Boolean(a2),hb2=Boolean(b2),ha1=Boolean(a1),hb1=Boolean(b1);
+
+if(ha2!==hb2)return ha2?-1:1;
+
+if(ha2&&hb2){
+const ad=getRemarkDateSortKey(a2),bd=getRemarkDateSortKey(b2);
+if(ad!==bd)return ad-bd;
+
+const r1=compareFirstRemarkText(a1,b1);
+if(r1!==0)return r1;
+
+if(!Number.isFinite(ad)){
+const r2=compareStructuredRemarkText(a2,b2);
+if(r2!==0)return r2
+}
+
+return compareStructuredText(a&&a.title,b&&b.title)
+}
+
+if(ha1!==hb1)return ha1?-1:1;
+
+if(ha1&&hb1){
+const r=compareFirstRemarkText(a1,b1);
+if(r!==0)return r;
+return compareStructuredText(a&&a.title,b&&b.title)
+}
+
+return compareStructuredText(a&&a.title,b&&b.title)
+}
+
+function sortPages(){
+pages.sort((a,b)=>{
+const ar=normalizeRemarks(a&&a.remark),br=normalizeRemarks(b&&b.remark),
+a1=ar[0]||'',b1=br[0]||'',a2=ar[1]||'',b2=br[1]||'',
+a1Date=getRemarkDateSortKey(a1),b1Date=getRemarkDateSortKey(b1),
+a2Date=getRemarkDateSortKey(a2),b2Date=getRemarkDateSortKey(b2),
+aGroup=Number.isFinite(a1Date)?0:Number.isFinite(a2Date)?1:2,
+bGroup=Number.isFinite(b1Date)?0:Number.isFinite(b2Date)?1:2;
+
+/*
+排序大组：
+0 第一标签为日期
+1 第二标签为日期
+2 其余条目
+*/
 if(aGroup!==bGroup)return aGroup-bGroup;
-if(aGroup===0){if(a1Date!==b1Date)return a1Date-b1Date;const r2=compareStructuredText(a2,b2);if(r2!==0)return r2;return compareStructuredText(a&&a.title,b&&b.title)}
-if(aGroup===1){const r1=compareFirstRemarkText(a1,b1);if(r1!==0)return r1;const r2=compareStructuredText(a2,b2);if(r2!==0)return r2;return compareStructuredText(a&&a.title,b&&b.title)}
-return compareLegacyPages(a,b)})}
+
+/*
+第一标签为日期：
+先日期从小到大；
+日期相同，再按第二标签的新标签规则；
+最后按标题原规则。
+*/
+if(aGroup===0){
+if(a1Date!==b1Date)return a1Date-b1Date;
+const r2=compareStructuredRemarkText(a2,b2);
+if(r2!==0)return r2;
+return compareStructuredText(a&&a.title,b&&b.title)
+}
+
+/*
+第二标签为日期：
+先按第一标签排序；
+第一标签相同，再按第二标签；
+最后按标题。
+*/
+if(aGroup===1){
+const r1=compareFirstRemarkText(a1,b1);
+if(r1!==0)return r1;
+const r2=compareStructuredRemarkText(a2,b2);
+if(r2!==0)return r2;
+return compareStructuredText(a&&a.title,b&&b.title)
+}
+
+/* 其余条目继续使用原有规则 */
+return compareLegacyPages(a,b)
+})
+}
 
 function parsePageInput(input){const raw=String(input||'').trim(),match=raw.match(/^\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)$/i);if(match)return{title:match[1].trim(),url:match[2].trim(),titleMode:'markdown'};if(/^https?:\/\/[^\s]+$/i.test(raw))return{title:raw,url:raw,titleMode:'url'};return{title:raw,url:'',titleMode:'text'}}
 function escapeHtml(text){if(!text)return'';const div=document.createElement('div');div.textContent=text;return div.innerHTML}
@@ -306,22 +472,54 @@ async function saveConfigAndConnect(){const token=cfgToken.value.trim(),owner=cf
 
 addBtn.addEventListener('click',addPage);
 document.querySelectorAll('.add-section .form-group input, .add-section .form-group textarea').forEach(input=>{if(input===remarkInput)return;input.addEventListener('keydown',function(e){if(e.key==='Enter'){if(this.tagName==='TEXTAREA'){if(e.ctrlKey||e.shiftKey){e.preventDefault();addPage()}}else{e.preventDefault();addPage()}}})});
-exportBtn.addEventListener('click',exportData);importBtn.addEventListener('click',()=>fileInput.click());fileInput.addEventListener('change',function(){if(this.files&&this.files.length>0){importData(this.files[0]);this.value=''}});
+exportBtn.addEventListener('click',exportData);
+importBtn.addEventListener('click',()=>fileInput.click());
+fileInput.addEventListener('change',function(){if(this.files&&this.files.length>0){importData(this.files[0]);this.value=''}});
 syncBtn.addEventListener('click',()=>{if(pages.length===0){showToast('没有数据需要同步','info');return}syncToCloud(true)});
-if(window.visualViewport){window.visualViewport.addEventListener('resize',syncConfigVisualViewport);window.visualViewport.addEventListener('scroll',syncConfigVisualViewport)}
-window.addEventListener('resize',()=>{syncConfigVisualViewport();syncBackToTopPosition()});window.addEventListener('orientationchange',()=>{syncConfigVisualViewport();syncBackToTopPosition()});syncConfigVisualViewport();syncBackToTopPosition();configBtn.addEventListener('click',openConfigModal);
+
+if(window.visualViewport){
+window.visualViewport.addEventListener('resize',syncConfigVisualViewport);
+window.visualViewport.addEventListener('scroll',syncConfigVisualViewport)
+}
+window.addEventListener('resize',()=>{syncConfigVisualViewport();syncBackToTopPosition()});
+window.addEventListener('orientationchange',()=>{syncConfigVisualViewport();syncBackToTopPosition()});
+syncConfigVisualViewport();
+syncBackToTopPosition();
+configBtn.addEventListener('click',openConfigModal);
 
 function fastScrollToTop(duration=10){const startY=window.scrollY||window.pageYOffset||0;if(startY<=0)return;if(backToTopAnimationFrame!==null){cancelAnimationFrame(backToTopAnimationFrame);backToTopAnimationFrame=null}const startTime=performance.now(),easeOutCubic=progress=>1-Math.pow(1-progress,3);function step(now){const progress=Math.min(1,(now-startTime)/duration),eased=easeOutCubic(progress);window.scrollTo(0,Math.round(startY*(1-eased)));if(progress<1)backToTopAnimationFrame=requestAnimationFrame(step);else{backToTopAnimationFrame=null;window.scrollTo(0,0)}}backToTopAnimationFrame=requestAnimationFrame(step)}
 backToTopBtn.addEventListener('click',()=>fastScrollToTop(10));
-configCancelBtn.addEventListener('click',closeConfigModal);configSaveBtn.addEventListener('click',saveConfigAndConnect);configModal.addEventListener('click',function(e){if(e.target===this)closeConfigModal()});editDeleteBtn.addEventListener('click',deleteEditingEntry);editCancelBtn.addEventListener('click',closeEditModal);editSaveBtn.addEventListener('click',saveEdit);
 
-let editOverlayPointerDown=false;editModal.addEventListener('pointerdown',function(e){editOverlayPointerDown=e.target===this});editModal.addEventListener('pointerup',function(e){const shouldClose=editOverlayPointerDown&&e.target===this;editOverlayPointerDown=false;if(shouldClose)closeEditModal()});editModal.addEventListener('pointercancel',()=>{editOverlayPointerDown=false});
+configCancelBtn.addEventListener('click',closeConfigModal);
+configSaveBtn.addEventListener('click',saveConfigAndConnect);
+configModal.addEventListener('click',function(e){if(e.target===this)closeConfigModal()});
+editDeleteBtn.addEventListener('click',deleteEditingEntry);
+editCancelBtn.addEventListener('click',closeEditModal);
+editSaveBtn.addEventListener('click',saveEdit);
+
+let editOverlayPointerDown=false;
+editModal.addEventListener('pointerdown',function(e){editOverlayPointerDown=e.target===this});
+editModal.addEventListener('pointerup',function(e){const shouldClose=editOverlayPointerDown&&e.target===this;editOverlayPointerDown=false;if(shouldClose)closeEditModal()});
+editModal.addEventListener('pointercancel',()=>{editOverlayPointerDown=false});
+
 document.querySelectorAll('#editModal .form-group input, #editModal .form-group textarea').forEach(input=>{if(input===editRemarkInput)return;input.addEventListener('keydown',function(e){if(e.key==='Enter'){if(this.tagName==='TEXTAREA'){if(e.ctrlKey||e.shiftKey){e.preventDefault();saveEdit()}}else{e.preventDefault();saveEdit()}}})});
 
 const remarkPicker=setupRemarkCombo({input:remarkInput,dropdown:remarkDropdown,options:remarkOptions,combo:remarkCombo,submit:addPage,manageOptions:true});
 const editRemarkPicker=setupRemarkCombo({input:editRemarkInput,dropdown:editRemarkDropdown,options:editRemarkOptions,combo:editRemarkCombo,submit:saveEdit});
-window.addEventListener('pagehide',()=>{if(localStateReady)void saveWorkingCopy()});document.addEventListener('visibilitychange',()=>{if(localStateReady&&document.visibilityState==='hidden')void saveWorkingCopy()});
-(async function initialize(){void requestPersistentStorage();await Promise.all([loadRemarkState(),loadConfig()]);await loadFromCloud();localStateReady=true})().catch(error=>{console.error('Pages 初始化失败:',error);setCloudStatus('offline','本地存储初始化失败');showToast('本地存储初始化失败，请检查浏览器权限','error')});
+
+window.addEventListener('pagehide',()=>{if(localStateReady)void saveWorkingCopy()});
+document.addEventListener('visibilitychange',()=>{if(localStateReady&&document.visibilityState==='hidden')void saveWorkingCopy()});
+
+(async function initialize(){
+void requestPersistentStorage();
+await Promise.all([loadRemarkState(),loadConfig()]);
+await loadFromCloud();
+localStateReady=true
+})().catch(error=>{
+console.error('Pages 初始化失败:',error);
+setCloudStatus('offline','本地存储初始化失败');
+showToast('本地存储初始化失败，请检查浏览器权限','error')
+});
 })();
 </script>
 </body>

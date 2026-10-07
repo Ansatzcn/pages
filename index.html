@@ -28,56 +28,155 @@ h1{font-size:2.2rem;font-weight:600;color:#1e293b;letter-spacing:-.5px;border-bo
 .form-group input,.form-group textarea{background:white;border:1px solid #d1d9e6;border-radius:16px;padding:.7rem 1rem;font-size:.95rem;transition:.2s;font-family:inherit;resize:vertical}
 .form-group input:focus,.form-group textarea:focus{outline:2px solid #1E40AF;border-color:transparent;box-shadow:0 0 0 3px rgba(124,155,255,.2)}
 .form-group textarea{min-height:60px}.form-group .hint{font-size:.75rem;color:#94a3b8;margin-top:4px}
-.remark-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}.remark-tag{display:inline-flex;align-items:center;gap:6px;max-width:100%;border:1px solid #c7d2fe;border-radius:999px;background:#eef2ff;color:#1e3a8a;padding:3px 10px;font-size:.9rem;font-weight:400}.remark-tag span{overflow-wrap:anywhere;min-width:0}
-.remark-remove{flex:0 0 auto;border:0;background:transparent;color:inherit;cursor:pointer;font:inherit;font-size:1.15rem;width:24px;min-height:24px;border-radius:50%}.remark-remove:hover{background:#c7d2fe}.remark-remove:focus-visible{outline:2px solid #1e40af}
+.remark-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}
+.remark-tag{display:inline-flex;align-items:center;gap:6px;max-width:100%;border:1px solid #c7d2fe;border-radius:999px;background:#eef2ff;color:#1e3a8a;padding:3px 10px;font-size:.9rem;font-weight:400}
+.remark-tag span{overflow-wrap:anywhere;min-width:0}
+.remark-remove{flex:0 0 auto;border:0;background:transparent;color:inherit;cursor:pointer;font:inherit;font-size:1.15rem;width:24px;min-height:24px;border-radius:50%}
+.remark-remove:hover{background:#c7d2fe}.remark-remove:focus-visible{outline:2px solid #1e40af}
 .remark-combo{position:relative;width:100%;min-width:0}.remark-combo>input{width:100%}
-.remark-dropdown{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:1300;max-height:260px;overflow-y:auto;padding:6px;border:1px solid #cbd5e1;border-radius:14px;background:#fff;box-shadow:0 14px 30px rgba(15,23,42,.16);overscroll-behavior:contain;touch-action:pan-y;-webkit-overflow-scrolling:touch}.remark-dropdown.hidden{display:none!important}
-.remark-option{display:block;width:100%;min-width:0;padding:.58rem .72rem;border:0;border-radius:9px;background:#fff;color:#0f172a;font:inherit;font-size:.9rem;line-height:1.35;text-align:left;overflow-wrap:anywhere;cursor:pointer}.remark-option+.remark-option{margin-top:2px}.remark-option:hover,.remark-option.is-active{background:#eef2ff;color:#1e3a8a}
+.remark-dropdown{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:1300;max-height:260px;overflow-y:auto;padding:6px;border:1px solid #cbd5e1;border-radius:14px;background:#fff;box-shadow:0 14px 30px rgba(15,23,42,.16);overscroll-behavior:contain;touch-action:pan-y;-webkit-overflow-scrolling:touch}
+.remark-dropdown.hidden{display:none!important}
+.remark-option{display:block;width:100%;min-width:0;padding:.58rem .72rem;border:0;border-radius:9px;background:#fff;color:#0f172a;font:inherit;font-size:.9rem;line-height:1.35;text-align:left;overflow-wrap:anywhere;cursor:pointer}
+.remark-option+.remark-option{margin-top:2px}.remark-option:hover,.remark-option.is-active{background:#eef2ff;color:#1e3a8a}
 .remark-option-row{display:flex;align-items:stretch;gap:6px;width:100%;min-width:0}.remark-option-row+.remark-option-row{margin-top:2px}.remark-option-row .remark-option{flex:1 1 auto;width:auto;min-width:0}
-.remark-option-actions{display:flex;flex:0 0 auto;align-items:center;gap:4px}.remark-manage-btn{min-width:32px;padding:.45rem .5rem;border:1px solid #d1d9e6;border-radius:8px;background:#fff;color:#475569;font:inherit;font-size:.78rem;line-height:1;cursor:pointer}
-.remark-manage-btn:hover,.remark-manage-btn:focus-visible{background:#f1f5f9;border-color:#94a3b8;outline:none}.remark-manage-btn.delete:hover,.remark-manage-btn.delete:focus-visible{background:#fee2e2;border-color:#fecaca;color:#991b1b}
+.remark-option-actions{display:flex;flex:0 0 auto;align-items:center;gap:4px}
+.remark-manage-btn{min-width:32px;padding:.45rem .5rem;border:1px solid #d1d9e6;border-radius:8px;background:#fff;color:#475569;font:inherit;font-size:.78rem;line-height:1;cursor:pointer}
+.remark-manage-btn:hover,.remark-manage-btn:focus-visible{background:#f1f5f9;border-color:#94a3b8;outline:none}
+.remark-manage-btn.delete:hover,.remark-manage-btn.delete:focus-visible{background:#fee2e2;border-color:#fecaca;color:#991b1b}
 .remark-empty{padding:.65rem .72rem;color:#94a3b8;font-size:.82rem;text-align:center}
-.btn-primary{grid-column:1/-1;background:#1E40AF;color:white;border:none;border-radius:40px;padding:.85rem 1.5rem;font-weight:600;font-size:1rem;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:.4rem}.btn-primary:hover{background:#1E3A8A;transform:scale(.98)}.btn-primary:active{transform:scale(.96)}.btn-primary:disabled{opacity:.6;cursor:not-allowed;transform:none}
-.table-wrapper{overflow-x:auto;border-radius:20px;border:1px solid #e9edf4;margin-top:.5rem}.page-table{width:100%;border-collapse:collapse;font-size:.95rem}
+.btn-primary{grid-column:1/-1;background:#1E40AF;color:white;border:none;border-radius:40px;padding:.85rem 1.5rem;font-weight:600;font-size:1rem;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:.4rem}
+.btn-primary:hover{background:#1E3A8A;transform:scale(.98)}.btn-primary:active{transform:scale(.96)}.btn-primary:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.table-wrapper{overflow-x:auto;border-radius:20px;border:1px solid #e9edf4;margin-top:.5rem}
+.page-table{width:100%;border-collapse:collapse;font-size:.95rem}
 .page-table th{background:#f1f5f9;text-align:left;padding:.9rem 1.2rem;font-weight:600;color:#1e293b;border-bottom:2px solid #d1d9e6;white-space:nowrap}
 .page-table th.sortable{cursor:pointer;user-select:none;transition:background .15s}.page-table th.sortable:hover{background:#e2e8f0}.page-table th.sortable .sort-icon{margin-left:6px;font-size:.75rem;color:#94a3b8}
-.page-table td{padding:.8rem 1.2rem;border-bottom:1px solid #eef2f6;vertical-align:middle;line-height:1.5}.page-table tbody tr:hover{background:#fafcff}.page-table tbody tr:last-child td{border-bottom:none}
+.page-table td{padding:.8rem 1.2rem;border-bottom:1px solid #eef2f6;vertical-align:middle;line-height:1.5}
+.page-table tbody tr:hover{background:#fafcff}.page-table tbody tr:last-child td{border-bottom:none}
 .page-table .col-title{min-width:200px;vertical-align:top;position:relative;--edit-reserve:4rem;padding-right:calc(1.2rem + var(--edit-reserve));-webkit-user-select:text;user-select:text;font-size:1.1rem;font-weight:700}
-.page-table .col-title>a,.page-table .title-note,.page-table .title-remark{-webkit-user-select:text;user-select:text}.page-table .title-note,.page-table .title-remark{cursor:text}
-.page-table .col-title>a{-webkit-user-drag:none;cursor:default}.page-table .col-title a{color:#1E40AF;text-decoration:none;font-size:inherit;font-weight:inherit}.page-table .col-title a:hover{color:#1E3A8A;text-decoration:underline}
-.page-table .title-note,.page-table .title-remark{margin-top:.28rem;color:#000;font-size:1rem;font-weight:400;line-height:1.45;white-space:normal;overflow-wrap:anywhere}
-.page-table .title-note{width:calc(100% + var(--edit-reserve));max-width:calc(100% + var(--edit-reserve));text-align:justify;text-justify:inter-character;text-align-last:left}.page-table .title-remark .remark-line{display:block;line-height:1.45}
-.page-table .row-edit-link{position:absolute;right:1.2rem;bottom:.8rem;border:none;background:transparent;color:#64748b;padding:0;font:inherit;font-size:1rem;font-weight:400;line-height:1.45;cursor:default;text-decoration:none}.page-table .row-edit-link:hover,.page-table .row-edit-link:focus-visible{color:#64748b;text-decoration:none;outline:none}
+.page-table .col-title>a,.page-table .title-note,.page-table .title-remark{-webkit-user-select:text;user-select:text}
+.page-table .title-note,.page-table .title-remark{cursor:text}
+.page-table .col-title>a{-webkit-user-drag:none;cursor:default}
+.page-table .col-title a{color:#1E40AF;text-decoration:none;font-size:inherit;font-weight:inherit}
+.page-table .col-title a:hover{color:#1E3A8A;text-decoration:underline}
+
+/* 提要与所有标签统一放在同一详情行组中。
+   有无提要都只使用这一套行距，不给第一个标签额外增加 margin。 */
+.page-table .title-details{
+margin-top:.28rem;
+color:#000;
+font-size:1rem;
+font-weight:400;
+line-height:1.45;
+white-space:normal;
+overflow-wrap:anywhere
+}
+.page-table .title-note,
+.page-table .title-remark,
+.page-table .title-remark .remark-line{
+margin:0;
+padding:0;
+font-size:inherit;
+font-weight:inherit;
+line-height:inherit;
+white-space:normal;
+overflow-wrap:anywhere
+}
+.page-table .title-note{
+width:calc(100% + var(--edit-reserve));
+max-width:calc(100% + var(--edit-reserve));
+text-align:justify;
+text-justify:inter-character;
+text-align-last:left
+}
+.page-table .title-remark .remark-line{display:block}
+
+.page-table .row-edit-link{position:absolute;right:1.2rem;bottom:.8rem;border:none;background:transparent;color:#64748b;padding:0;font:inherit;font-size:1rem;font-weight:400;line-height:1.45;cursor:default;text-decoration:none}
+.page-table .row-edit-link:hover,.page-table .row-edit-link:focus-visible{color:#64748b;text-decoration:none;outline:none}
 .empty-row td{padding:2.5rem 1rem;text-align:center;color:#94a3b8;font-size:1rem;background:#fafcff}
-.list-header{display:flex;justify-content:space-between;align-items:baseline;margin:1.8rem 0 .8rem;flex-wrap:wrap;gap:10px}.list-header h2{font-size:1.4rem;font-weight:600;color:#0f172a}.list-header .badge{background:#e9edf4;padding:.2rem 1rem;border-radius:40px;font-size:.8rem;font-weight:500;color:#334155}
-.modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.4);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:999;animation:fadeIn .2s ease}.modal-overlay.hidden{display:none}
-.modal-box{background:white;border-radius:28px;padding:2rem 2rem 1.8rem;max-width:520px;width:92%;box-shadow:0 30px 60px rgba(0,0,0,.25);animation:slideUp .25s ease}.modal-box h3{font-size:1.3rem;font-weight:600;color:#0f172a;margin-bottom:.2rem}.modal-box .modal-sub{color:#64748b;font-size:.9rem;margin-bottom:1.2rem;border-bottom:1px solid #e9edf4;padding-bottom:.8rem}.modal-box .form-group{margin-bottom:1rem}.modal-box .form-group label{font-size:.75rem;font-weight:600;text-transform:uppercase;color:#475569}
-.modal-box .form-group input,.modal-box .form-group textarea{width:100%;background:white;border:1px solid #d1d9e6;border-radius:14px;padding:.6rem 1rem;font-size:.95rem;font-family:inherit;transition:.2s}.modal-box .form-group input:focus,.modal-box .form-group textarea:focus{outline:2px solid #1E40AF;border-color:transparent}.modal-box .form-group textarea{min-height:56px;resize:vertical}
-.modal-actions{display:flex;gap:10px;justify-content:space-between;align-items:center;margin-top:1.2rem}.modal-actions-right{display:flex;gap:10px;align-items:center}.modal-actions .btn-modal{padding:.5rem 1.6rem;border-radius:40px;font-weight:600;font-size:.9rem;border:none;cursor:pointer;transition:.15s}.modal-actions .btn-modal.cancel{background:#f1f5f9;color:#334155}.modal-actions .btn-modal.cancel:hover{background:#e2e8f0}.modal-actions .btn-modal.save{background:#1E40AF;color:white}.modal-actions .btn-modal.save:hover{background:#1E3A8A}.modal-actions .btn-modal.delete{background:#fee2e2;color:#991b1b}.modal-actions .btn-modal.delete:hover{background:#fecaca}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
-.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);padding:.8rem 2rem;border-radius:40px;color:white;font-weight:500;font-size:.9rem;z-index:1000;animation:slideUp .3s ease;box-shadow:0 8px 30px rgba(0,0,0,.2);background:#1E40AF;max-width:90%;text-align:center}.toast.success{background:#16a34a}.toast.error{background:#dc2626}.toast.info{background:#1E40AF}.toast.hidden{display:none}
-.config-overlay{position:fixed;inset:0;width:100%;height:100vh;height:100dvh;background:rgba(0,0,0,.5);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;z-index:1000;animation:fadeIn .25s ease;padding:max(12px,env(safe-area-inset-top)) 12px max(12px,env(safe-area-inset-bottom));overflow:hidden}.config-overlay.hidden{display:none}
+.list-header{display:flex;justify-content:space-between;align-items:baseline;margin:1.8rem 0 .8rem;flex-wrap:wrap;gap:10px}
+.list-header h2{font-size:1.4rem;font-weight:600;color:#0f172a}
+.list-header .badge{background:#e9edf4;padding:.2rem 1rem;border-radius:40px;font-size:.8rem;font-weight:500;color:#334155}
+.modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.4);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:999;animation:fadeIn .2s ease}
+.modal-overlay.hidden{display:none}
+.modal-box{background:white;border-radius:28px;padding:2rem 2rem 1.8rem;max-width:520px;width:92%;box-shadow:0 30px 60px rgba(0,0,0,.25);animation:slideUp .25s ease}
+.modal-box h3{font-size:1.3rem;font-weight:600;color:#0f172a;margin-bottom:.2rem}
+.modal-box .modal-sub{color:#64748b;font-size:.9rem;margin-bottom:1.2rem;border-bottom:1px solid #e9edf4;padding-bottom:.8rem}
+.modal-box .form-group{margin-bottom:.95rem}
+.modal-box .form-group label{font-size:.75rem;font-weight:600;text-transform:uppercase;color:#475569}
+.modal-box .form-group input,.modal-box .form-group textarea{width:100%;background:white;border:1px solid #d1d9e6;border-radius:14px;padding:.6rem 1rem;font-size:.95rem;font-family:inherit;transition:.2s}
+.modal-box .form-group input:focus,.modal-box .form-group textarea:focus{outline:2px solid #1E40AF;border-color:transparent}
+.modal-box .form-group textarea{min-height:56px;resize:vertical}
+.modal-actions{display:flex;gap:10px;justify-content:space-between;align-items:center;margin-top:1.2rem}
+.modal-actions-right{display:flex;gap:10px;align-items:center}
+.modal-actions .btn-modal{padding:.5rem 1.6rem;border-radius:40px;font-weight:600;font-size:.9rem;border:none;cursor:pointer;transition:.15s}
+.modal-actions .btn-modal.cancel{background:#f1f5f9;color:#334155}.modal-actions .btn-modal.cancel:hover{background:#e2e8f0}
+.modal-actions .btn-modal.save{background:#1E40AF;color:white}.modal-actions .btn-modal.save:hover{background:#1E3A8A}
+.modal-actions .btn-modal.delete{background:#fee2e2;color:#991b1b}.modal-actions .btn-modal.delete:hover{background:#fecaca}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);padding:.8rem 2rem;border-radius:40px;color:white;font-weight:500;font-size:.9rem;z-index:1000;animation:slideUp .3s ease;box-shadow:0 8px 30px rgba(0,0,0,.2);background:#1E40AF;max-width:90%;text-align:center}
+.toast.success{background:#16a34a}.toast.error{background:#dc2626}.toast.info{background:#1E40AF}.toast.hidden{display:none}
+.config-overlay{position:fixed;inset:0;width:100%;height:100vh;height:100dvh;background:rgba(0,0,0,.5);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;z-index:1000;animation:fadeIn .25s ease;padding:max(12px,env(safe-area-inset-top)) 12px max(12px,env(safe-area-inset-bottom));overflow:hidden}
+.config-overlay.hidden{display:none}
 .config-box{background:white;border-radius:28px;padding:2rem 2rem 1.2rem;max-width:560px;width:min(94%,560px);max-height:calc(100vh - 24px);max-height:calc(100dvh - max(24px,env(safe-area-inset-top) + env(safe-area-inset-bottom) + 16px));overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-gutter:stable;box-shadow:0 30px 60px rgba(0,0,0,.3);animation:slideUp .25s ease}
-.config-box::-webkit-scrollbar{width:8px}.config-box::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:999px}.config-box::-webkit-scrollbar-track{background:transparent}.config-box h3{font-size:1.3rem;font-weight:600;color:#0f172a;margin-bottom:.5rem}.config-box .config-desc{color:#64748b;font-size:.9rem;margin-bottom:1.2rem;border-bottom:1px solid #e9edf4;padding-bottom:.8rem}.config-box .form-group{margin-bottom:1rem}.config-box .form-group label{font-size:.75rem;font-weight:600;text-transform:uppercase;color:#475569}
-.config-box .form-group input{width:100%;background:white;border:1px solid #d1d9e6;border-radius:14px;padding:.7rem 1rem;font-size:.95rem;font-family:inherit;transition:.2s}.config-box .form-group input:focus{outline:2px solid #1E40AF;border-color:transparent}.config-box .form-group .hint{font-size:.75rem;color:#94a3b8;margin-top:4px}.config-box .form-group .hint a{color:#1E40AF;text-decoration:none;cursor:default}.config-box .form-group .hint a:hover{text-decoration:underline}
-.config-box .token-save-option{display:flex;flex-direction:row;align-items:center;gap:8px;margin-top:8px;color:#475569;font-size:.82rem;font-weight:500;text-transform:none;letter-spacing:0;cursor:pointer}.config-box .token-save-option input[type=checkbox]{width:16px;height:16px;margin:0;padding:0;accent-color:#1E40AF;cursor:pointer;flex:0 0 auto}.config-box .token-save-hint{margin-left:24px;color:#64748b;line-height:1.5}
-.config-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:1.2rem;position:sticky;bottom:0;z-index:3;background:linear-gradient(to bottom,rgba(255,255,255,.88),#fff 24%);padding:.9rem 0 max(.2rem,env(safe-area-inset-bottom))}.config-actions .btn-config{padding:.5rem 1.8rem;border-radius:40px;font-weight:600;font-size:.9rem;border:none;cursor:pointer;transition:.15s}.config-actions .btn-config.primary{background:#1E40AF;color:white}.config-actions .btn-config.primary:hover{background:#1E3A8A}.config-actions .btn-config.secondary{background:#f1f5f9;color:#334155}.config-actions .btn-config.secondary:hover{background:#e2e8f0}
-.back-to-top{position:fixed;left:auto;right:16px;top:70%;transform:translateY(-50%);z-index:900;display:block;width:30px;height:26px;padding:0;border:0;border-radius:0;background:#1E40AF;clip-path:polygon(50% 0,100% 100%,0 100%);cursor:pointer;opacity:1;filter:drop-shadow(0 4px 7px rgba(30,64,175,.24));transition:opacity .2s,background .2s,transform .2s}.back-to-top:hover,.back-to-top:focus-visible{opacity:1;background:#1E3A8A;transform:translateY(calc(-50% - 2px));outline:none}
+.config-box::-webkit-scrollbar{width:8px}.config-box::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:999px}.config-box::-webkit-scrollbar-track{background:transparent}
+.config-box h3{font-size:1.3rem;font-weight:600;color:#0f172a;margin-bottom:.5rem}
+.config-box .config-desc{color:#64748b;font-size:.9rem;margin-bottom:1.2rem;border-bottom:1px solid #e9edf4;padding-bottom:.8rem}
+.config-box .form-group{margin-bottom:1rem}
+.config-box .form-group label{font-size:.75rem;font-weight:600;text-transform:uppercase;color:#475569}
+.config-box .form-group input{width:100%;background:white;border:1px solid #d1d9e6;border-radius:14px;padding:.7rem 1rem;font-size:.95rem;font-family:inherit;transition:.2s}
+.config-box .form-group input:focus{outline:2px solid #1E40AF;border-color:transparent}
+.config-box .form-group .hint{font-size:.75rem;color:#94a3b8;margin-top:4px}
+.config-box .form-group .hint a{color:#1E40AF;text-decoration:none;cursor:default}
+.config-box .form-group .hint a:hover{text-decoration:underline}
+.config-box .token-save-option{display:flex;flex-direction:row;align-items:center;gap:8px;margin-top:8px;color:#475569;font-size:.82rem;font-weight:500;text-transform:none;letter-spacing:0;cursor:pointer}
+.config-box .token-save-option input[type=checkbox]{width:16px;height:16px;margin:0;padding:0;accent-color:#1E40AF;cursor:pointer;flex:0 0 auto}
+.config-box .token-save-hint{margin-left:24px;color:#64748b;line-height:1.5}
+.config-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:1.2rem;position:sticky;bottom:0;z-index:3;background:linear-gradient(to bottom,rgba(255,255,255,.88),#fff 24%);padding:.9rem 0 max(.2rem,env(safe-area-inset-bottom))}
+.config-actions .btn-config{padding:.5rem 1.8rem;border-radius:40px;font-weight:600;font-size:.9rem;border:none;cursor:pointer;transition:.15s}
+.config-actions .btn-config.primary{background:#1E40AF;color:white}.config-actions .btn-config.primary:hover{background:#1E3A8A}
+.config-actions .btn-config.secondary{background:#f1f5f9;color:#334155}.config-actions .btn-config.secondary:hover{background:#e2e8f0}
+.back-to-top{position:fixed;left:auto;right:16px;top:70%;transform:translateY(-50%);z-index:900;display:block;width:30px;height:26px;padding:0;border:0;border-radius:0;background:#1E40AF;clip-path:polygon(50% 0,100% 100%,0 100%);cursor:pointer;opacity:1;filter:drop-shadow(0 4px 7px rgba(30,64,175,.24));transition:opacity .2s,background .2s,transform .2s}
+.back-to-top:hover,.back-to-top:focus-visible{opacity:1;background:#1E3A8A;transform:translateY(calc(-50% - 2px));outline:none}
 @media(max-width:700px){
-body{width:100%;max-width:100%;padding:.75rem .5rem;overflow-x:hidden}.container{width:100%;max-width:100%;min-width:0;padding:1.2rem}.table-wrapper{width:100%;max-width:100%;min-width:0;overflow-x:hidden}.page-table{width:100%;max-width:100%;min-width:0;table-layout:fixed}.page-table th,.page-table td,.page-table .col-title{width:100%;max-width:100%;min-width:0}.page-table .col-title{overflow-wrap:anywhere;word-break:break-word}.page-table .col-title>a{display:inline;max-width:100%;overflow-wrap:anywhere;word-break:break-all}.page-table .title-note,.page-table .title-remark{max-width:100%;overflow-wrap:anywhere;word-break:break-word}.page-table .col-title{--edit-reserve:0rem;padding-right:.8rem}.page-table .title-note{width:100%;max-width:100%}.page-table .row-edit-link{right:.8rem;bottom:.6rem}.form-grid{grid-template-columns:1fr}.page-table th,.page-table td{padding:.6rem .8rem;font-size:.85rem}.toolbar{flex-direction:column;align-items:stretch}.toolbar .left-group,.toolbar .right-group{justify-content:center}.cloud-status{float:none;margin-top:0}.config-overlay{align-items:stretch;padding:max(8px,env(safe-area-inset-top)) 8px max(8px,env(safe-area-inset-bottom))}.config-box{width:100%;max-height:calc(100dvh - max(16px,env(safe-area-inset-top) + env(safe-area-inset-bottom) + 8px));margin:auto 0;padding:1.25rem 1rem .8rem;border-radius:22px}.config-actions{gap:8px}.config-actions .btn-config{flex:1 1 0;min-width:0;padding-left:.75rem;padding-right:.75rem}.back-to-top{right:3px;top:70%;width:24px;height:21px;padding:0}
+body{width:100%;max-width:100%;padding:.75rem .5rem;overflow-x:hidden}
+.container{width:100%;max-width:100%;min-width:0;padding:1.2rem}
+.table-wrapper{width:100%;max-width:100%;min-width:0;overflow-x:hidden}
+.page-table{width:100%;max-width:100%;min-width:0;table-layout:fixed}
+.page-table th,.page-table td,.page-table .col-title{width:100%;max-width:100%;min-width:0}
+.page-table .col-title{overflow-wrap:anywhere;word-break:break-word}
+.page-table .col-title>a{display:inline;max-width:100%;overflow-wrap:anywhere;word-break:break-all}
+.page-table .title-details,.page-table .title-note,.page-table .title-remark{max-width:100%;overflow-wrap:anywhere;word-break:break-word}
+.page-table .col-title{--edit-reserve:0rem;padding-right:.8rem}
+.page-table .title-note{width:100%;max-width:100%}
+.page-table .row-edit-link{right:.8rem;bottom:.6rem}
+.form-grid{grid-template-columns:1fr}
+.page-table th,.page-table td{padding:.6rem .8rem;font-size:.85rem}
+.toolbar{flex-direction:column;align-items:stretch}
+.toolbar .left-group,.toolbar .right-group{justify-content:center}
+.cloud-status{float:none;margin-top:0}
+.config-overlay{align-items:stretch;padding:max(8px,env(safe-area-inset-top)) 8px max(8px,env(safe-area-inset-bottom))}
+.config-box{width:100%;max-height:calc(100dvh - max(16px,env(safe-area-inset-top) + env(safe-area-inset-bottom) + 8px));margin:auto 0;padding:1.25rem 1rem .8rem;border-radius:22px}
+.config-actions{gap:8px}
+.config-actions .btn-config{flex:1 1 0;min-width:0;padding-left:.75rem;padding-right:.75rem}
+.back-to-top{right:3px;top:70%;width:24px;height:21px;padding:0}
 }
 .config-box{padding:0;display:grid;grid-template-rows:minmax(0,1fr) auto;overflow:hidden}
 .config-scroll{min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-width:auto;scrollbar-color:#94a3b8 #eef2f7;scrollbar-gutter:stable;padding:2rem 2rem 1rem;touch-action:pan-y}
 .config-scroll::-webkit-scrollbar{width:10px}.config-scroll::-webkit-scrollbar-track{background:#eef2f7}.config-scroll::-webkit-scrollbar-thumb{background:#94a3b8;border:2px solid #eef2f7;border-radius:999px}
 .config-actions{position:static;bottom:auto;flex:0 0 auto;margin-top:0;padding:.9rem 2rem max(1.2rem,env(safe-area-inset-bottom));border-top:1px solid #e9edf4;background:#fff;box-shadow:0 -8px 20px rgba(15,23,42,.06)}
 @media(max-width:700px){
-.config-overlay{top:var(--config-vv-top,0px);bottom:auto;height:var(--config-vv-height,100dvh);min-height:0;padding:max(8px,env(safe-area-inset-top)) 8px max(8px,env(safe-area-inset-bottom));align-items:stretch;overflow:hidden}.config-box{width:100%;max-width:none;height:100%;max-height:none;min-height:0;margin:0;border-radius:22px}.config-scroll{min-height:0;padding:1.25rem 1rem 1rem}.config-actions{width:100%;padding:.85rem 1rem max(.85rem,env(safe-area-inset-bottom))}
+.config-overlay{top:var(--config-vv-top,0px);bottom:auto;height:var(--config-vv-height,100dvh);min-height:0;padding:max(8px,env(safe-area-inset-top)) 8px max(8px,env(safe-area-inset-bottom));align-items:stretch;overflow:hidden}
+.config-box{width:100%;max-width:none;height:100%;max-height:none;min-height:0;margin:0;border-radius:22px}
+.config-scroll{min-height:0;padding:1.25rem 1rem 1rem}
+.config-actions{width:100%;padding:.85rem 1rem max(.85rem,env(safe-area-inset-bottom))}
 }
 </style>
 </head>
 <body>
 <div class="container">
 <h1>Pages <span class="cloud-status" id="cloudStatus"><span class="dot" id="statusDot"></span><span id="statusText">未配置</span></span></h1>
+
 <div class="toolbar">
 <div class="left-group">
 <button class="btn-sync" id="syncBtn">同步</button>
@@ -94,13 +193,24 @@ body{width:100%;max-width:100%;padding:.75rem .5rem;overflow-x:hidden}.container
 <div class="form-grid">
 <div class="form-group full-width"><label for="pageInput">标题</label><input type="text" id="pageInput" autofocus></div>
 <div class="form-group full-width"><label for="noteInput">提要</label><input type="text" id="noteInput"></div>
-<div class="form-group full-width"><label for="remarkInput">备注</label><div class="remark-combo" id="remarkCombo"><input type="text" id="remarkInput" autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-controls="remarkOptions"><div class="remark-dropdown hidden" id="remarkDropdown"><div id="remarkOptions"></div></div></div></div>
+<div class="form-group full-width">
+<label for="remarkInput">备注</label>
+<div class="remark-combo" id="remarkCombo">
+<input type="text" id="remarkInput" autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-controls="remarkOptions">
+<div class="remark-dropdown hidden" id="remarkDropdown"><div id="remarkOptions"></div></div>
+</div>
+</div>
 <button class="btn-primary" id="addBtn">添加</button>
 </div>
 </div>
 
 <div class="list-header"><h2>总表</h2><span class="badge" id="countDisplay">0/0</span></div>
-<div class="table-wrapper"><table class="page-table" id="pageTable"><thead><tr><th>标题</th></tr></thead><tbody id="tableBody"><tr class="empty-row"><td>加载中...</td></tr></tbody></table></div>
+<div class="table-wrapper">
+<table class="page-table" id="pageTable">
+<thead><tr><th>标题</th></tr></thead>
+<tbody id="tableBody"><tr class="empty-row"><td>加载中...</td></tr></tbody>
+</table>
+</div>
 </div>
 
 <div class="modal-overlay hidden" id="editModal">
@@ -109,8 +219,20 @@ body{width:100%;max-width:100%;padding:.75rem .5rem;overflow-x:hidden}.container
 <div class="modal-sub" id="editModalTitle">标题：<span id="editTitleDisplay"></span></div>
 <div class="form-group"><label for="editPageInput">标题</label><input type="text" id="editPageInput"><div class="hint">格式：[标题](链接)</div></div>
 <div class="form-group"><label for="editNoteInput">提要</label><input type="text" id="editNoteInput"></div>
-<div class="form-group"><label for="editRemarkInput">备注</label><div class="remark-combo" id="editRemarkCombo"><input type="text" id="editRemarkInput" autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-controls="editRemarkOptions"><div class="remark-dropdown hidden" id="editRemarkDropdown"><div id="editRemarkOptions"></div></div></div></div>
-<div class="modal-actions"><button class="btn-modal delete" id="editDeleteBtn">删除</button><div class="modal-actions-right"><button class="btn-modal cancel" id="editCancelBtn">取消</button><button class="btn-modal save" id="editSaveBtn">保存</button></div></div>
+<div class="form-group">
+<label for="editRemarkInput">备注</label>
+<div class="remark-combo" id="editRemarkCombo">
+<input type="text" id="editRemarkInput" autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-controls="editRemarkOptions">
+<div class="remark-dropdown hidden" id="editRemarkDropdown"><div id="editRemarkOptions"></div></div>
+</div>
+</div>
+<div class="modal-actions">
+<button class="btn-modal delete" id="editDeleteBtn">删除</button>
+<div class="modal-actions-right">
+<button class="btn-modal cancel" id="editCancelBtn">取消</button>
+<button class="btn-modal save" id="editSaveBtn">保存</button>
+</div>
+</div>
 </div>
 </div>
 
@@ -119,12 +241,26 @@ body{width:100%;max-width:100%;padding:.75rem .5rem;overflow-x:hidden}.container
 <div class="config-scroll">
 <h3>GitHub 云端配置</h3>
 <div class="config-desc">配置后数据将保存到您的 GitHub 仓库，在任何设备上打开都能同步。</div>
-<div class="form-group"><label for="cfgToken">GitHub Personal Access Token *</label><input type="password" id="cfgToken" name="github-token" autocomplete="current-password" spellcheck="false" placeholder="ghp_xxxxxxxxxxxx"><label class="token-save-option" for="cfgRememberToken"><input type="checkbox" id="cfgRememberToken" checked><span>在本设备保存Token。若浏览器出现“保存密码”提示，请选择保存；开启浏览器密码同步后，其他设备可自动填充。</span></label><div class="hint"><a href="https://github.com/settings/tokens" target="_blank" rel="noopener noreferrer">创建 Token</a>（需要勾选 <strong>repo</strong> 权限，有效期建议选择 <strong>No expiration</strong>）</div></div>
+
+<div class="form-group">
+<label for="cfgToken">GitHub Personal Access Token *</label>
+<input type="password" id="cfgToken" name="github-token" autocomplete="current-password" spellcheck="false" placeholder="ghp_xxxxxxxxxxxx">
+<label class="token-save-option" for="cfgRememberToken">
+<input type="checkbox" id="cfgRememberToken" checked>
+<span>在本设备保存Token。若浏览器出现“保存密码”提示，请选择保存；开启浏览器密码同步后，其他设备可自动填充。</span>
+</label>
+<div class="hint"><a href="https://github.com/settings/tokens" target="_blank" rel="noopener noreferrer">创建 Token</a>（需要勾选 <strong>repo</strong> 权限，有效期建议选择 <strong>No expiration</strong>）</div>
+</div>
+
 <div class="form-group"><label for="cfgOwner">仓库所有者 *</label><input type="text" id="cfgOwner" placeholder="你的GitHub用户名"></div>
 <div class="form-group"><label for="cfgRepo">仓库名称 *</label><input type="text" id="cfgRepo" placeholder="仓库名"><div class="hint">数据将保存在此仓库的 pages_data.json 文件中</div></div>
 <div class="form-group"><label for="cfgFile">数据文件名</label><input type="text" id="cfgFile" placeholder="pages_data.json" value="pages_data.json"></div>
 </div>
-<div class="config-actions"><button type="button" class="btn-config secondary" id="configCancelBtn">取消</button><button type="button" class="btn-config primary" id="configSaveBtn">保存并连接</button></div>
+
+<div class="config-actions">
+<button type="button" class="btn-config secondary" id="configCancelBtn">取消</button>
+<button type="button" class="btn-config primary" id="configSaveBtn">保存并连接</button>
+</div>
 </div>
 </div>
 
@@ -133,17 +269,97 @@ body{width:100%;max-width:100%;padding:.75rem .5rem;overflow-x:hidden}.container
 
 <script>
 (function(){
-const CONFIG_KEY='pages_github_config',TOKEN_PERSISTED_KEY='pages_github_token_persisted_v1',WORKING_COPY_KEY='pages_working_copy_v1',REMARK_HISTORY_KEY='pages_remark_history_v1',REMARK_HIDDEN_KEY='pages_remark_hidden_v1',SYNC_META_KEY='pages_sync_meta_v2',SYNC_BASE_KEY='pages_sync_base_v2';
-const DB_NAME='pages_app_storage_v1',DB_VERSION=1,DB_STORE='kv',OPFS_WORKING_COPY_FILE='pages-working-copy-v1.json';
-const AUTO_SYNC_DELAY=700,PASSIVE_SYNC_DELAY=700,PASSIVE_SYNC_MIN_INTERVAL=3000,MAX_SYNC_BYTES=750*1024,MAX_WRITE_CONFLICT_RETRIES=3;
-let pages=[],tombstones=[],editingIndex=null,isSyncing=false,remarkHistory=[],remarkHidden=new Set(),backToTopAnimationFrame=null;
-let config={token:'',rememberToken:true,owner:'',repo:'',file:'pages_data.json'},memoryToken='',dbPromise=null,workingCopyQueue=Promise.resolve(),workingCopyRevision=0,localStateReady=false,hadStoredState=false;
-let syncMeta={target:'',sha:null,fingerprint:null,dirty:false,lastSyncAt:null},syncBase=null,localMutationVersion=0,syncInFlight=null,syncRequested=false,syncShowResult=false,syncInteractive=false,autoSyncTimer=null,passiveSyncTimer=null,lastPassiveSyncAt=0;
+'use strict';
 
-const pageInput=document.getElementById('pageInput'),noteInput=document.getElementById('noteInput'),remarkCombo=document.getElementById('remarkCombo'),remarkInput=document.getElementById('remarkInput'),remarkDropdown=document.getElementById('remarkDropdown'),remarkOptions=document.getElementById('remarkOptions'),addBtn=document.getElementById('addBtn'),tableBody=document.getElementById('tableBody'),countDisplay=document.getElementById('countDisplay'),exportBtn=document.getElementById('exportBtn'),importBtn=document.getElementById('importBtn'),fileInput=document.getElementById('fileInput'),syncBtn=document.getElementById('syncBtn'),lastSyncTime=document.getElementById('lastSyncTime'),statusDot=document.getElementById('statusDot'),statusText=document.getElementById('statusText'),configBtn=document.getElementById('configBtn'),backToTopBtn=document.getElementById('backToTopBtn'),tableWrapper=document.querySelector('.table-wrapper');
-const editModal=document.getElementById('editModal'),editTitleDisplay=document.getElementById('editTitleDisplay'),editPageInput=document.getElementById('editPageInput'),editNoteInput=document.getElementById('editNoteInput'),editRemarkCombo=document.getElementById('editRemarkCombo'),editRemarkInput=document.getElementById('editRemarkInput'),editRemarkDropdown=document.getElementById('editRemarkDropdown'),editRemarkOptions=document.getElementById('editRemarkOptions'),editDeleteBtn=document.getElementById('editDeleteBtn'),editCancelBtn=document.getElementById('editCancelBtn'),editSaveBtn=document.getElementById('editSaveBtn');
-const configModal=document.getElementById('configModal'),cfgToken=document.getElementById('cfgToken'),cfgRememberToken=document.getElementById('cfgRememberToken'),cfgOwner=document.getElementById('cfgOwner'),cfgRepo=document.getElementById('cfgRepo'),cfgFile=document.getElementById('cfgFile'),configCancelBtn=document.getElementById('configCancelBtn'),configSaveBtn=document.getElementById('configSaveBtn');
-const toast=document.getElementById('toast');let toastTimer=null;
+const CONFIG_KEY='pages_github_config',
+TOKEN_PERSISTED_KEY='pages_github_token_persisted_v1',
+WORKING_COPY_KEY='pages_working_copy_v1',
+REMARK_HISTORY_KEY='pages_remark_history_v1',
+REMARK_HIDDEN_KEY='pages_remark_hidden_v1',
+SYNC_META_KEY='pages_sync_meta_v2',
+SYNC_BASE_KEY='pages_sync_base_v2';
+
+const DB_NAME='pages_app_storage_v1',
+DB_VERSION=1,
+DB_STORE='kv',
+OPFS_WORKING_COPY_FILE='pages-working-copy-v1.json';
+
+const AUTO_SYNC_DELAY=700,
+PASSIVE_SYNC_DELAY=700,
+PASSIVE_SYNC_MIN_INTERVAL=3000,
+MAX_SYNC_BYTES=750*1024,
+MAX_WRITE_CONFLICT_RETRIES=3;
+
+let pages=[],
+tombstones=[],
+editingIndex=null,
+isSyncing=false,
+remarkHistory=[],
+remarkHidden=new Set(),
+backToTopAnimationFrame=null;
+
+let config={token:'',rememberToken:true,owner:'',repo:'',file:'pages_data.json'},
+memoryToken='',
+dbPromise=null,
+workingCopyQueue=Promise.resolve(),
+workingCopyRevision=0,
+localStateReady=false,
+hadStoredState=false;
+
+let syncMeta={target:'',sha:null,fingerprint:null,dirty:false,lastSyncAt:null},
+syncBase=null,
+localMutationVersion=0,
+syncInFlight=null,
+syncRequested=false,
+syncShowResult=false,
+syncInteractive=false,
+autoSyncTimer=null,
+passiveSyncTimer=null,
+lastPassiveSyncAt=0;
+
+const pageInput=document.getElementById('pageInput'),
+noteInput=document.getElementById('noteInput'),
+remarkCombo=document.getElementById('remarkCombo'),
+remarkInput=document.getElementById('remarkInput'),
+remarkDropdown=document.getElementById('remarkDropdown'),
+remarkOptions=document.getElementById('remarkOptions'),
+addBtn=document.getElementById('addBtn'),
+tableBody=document.getElementById('tableBody'),
+countDisplay=document.getElementById('countDisplay'),
+exportBtn=document.getElementById('exportBtn'),
+importBtn=document.getElementById('importBtn'),
+fileInput=document.getElementById('fileInput'),
+syncBtn=document.getElementById('syncBtn'),
+lastSyncTime=document.getElementById('lastSyncTime'),
+statusDot=document.getElementById('statusDot'),
+statusText=document.getElementById('statusText'),
+configBtn=document.getElementById('configBtn'),
+backToTopBtn=document.getElementById('backToTopBtn'),
+tableWrapper=document.querySelector('.table-wrapper');
+
+const editModal=document.getElementById('editModal'),
+editTitleDisplay=document.getElementById('editTitleDisplay'),
+editPageInput=document.getElementById('editPageInput'),
+editNoteInput=document.getElementById('editNoteInput'),
+editRemarkCombo=document.getElementById('editRemarkCombo'),
+editRemarkInput=document.getElementById('editRemarkInput'),
+editRemarkDropdown=document.getElementById('editRemarkDropdown'),
+editRemarkOptions=document.getElementById('editRemarkOptions'),
+editDeleteBtn=document.getElementById('editDeleteBtn'),
+editCancelBtn=document.getElementById('editCancelBtn'),
+editSaveBtn=document.getElementById('editSaveBtn');
+
+const configModal=document.getElementById('configModal'),
+cfgToken=document.getElementById('cfgToken'),
+cfgRememberToken=document.getElementById('cfgRememberToken'),
+cfgOwner=document.getElementById('cfgOwner'),
+cfgRepo=document.getElementById('cfgRepo'),
+cfgFile=document.getElementById('cfgFile'),
+configCancelBtn=document.getElementById('configCancelBtn'),
+configSaveBtn=document.getElementById('configSaveBtn');
+
+const toast=document.getElementById('toast');
+let toastTimer=null;
 
 const pinyinCollator=new Intl.Collator('zh-CN-u-co-pinyin',{usage:'sort',sensitivity:'base',numeric:true,ignorePunctuation:true});
 const generalCollator=new Intl.Collator('zh-CN',{usage:'sort',sensitivity:'base',numeric:true,ignorePunctuation:true});
@@ -151,124 +367,730 @@ const strokeCollator=new Intl.Collator('zh-CN-u-co-stroke',{usage:'sort',sensiti
 
 function openDb(){
 if(dbPromise)return dbPromise;
-dbPromise=new Promise((resolve,reject)=>{const request=indexedDB.open(DB_NAME,DB_VERSION);request.onupgradeneeded=()=>{const db=request.result;if(!db.objectStoreNames.contains(DB_STORE))db.createObjectStore(DB_STORE)};request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error||new Error('IndexedDB 打开失败'));request.onblocked=()=>console.warn('IndexedDB 升级被其他页面阻塞')});
+
+dbPromise=new Promise((resolve,reject)=>{
+const request=indexedDB.open(DB_NAME,DB_VERSION);
+
+request.onupgradeneeded=()=>{
+const db=request.result;
+if(!db.objectStoreNames.contains(DB_STORE))db.createObjectStore(DB_STORE)
+};
+
+request.onsuccess=()=>resolve(request.result);
+request.onerror=()=>reject(request.error||new Error('IndexedDB 打开失败'));
+request.onblocked=()=>console.warn('IndexedDB 升级被其他页面阻塞')
+});
+
 return dbPromise
 }
-async function idbGet(key){const db=await openDb();return new Promise((resolve,reject)=>{const tx=db.transaction(DB_STORE,'readonly'),req=tx.objectStore(DB_STORE).get(key);req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error||new Error('IndexedDB 读取失败'))})}
-async function idbSet(key,value){const db=await openDb();return new Promise((resolve,reject)=>{const tx=db.transaction(DB_STORE,'readwrite');tx.objectStore(DB_STORE).put(value,key);tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error||new Error('IndexedDB 写入失败'));tx.onabort=()=>reject(tx.error||new Error('IndexedDB 写入中止'))})}
-async function idbDelete(key){const db=await openDb();return new Promise((resolve,reject)=>{const tx=db.transaction(DB_STORE,'readwrite');tx.objectStore(DB_STORE).delete(key);tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error||new Error('IndexedDB 删除失败'));tx.onabort=()=>reject(tx.error||new Error('IndexedDB 写入中止'))})}
-function isValidWorkingCopy(record){return Boolean(record&&(record.version===1||record.version===2)&&Array.isArray(record.pages)&&Number.isFinite(Number(record.savedAt)))}
-async function readOpfsWorkingCopy(){if(!navigator.storage?.getDirectory)throw new Error('OPFS 不可用');const root=await navigator.storage.getDirectory(),handle=await root.getFileHandle(OPFS_WORKING_COPY_FILE);const file=await handle.getFile();return JSON.parse(await file.text())}
-async function writeOpfsWorkingCopy(record){if(!navigator.storage?.getDirectory)throw new Error('OPFS 不可用');const root=await navigator.storage.getDirectory(),handle=await root.getFileHandle(OPFS_WORKING_COPY_FILE,{create:true}),writer=await handle.createWritable();try{await writer.write(JSON.stringify(record));await writer.close()}catch(error){try{await writer.abort()}catch{}throw error}}
-async function persistWorkingCopy(record){const results=await Promise.allSettled([idbSet(WORKING_COPY_KEY,record),writeOpfsWorkingCopy(record)]);if(!results.some(result=>result.status==='fulfilled'))throw new Error('IndexedDB 与 OPFS 均保存失败')}
-function saveWorkingCopy(){const snapshot=getLocalSnapshot(),record={version:2,savedAt:Date.now(),revision:++workingCopyRevision,pages:structuredClone(snapshot.pages),tombstones:structuredClone(snapshot.tombstones)};workingCopyQueue=workingCopyQueue.catch(()=>{}).then(()=>persistWorkingCopy(record)).catch(error=>console.error('保存 Pages 工作副本失败:',error));return workingCopyQueue}
-async function readBestWorkingCopy(){let idbRecord=null,opfsRecord=null;try{idbRecord=await idbGet(WORKING_COPY_KEY)}catch(error){console.warn('读取 IndexedDB 工作副本失败:',error)}try{opfsRecord=await readOpfsWorkingCopy()}catch(error){if(error?.name!=='NotFoundError')console.warn('读取 OPFS 工作副本失败:',error)}const valid=[idbRecord,opfsRecord].filter(isValidWorkingCopy).sort((a,b)=>Number(b.savedAt)-Number(a.savedAt));const best=valid[0]||null;if(best){const repairs=await Promise.allSettled([idbSet(WORKING_COPY_KEY,best),writeOpfsWorkingCopy(best)]);if(repairs.every(result=>result.status==='rejected'))console.warn('工作副本恢复后无法重新建立本地双副本')}return best}
-async function requestPersistentStorage(){try{if(navigator.storage?.persist)await navigator.storage.persist()}catch(error){console.warn('请求持久存储失败:',error)}}
-function persistRemarkHidden(){void idbSet(REMARK_HIDDEN_KEY,[...remarkHidden]).catch(error=>console.error('保存已删除备注选项失败:',error))}
-function persistRemarkHistory(){void idbSet(REMARK_HISTORY_KEY,[...remarkHistory]).catch(error=>console.error('保存备注历史失败:',error))}
-async function loadRemarkState(){try{const [storedHistory,storedHidden]=await Promise.all([idbGet(REMARK_HISTORY_KEY),idbGet(REMARK_HIDDEN_KEY)]);remarkHistory=Array.isArray(storedHistory)?storedHistory.map(normalizeRemarkValue).filter(Boolean):[];remarkHidden=new Set((Array.isArray(storedHidden)?storedHidden:[]).map(remarkHistoryKey).filter(Boolean))}catch(error){console.error('读取备注本地状态失败:',error);remarkHistory=[];remarkHidden=new Set()}}
 
-function normalizeSortText(v){return typeof v==='string'?v.normalize('NFKC').trim():''}
+async function idbGet(key){
+const db=await openDb();
+
+return new Promise((resolve,reject)=>{
+const tx=db.transaction(DB_STORE,'readonly'),
+req=tx.objectStore(DB_STORE).get(key);
+
+req.onsuccess=()=>resolve(req.result);
+req.onerror=()=>reject(req.error||new Error('IndexedDB 读取失败'))
+})
+}
+
+async function idbSet(key,value){
+const db=await openDb();
+
+return new Promise((resolve,reject)=>{
+const tx=db.transaction(DB_STORE,'readwrite');
+
+tx.objectStore(DB_STORE).put(value,key);
+tx.oncomplete=()=>resolve();
+tx.onerror=()=>reject(tx.error||new Error('IndexedDB 写入失败'));
+tx.onabort=()=>reject(tx.error||new Error('IndexedDB 写入中止'))
+})
+}
+
+async function idbDelete(key){
+const db=await openDb();
+
+return new Promise((resolve,reject)=>{
+const tx=db.transaction(DB_STORE,'readwrite');
+
+tx.objectStore(DB_STORE).delete(key);
+tx.oncomplete=()=>resolve();
+tx.onerror=()=>reject(tx.error||new Error('IndexedDB 删除失败'));
+tx.onabort=()=>reject(tx.error||new Error('IndexedDB 写入中止'))
+})
+}
+
+function isValidWorkingCopy(record){
+return Boolean(
+record &&
+(record.version===1||record.version===2) &&
+Array.isArray(record.pages) &&
+Number.isFinite(Number(record.savedAt))
+)
+}
+
+async function readOpfsWorkingCopy(){
+if(!navigator.storage?.getDirectory)throw new Error('OPFS 不可用');
+
+const root=await navigator.storage.getDirectory(),
+handle=await root.getFileHandle(OPFS_WORKING_COPY_FILE),
+file=await handle.getFile();
+
+return JSON.parse(await file.text())
+}
+
+async function writeOpfsWorkingCopy(record){
+if(!navigator.storage?.getDirectory)throw new Error('OPFS 不可用');
+
+const root=await navigator.storage.getDirectory(),
+handle=await root.getFileHandle(OPFS_WORKING_COPY_FILE,{create:true}),
+writer=await handle.createWritable();
+
+try{
+await writer.write(JSON.stringify(record));
+await writer.close()
+}catch(error){
+try{await writer.abort()}catch{}
+throw error
+}
+}
+
+async function persistWorkingCopy(record){
+const results=await Promise.allSettled([
+idbSet(WORKING_COPY_KEY,record),
+writeOpfsWorkingCopy(record)
+]);
+
+if(!results.some(result=>result.status==='fulfilled')){
+throw new Error('IndexedDB 与 OPFS 均保存失败')
+}
+}
+
+function saveWorkingCopy(){
+const snapshot=getLocalSnapshot(),
+record={
+version:2,
+savedAt:Date.now(),
+revision:++workingCopyRevision,
+pages:structuredClone(snapshot.pages),
+tombstones:structuredClone(snapshot.tombstones)
+};
+
+workingCopyQueue=workingCopyQueue
+.catch(()=>{})
+.then(()=>persistWorkingCopy(record))
+.catch(error=>console.error('保存 Pages 工作副本失败:',error));
+
+return workingCopyQueue
+}
+
+async function readBestWorkingCopy(){
+let idbRecord=null,
+opfsRecord=null;
+
+try{
+idbRecord=await idbGet(WORKING_COPY_KEY)
+}catch(error){
+console.warn('读取 IndexedDB 工作副本失败:',error)
+}
+
+try{
+opfsRecord=await readOpfsWorkingCopy()
+}catch(error){
+if(error?.name!=='NotFoundError'){
+console.warn('读取 OPFS 工作副本失败:',error)
+}
+}
+
+const valid=[idbRecord,opfsRecord]
+.filter(isValidWorkingCopy)
+.sort((a,b)=>Number(b.savedAt)-Number(a.savedAt));
+
+const best=valid[0]||null;
+
+if(best){
+const repairs=await Promise.allSettled([
+idbSet(WORKING_COPY_KEY,best),
+writeOpfsWorkingCopy(best)
+]);
+
+if(repairs.every(result=>result.status==='rejected')){
+console.warn('工作副本恢复后无法重新建立本地双副本')
+}
+}
+
+return best
+}
+
+async function requestPersistentStorage(){
+try{
+if(navigator.storage?.persist)await navigator.storage.persist()
+}catch(error){
+console.warn('请求持久存储失败:',error)
+}
+}
+
+function persistRemarkHidden(){
+void idbSet(REMARK_HIDDEN_KEY,[...remarkHidden])
+.catch(error=>console.error('保存已删除备注选项失败:',error))
+}
+
+function persistRemarkHistory(){
+void idbSet(REMARK_HISTORY_KEY,[...remarkHistory])
+.catch(error=>console.error('保存备注历史失败:',error))
+}
+
+async function loadRemarkState(){
+try{
+const [storedHistory,storedHidden]=await Promise.all([
+idbGet(REMARK_HISTORY_KEY),
+idbGet(REMARK_HIDDEN_KEY)
+]);
+
+remarkHistory=Array.isArray(storedHistory)
+?storedHistory.map(normalizeRemarkValue).filter(Boolean)
+:[];
+
+remarkHidden=new Set(
+(Array.isArray(storedHidden)?storedHidden:[])
+.map(remarkHistoryKey)
+.filter(Boolean)
+)
+}catch(error){
+console.error('读取备注本地状态失败:',error);
+remarkHistory=[];
+remarkHidden=new Set()
+}
+}
+
+function normalizeSortText(v){
+return typeof v==='string'
+?v.normalize('NFKC').trim()
+:''
+}
+
 function getStructuredSortInfo(v){
-const text=normalizeSortText(v);if(!text)return{type:99,text:'',dateKey:null,numberKey:null};
+const text=normalizeSortText(v);
+
+if(!text){
+return{type:99,text:'',dateKey:null,numberKey:null}
+}
+
 const dm=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-if(dm){const y=Number(dm[1]),m=Number(dm[2]),d=Number(dm[3]),date=new Date(Date.UTC(y,m-1,d));if(date.getUTCFullYear()===y&&date.getUTCMonth()===m-1&&date.getUTCDate()===d)return{type:0,text,dateKey:y*10000+m*100+d,numberKey:null}}
-if(/^https?:\/\//i.test(text))return{type:5,text,dateKey:null,numberKey:null};
+
+if(dm){
+const y=Number(dm[1]),
+m=Number(dm[2]),
+d=Number(dm[3]),
+date=new Date(Date.UTC(y,m-1,d));
+
+if(
+date.getUTCFullYear()===y &&
+date.getUTCMonth()===m-1 &&
+date.getUTCDate()===d
+){
+return{
+type:0,
+text,
+dateKey:y*10000+m*100+d,
+numberKey:null
+}
+}
+}
+
+if(/^https?:\/\//i.test(text)){
+return{type:5,text,dateKey:null,numberKey:null}
+}
+
 const first=Array.from(text)[0]||'';
-if(/^\p{Script=Han}$/u.test(first))return{type:1,text,dateKey:null,numberKey:null};
-if(/^[A-Za-z]$/.test(first))return{type:2,text,dateKey:null,numberKey:null};
-const nm=text.match(/^[+-]?(?:\d+(?:\.\d+)?|\.\d+)/);if(nm)return{type:3,text,dateKey:null,numberKey:Number(nm[0])};
+
+if(/^\p{Script=Han}$/u.test(first)){
+return{type:1,text,dateKey:null,numberKey:null}
+}
+
+if(/^[A-Za-z]$/.test(first)){
+return{type:2,text,dateKey:null,numberKey:null}
+}
+
+const nm=text.match(/^[+-]?(?:\d+(?:\.\d+)?|\.\d+)/);
+
+if(nm){
+return{
+type:3,
+text,
+dateKey:null,
+numberKey:Number(nm[0])
+}
+}
+
 return{type:4,text,dateKey:null,numberKey:null}
 }
+
 function compareStructuredText(a0,b0){
-const a=getStructuredSortInfo(a0),b=getStructuredSortInfo(b0);if(a.type!==b.type)return a.type-b.type;if(a.type===0&&a.dateKey!==b.dateKey)return a.dateKey-b.dateKey;
-if(a.type===1){let r=pinyinCollator.compare(a.text,b.text);if(r!==0)return r;r=strokeCollator.compare(a.text,b.text);if(r!==0)return r}
-if(a.type===2){const r=a.text.localeCompare(b.text,'en',{sensitivity:'base',numeric:true});if(r!==0)return r}
-if(a.type===3&&a.numberKey!==b.numberKey)return a.numberKey-b.numberKey;
-const r=generalCollator.compare(a.text,b.text);if(r!==0)return r;return a.text<b.text?-1:a.text>b.text?1:0
+const a=getStructuredSortInfo(a0),
+b=getStructuredSortInfo(b0);
+
+if(a.type!==b.type)return a.type-b.type;
+
+if(a.type===0&&a.dateKey!==b.dateKey){
+return a.dateKey-b.dateKey
 }
 
-/* NFC 不进行兼容字符折叠，因此不会把【】等全角符号转换为半角 */
-function normalizeRemarkValue(v){return typeof v==='string'?v.normalize('NFC').trim():''}
+if(a.type===1){
+let r=pinyinCollator.compare(a.text,b.text);
+if(r!==0)return r;
 
-function remarkHistoryKey(v){return normalizeRemarkValue(v).toLocaleLowerCase('zh-CN')}
-function normalizeRemarks(v){const seen=new Set();return(Array.isArray(v)?v:[v]).map(normalizeRemarkValue).filter(item=>{const key=remarkHistoryKey(item);if(!item||seen.has(key))return false;seen.add(key);return true})}
+r=strokeCollator.compare(a.text,b.text);
+if(r!==0)return r
+}
+
+if(a.type===2){
+const r=a.text.localeCompare(
+b.text,
+'en',
+{sensitivity:'base',numeric:true}
+);
+
+if(r!==0)return r
+}
+
+if(a.type===3&&a.numberKey!==b.numberKey){
+return a.numberKey-b.numberKey
+}
+
+const r=generalCollator.compare(a.text,b.text);
+
+if(r!==0)return r;
+
+return a.text<b.text?-1:a.text>b.text?1:0
+}
+
+function normalizeRemarkValue(v){
+return typeof v==='string'
+?v.normalize('NFC').trim()
+:''
+}
+
+function remarkHistoryKey(v){
+return normalizeRemarkValue(v)
+.toLocaleLowerCase('zh-CN')
+}
+
+function normalizeRemarks(v){
+const seen=new Set();
+
+return(Array.isArray(v)?v:[v])
+.map(normalizeRemarkValue)
+.filter(item=>{
+const k=remarkHistoryKey(item);
+
+if(!item||seen.has(k))return false;
+
+seen.add(k);
+return true
+})
+}
+
 function getRemarkSortInfo(v){
-const text=normalizeRemarkValue(v),first=Array.from(text)[0]||'';
-if(/^\p{Script=Han}$/u.test(first))return{type:0,text,dateKey:null,numberKey:null};
-if(/^[A-Za-z]$/.test(first))return{type:1,text,dateKey:null,numberKey:null};
+const text=normalizeRemarkValue(v),
+first=Array.from(text)[0]||'';
+
+if(/^\p{Script=Han}$/u.test(first)){
+return{type:0,text,dateKey:null,numberKey:null}
+}
+
+if(/^[A-Za-z]$/.test(first)){
+return{type:1,text,dateKey:null,numberKey:null}
+}
+
 const dm=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-if(dm){const y=Number(dm[1]),m=Number(dm[2]),d=Number(dm[3]),date=new Date(Date.UTC(y,m-1,d));if(date.getUTCFullYear()===y&&date.getUTCMonth()===m-1&&date.getUTCDate()===d)return{type:3,text,dateKey:y*10000+m*100+d,numberKey:null}}
-const nm=text.match(/^(\d+(?:\.\d+)?)/);if(nm)return{type:2,text,dateKey:null,numberKey:Number(nm[1])};
+
+if(dm){
+const y=Number(dm[1]),
+m=Number(dm[2]),
+d=Number(dm[3]),
+date=new Date(Date.UTC(y,m-1,d));
+
+if(
+date.getUTCFullYear()===y &&
+date.getUTCMonth()===m-1 &&
+date.getUTCDate()===d
+){
+return{
+type:3,
+text,
+dateKey:y*10000+m*100+d,
+numberKey:null
+}
+}
+}
+
+const nm=text.match(/^(\d+(?:\.\d+)?)/);
+
+if(nm){
+return{
+type:2,
+text,
+dateKey:null,
+numberKey:Number(nm[1])
+}
+}
+
 return{type:4,text,dateKey:null,numberKey:null}
 }
 
-/* 仅识别标签中的【数字】，符号保持原样，不转换为其它括号 */
 function getBracketedNumberInfo(value){
-const text=normalizeRemarkValue(value);
-const numberPattern=/【\s*([+-]?(?:\d+(?:\.\d+)?|\.\d+))\s*】/;
-const match=text.match(numberPattern);
-const withoutNumber=text.replace(/【\s*[+-]?(?:\d+(?:\.\d+)?|\.\d+)\s*】/g,' ').replace(/\s+/g,' ').trim();
-return{hasNumber:Boolean(match),number:match?Number(match[1]):null,text,withoutNumber}
+const text=normalizeRemarkValue(value),
+numberPattern=/【\s*([+-]?(?:\d+(?:\.\d+)?|\.\d+))\s*】/,
+match=text.match(numberPattern),
+withoutNumber=text
+.replace(/【\s*[+-]?(?:\d+(?:\.\d+)?|\.\d+)\s*】/g,' ')
+.replace(/\s+/g,' ')
+.trim();
+
+return{
+hasNumber:Boolean(match),
+number:match?Number(match[1]):null,
+text,
+withoutNumber
+}
 }
 
 function compareRemarkOptionsBase(a0,b0){
-const a=getRemarkSortInfo(a0),b=getRemarkSortInfo(b0);if(a.type!==b.type)return a.type-b.type;
-if(a.type===0){let r=pinyinCollator.compare(a.text,b.text);if(r!==0)return r;r=strokeCollator.compare(a.text,b.text);if(r!==0)return r}
-else if(a.type===1){const r=a.text.localeCompare(b.text,'en',{sensitivity:'base',numeric:true});if(r!==0)return r}
-else if(a.type===2){if(a.numberKey!==b.numberKey)return a.numberKey-b.numberKey;const r=a.text.localeCompare(b.text,'zh-CN',{sensitivity:'base',numeric:true});if(r!==0)return r}
-else if(a.type===3&&a.dateKey!==b.dateKey)return a.dateKey-b.dateKey;
-const r=generalCollator.compare(a.text,b.text);if(r!==0)return r;return a.text<b.text?-1:a.text>b.text?1:0
-}
+const a=getRemarkSortInfo(a0),
+b=getRemarkSortInfo(b0);
 
-/* 有【数字】的标签优先，括号内数字从大到小，再按原规则 */
-function compareLabelByBracketedNumber(a0,b0,baseComparator){
-const a=getBracketedNumberInfo(a0),b=getBracketedNumberInfo(b0);
-if(a.hasNumber!==b.hasNumber)return a.hasNumber?-1:1;
-if(a.hasNumber&&b.hasNumber){
-if(a.number!==b.number)return b.number-a.number;
-const r=baseComparator(a.withoutNumber,b.withoutNumber);
+if(a.type!==b.type)return a.type-b.type;
+
+if(a.type===0){
+let r=pinyinCollator.compare(a.text,b.text);
 if(r!==0)return r;
-return baseComparator(a.text,b.text)
-}
-return baseComparator(a.text,b.text)
+
+r=strokeCollator.compare(a.text,b.text);
+if(r!==0)return r
+}else if(a.type===1){
+const r=a.text.localeCompare(
+b.text,
+'en',
+{sensitivity:'base',numeric:true}
+);
+
+if(r!==0)return r
+}else if(a.type===2){
+if(a.numberKey!==b.numberKey){
+return a.numberKey-b.numberKey
 }
 
-function compareRemarkOptions(a0,b0){return compareLabelByBracketedNumber(a0,b0,compareRemarkOptionsBase)}
-function saveRemarkHidden(){persistRemarkHidden()}
-function saveRemarkHistory(){persistRemarkHistory()}
-function rebuildRemarkHistory(){const seen=new Map(),candidates=[...remarkHistory];pages.forEach(item=>candidates.push(...normalizeRemarks(item&&item.remark)));candidates.forEach(raw=>{const value=normalizeRemarkValue(raw),key=remarkHistoryKey(value);if(value&&!remarkHidden.has(key)&&!seen.has(key))seen.set(key,value)});remarkHistory=[...seen.values()].sort(compareRemarkOptions);saveRemarkHistory()}
-function rememberRemark(v){if(Array.isArray(v)){v.forEach(rememberRemark);return}const n=normalizeRemarkValue(v);if(!n)return;const key=remarkHistoryKey(n);if(remarkHidden.delete(key))saveRemarkHidden();if(!remarkHistory.some(item=>remarkHistoryKey(item)===key)){remarkHistory.push(n);remarkHistory.sort(compareRemarkOptions);saveRemarkHistory()}}
+const r=a.text.localeCompare(
+b.text,
+'zh-CN',
+{sensitivity:'base',numeric:true}
+);
 
-function setupRemarkCombo({input,dropdown,options,combo,submit,manageOptions=false}){
-let selected=[],filtered=[],activeIndex=-1,suppressMenuOpen=false;const tags=document.createElement('div');tags.className='remark-tags';combo.insertBefore(tags,input);input.removeAttribute('placeholder');options.setAttribute('role','listbox');options.setAttribute('aria-multiselectable','true');
-function closeMenu(){dropdown.classList.add('hidden');input.setAttribute('aria-expanded','false');activeIndex=-1}
-function renderTags(){tags.replaceChildren();selected.forEach((value,index)=>{const tag=document.createElement('span');tag.className='remark-tag';const label=document.createElement('span');label.textContent=value;const remove=document.createElement('button');remove.type='button';remove.className='remark-remove';remove.textContent='×';remove.setAttribute('aria-label','移除备注：'+value);remove.addEventListener('click',()=>{selected.splice(index,1);renderTags();input.focus();renderMenu(true)});tag.append(label,remove);tags.append(tag)})}
-function add(value){selected=normalizeRemarks([...selected,value]);input.value='';renderTags()}
-function choose(value){const index=selected.findIndex(item=>remarkHistoryKey(item)===remarkHistoryKey(value));if(index>=0)selected.splice(index,1);else add(value);input.value='';renderTags();suppressMenuOpen=true;closeMenu();input.focus({preventScroll:true});closeMenu();setTimeout(()=>{closeMenu();suppressMenuOpen=false},0)}
-function setActive(index){activeIndex=filtered.length?(index+filtered.length)%filtered.length:-1;[...options.children].forEach((node,i)=>{const button=node.matches('.remark-option')?node:node.querySelector('.remark-option');if(button)button.classList.toggle('is-active',i===activeIndex)});if(activeIndex>=0){const node=options.children[activeIndex];if(node)node.scrollIntoView({block:'nearest'})}}
+if(r!==0)return r
+}else if(a.type===3&&a.dateKey!==b.dateKey){
+return a.dateKey-b.dateKey
+}
+
+const r=generalCollator.compare(a.text,b.text);
+
+if(r!==0)return r;
+
+return a.text<b.text?-1:a.text>b.text?1:0
+}
+
+function compareLabelByBracketedNumber(a0,b0,baseComparator){
+const a=getBracketedNumberInfo(a0),
+b=getBracketedNumberInfo(b0);
+
+if(a.hasNumber!==b.hasNumber){
+return a.hasNumber?-1:1
+}
+
+if(a.hasNumber&&b.hasNumber){
+if(a.number!==b.number){
+return b.number-a.number
+}
+
+const r=baseComparator(
+a.withoutNumber,
+b.withoutNumber
+);
+
+if(r!==0)return r;
+
+return baseComparator(
+a.text,
+b.text
+)
+}
+
+return baseComparator(
+a.text,
+b.text
+)
+}
+
+function compareRemarkOptions(a0,b0){
+return compareLabelByBracketedNumber(
+a0,
+b0,
+compareRemarkOptionsBase
+)
+}
+
+function saveRemarkHidden(){
+persistRemarkHidden()
+}
+
+function saveRemarkHistory(){
+persistRemarkHistory()
+}
+
+function rebuildRemarkHistory(){
+const seen=new Map(),
+candidates=[...remarkHistory];
+
+pages.forEach(item=>{
+candidates.push(...normalizeRemarks(item&&item.remark))
+});
+
+candidates.forEach(raw=>{
+const value=normalizeRemarkValue(raw),
+k=remarkHistoryKey(value);
+
+if(
+value &&
+!remarkHidden.has(k) &&
+!seen.has(k)
+){
+seen.set(k,value)
+}
+});
+
+remarkHistory=[...seen.values()]
+.sort(compareRemarkOptions);
+
+saveRemarkHistory()
+}
+
+function rememberRemark(v){
+if(Array.isArray(v)){
+v.forEach(rememberRemark);
+return
+}
+
+const n=normalizeRemarkValue(v);
+
+if(!n)return;
+
+const k=remarkHistoryKey(n);
+
+if(remarkHidden.delete(k)){
+saveRemarkHidden()
+}
+
+if(
+!remarkHistory.some(
+item=>remarkHistoryKey(item)===k
+)
+){
+remarkHistory.push(n);
+remarkHistory.sort(compareRemarkOptions);
+saveRemarkHistory()
+}
+}
+
+function setupRemarkCombo({
+input,
+dropdown,
+options,
+combo,
+submit,
+manageOptions=false
+}){
+let selected=[],
+filtered=[],
+activeIndex=-1,
+suppressMenuOpen=false;
+
+const tags=document.createElement('div');
+tags.className='remark-tags';
+combo.insertBefore(tags,input);
+
+input.removeAttribute('placeholder');
+options.setAttribute('role','listbox');
+options.setAttribute('aria-multiselectable','true');
+
+function closeMenu(){
+dropdown.classList.add('hidden');
+input.setAttribute('aria-expanded','false');
+activeIndex=-1
+}
+
+function renderTags(){
+tags.replaceChildren();
+
+selected.forEach((value,index)=>{
+const tag=document.createElement('span');
+tag.className='remark-tag';
+
+const label=document.createElement('span');
+label.textContent=value;
+
+const remove=document.createElement('button');
+remove.type='button';
+remove.className='remark-remove';
+remove.textContent='×';
+remove.setAttribute('aria-label','移除备注：'+value);
+
+remove.addEventListener('click',()=>{
+selected.splice(index,1);
+renderTags();
+input.focus();
+renderMenu(true)
+});
+
+tag.append(label,remove);
+tags.append(tag)
+})
+}
+
+function add(value){
+selected=normalizeRemarks([
+...selected,
+value
+]);
+
+input.value='';
+renderTags()
+}
+
+function choose(value){
+const index=selected.findIndex(
+item=>
+remarkHistoryKey(item)===
+remarkHistoryKey(value)
+);
+
+if(index>=0){
+selected.splice(index,1)
+}else{
+add(value)
+}
+
+input.value='';
+renderTags();
+suppressMenuOpen=true;
+closeMenu();
+input.focus({preventScroll:true});
+closeMenu();
+
+setTimeout(()=>{
+closeMenu();
+suppressMenuOpen=false
+},0)
+}
+
+function setActive(index){
+activeIndex=filtered.length
+?(index+filtered.length)%filtered.length
+:-1;
+
+[...options.children].forEach((node,i)=>{
+const button=node.matches('.remark-option')
+?node
+:node.querySelector('.remark-option');
+
+if(button){
+button.classList.toggle(
+'is-active',
+i===activeIndex
+)
+}
+});
+
+if(activeIndex>=0){
+const node=options.children[activeIndex];
+
+if(node){
+node.scrollIntoView({block:'nearest'})
+}
+}
+}
 
 function renameHistoryOption(oldValue){
-const oldNormalized=normalizeRemarkValue(oldValue);if(!oldNormalized)return;
-const result=prompt('修改备注选项：',oldNormalized);if(result===null)return;
-const newNormalized=normalizeRemarkValue(result);if(!newNormalized){alert('备注选项不能为空。');return}
-const oldKey=remarkHistoryKey(oldNormalized),newKey=remarkHistoryKey(newNormalized);
-if(newKey!==oldKey&&remarkHistory.some(item=>remarkHistoryKey(item)===newKey)){alert('该备注选项已经存在。');return}
+const oldNormalized=normalizeRemarkValue(oldValue);
+
+if(!oldNormalized)return;
+
+const result=prompt(
+'修改备注选项：',
+oldNormalized
+);
+
+if(result===null)return;
+
+const newNormalized=normalizeRemarkValue(result);
+
+if(!newNormalized){
+alert('备注选项不能为空。');
+return
+}
+
+const oldKey=remarkHistoryKey(oldNormalized),
+newKey=remarkHistoryKey(newNormalized);
+
+if(
+newKey!==oldKey &&
+remarkHistory.some(
+item=>remarkHistoryKey(item)===newKey
+)
+){
+alert('该备注选项已经存在。');
+return
+}
 
 pages.forEach(item=>{
 if(!item)return;
-item.remark=normalizeRemarks(item.remark).map(remark=>remarkHistoryKey(remark)===oldKey?newNormalized:remark);
+
+item.remark=normalizeRemarks(item.remark)
+.map(
+remark=>
+remarkHistoryKey(remark)===oldKey
+?newNormalized
+:remark
+);
+
 item.remark=normalizeRemarks(item.remark)
 });
 
 remarkHidden.add(oldKey);
 remarkHidden.delete(newKey);
-remarkHistory=remarkHistory.filter(item=>remarkHistoryKey(item)!==oldKey&&remarkHistoryKey(item)!==newKey);
+
+remarkHistory=remarkHistory.filter(
+item=>
+remarkHistoryKey(item)!==oldKey &&
+remarkHistoryKey(item)!==newKey
+);
+
 remarkHistory.push(newNormalized);
 remarkHistory.sort(compareRemarkOptions);
-selected=normalizeRemarks(selected.map(item=>remarkHistoryKey(item)===oldKey?newNormalized:item));
+
+selected=normalizeRemarks(
+selected.map(
+item=>
+remarkHistoryKey(item)===oldKey
+?newNormalized
+:item
+)
+);
+
 saveRemarkHidden();
 saveRemarkHistory();
+
 input.value='';
 renderTags();
 closeMenu();
@@ -277,20 +1099,45 @@ markLocalChange()
 }
 
 function deleteHistoryOption(value){
-const normalized=normalizeRemarkValue(value);if(!normalized)return;
-if(!confirm(`确定删除备注“${normalized}”吗？\n该备注会同时从总表中所有已保存条目里移除。`))return;
-const key=remarkHistoryKey(normalized);
+const normalized=normalizeRemarkValue(value);
+
+if(!normalized)return;
+
+if(
+!confirm(
+`确定删除备注“${normalized}”吗？\n该备注会同时从总表中所有已保存条目里移除。`
+)
+){
+return
+}
+
+const k=remarkHistoryKey(normalized);
 
 pages.forEach(item=>{
 if(!item)return;
-item.remark=normalizeRemarks(item.remark).filter(remark=>remarkHistoryKey(remark)!==key)
+
+item.remark=normalizeRemarks(item.remark)
+.filter(
+remark=>
+remarkHistoryKey(remark)!==k
+)
 });
 
-remarkHidden.add(key);
-remarkHistory=remarkHistory.filter(item=>remarkHistoryKey(item)!==key);
-selected=selected.filter(item=>remarkHistoryKey(item)!==key);
+remarkHidden.add(k);
+
+remarkHistory=remarkHistory.filter(
+item=>
+remarkHistoryKey(item)!==k
+);
+
+selected=selected.filter(
+item=>
+remarkHistoryKey(item)!==k
+);
+
 saveRemarkHidden();
 saveRemarkHistory();
+
 input.value='';
 renderTags();
 closeMenu();
@@ -298,17 +1145,61 @@ applySortAndRender();
 markLocalChange()
 }
 
-function createOptionButton(value,checked){const button=document.createElement('button');button.type='button';button.className='remark-option';button.textContent=(checked?'✓ ':'')+value;button.setAttribute('role','option');button.setAttribute('aria-selected',String(checked));button.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();choose(value)});return button}
+function createOptionButton(value,checked){
+const button=document.createElement('button');
+
+button.type='button';
+button.className='remark-option';
+button.textContent=(checked?'✓ ':'')+value;
+button.setAttribute('role','option');
+button.setAttribute('aria-selected',String(checked));
+
+button.addEventListener('click',event=>{
+event.preventDefault();
+event.stopPropagation();
+choose(value)
+});
+
+return button
+}
 
 function renderMenu(forceOpen=false){
 const query=remarkHistoryKey(input.value);
-filtered=remarkHistory.filter(item=>remarkHistoryKey(item).includes(query));
-if(query&&!filtered.some(item=>remarkHistoryKey(item)===query))filtered.unshift(normalizeRemarkValue(input.value));
+
+filtered=remarkHistory.filter(
+item=>
+remarkHistoryKey(item).includes(query)
+);
+
+if(
+query &&
+!filtered.some(
+item=>remarkHistoryKey(item)===query
+)
+){
+filtered.unshift(
+normalizeRemarkValue(input.value)
+)
+}
+
 options.replaceChildren();
 
 filtered.forEach(value=>{
-const checked=selected.some(item=>remarkHistoryKey(item)===remarkHistoryKey(value)),optionButton=createOptionButton(value,checked);
-if(!manageOptions){options.append(optionButton);return}
+const checked=selected.some(
+item=>
+remarkHistoryKey(item)===
+remarkHistoryKey(value)
+);
+
+const optionButton=createOptionButton(
+value,
+checked
+);
+
+if(!manageOptions){
+options.append(optionButton);
+return
+}
 
 const row=document.createElement('div');
 row.className='remark-option-row';
@@ -320,15 +1211,31 @@ const editButton=document.createElement('button');
 editButton.type='button';
 editButton.className='remark-manage-btn edit';
 editButton.textContent='改';
-editButton.setAttribute('aria-label','修改备注选项：'+value);
-editButton.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();renameHistoryOption(value)});
+editButton.setAttribute(
+'aria-label',
+'修改备注选项：'+value
+);
+
+editButton.addEventListener('click',event=>{
+event.preventDefault();
+event.stopPropagation();
+renameHistoryOption(value)
+});
 
 const deleteButton=document.createElement('button');
 deleteButton.type='button';
 deleteButton.className='remark-manage-btn delete';
 deleteButton.textContent='删';
-deleteButton.setAttribute('aria-label','删除备注选项：'+value);
-deleteButton.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();deleteHistoryOption(value)});
+deleteButton.setAttribute(
+'aria-label',
+'删除备注选项：'+value
+);
+
+deleteButton.addEventListener('click',event=>{
+event.preventDefault();
+event.stopPropagation();
+deleteHistoryOption(value)
+});
 
 actions.append(editButton,deleteButton);
 row.append(optionButton,actions);
@@ -336,98 +1243,245 @@ options.append(row)
 });
 
 activeIndex=-1;
-if(!filtered.length)options.innerHTML='<div class="remark-empty">输入新备注，按回车添加</div>';
-if(forceOpen){dropdown.classList.remove('hidden');input.setAttribute('aria-expanded','true')}
+
+if(!filtered.length){
+options.innerHTML='<div class="remark-empty">输入新备注，按回车添加</div>'
 }
 
-input.addEventListener('focus',()=>{if(suppressMenuOpen){closeMenu();return}renderMenu(true)});
-input.addEventListener('input',()=>{if(suppressMenuOpen){closeMenu();return}renderMenu(true)});
+if(forceOpen){
+dropdown.classList.remove('hidden');
+input.setAttribute('aria-expanded','true')
+}
+}
+
+input.addEventListener('focus',()=>{
+if(suppressMenuOpen){
+closeMenu();
+return
+}
+
+renderMenu(true)
+});
+
+input.addEventListener('input',()=>{
+if(suppressMenuOpen){
+closeMenu();
+return
+}
+
+renderMenu(true)
+});
+
 input.addEventListener('keydown',event=>{
 if(event.isComposing||event.keyCode===229)return;
-if(['ArrowDown','ArrowUp','Enter','Escape'].includes(event.key)){event.preventDefault();event.stopImmediatePropagation()}
-if(event.key==='ArrowDown'||event.key==='ArrowUp'){
-if(dropdown.classList.contains('hidden'))renderMenu(true);
-setActive(activeIndex<0?(event.key==='ArrowDown'?0:filtered.length-1):activeIndex+(event.key==='ArrowDown'?1:-1))
+
+if(
+['ArrowDown','ArrowUp','Enter','Escape']
+.includes(event.key)
+){
+event.preventDefault();
+event.stopImmediatePropagation()
 }
-else if(event.key==='Escape')closeMenu();
-else if(event.key==='Enter'){
-if(activeIndex>=0)choose(filtered[activeIndex]);
-else if(input.value.trim()){add(input.value);renderMenu(true)}
-else{closeMenu();submit()}
+
+if(
+event.key==='ArrowDown' ||
+event.key==='ArrowUp'
+){
+if(dropdown.classList.contains('hidden')){
+renderMenu(true)
+}
+
+setActive(
+activeIndex<0
+?(
+event.key==='ArrowDown'
+?0
+:filtered.length-1
+)
+:activeIndex+
+(
+event.key==='ArrowDown'
+?1
+:-1
+)
+)
+}else if(event.key==='Escape'){
+closeMenu()
+}else if(event.key==='Enter'){
+if(activeIndex>=0){
+choose(filtered[activeIndex])
+}else if(input.value.trim()){
+add(input.value);
+renderMenu(true)
+}else{
+closeMenu();
+submit()
+}
 }
 });
-document.addEventListener('mousedown',event=>{if(!combo.contains(event.target))closeMenu()});
+
+document.addEventListener('mousedown',event=>{
+if(!combo.contains(event.target)){
+closeMenu()
+}
+});
 
 return{
-setValues(value){selected=normalizeRemarks(value);input.value='';renderTags();closeMenu()},
-getValues(){if(input.value.trim())add(input.value);return[...selected]},
+setValues(value){
+selected=normalizeRemarks(value);
+input.value='';
+renderTags();
+closeMenu()
+},
+getValues(){
+if(input.value.trim()){
+add(input.value)
+}
+
+return[...selected]
+},
 closeMenu
 }
 }
 
 function getRemarkDateSortKey(value){
-const text=normalizeSortText(value),match=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+const text=normalizeSortText(value),
+match=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+
 if(!match)return Number.POSITIVE_INFINITY;
-const y=Number(match[1]),m=Number(match[2]),d=Number(match[3]),date=new Date(Date.UTC(y,m-1,d));
-if(date.getUTCFullYear()!==y||date.getUTCMonth()!==m-1||date.getUTCDate()!==d)return Number.POSITIVE_INFINITY;
+
+const y=Number(match[1]),
+m=Number(match[2]),
+d=Number(match[3]),
+date=new Date(Date.UTC(y,m-1,d));
+
+if(
+date.getUTCFullYear()!==y ||
+date.getUTCMonth()!==m-1 ||
+date.getUTCDate()!==d
+){
+return Number.POSITIVE_INFINITY
+}
+
 return y*10000+m*100+d
 }
 
 function compareFirstRemarkTextBase(a0,b0){
 function info(value){
 const text=normalizeSortText(value);
-if(!text)return{type:99,text:'',numberKey:null};
-if(/^https?:\/\//i.test(text))return{type:5,text,numberKey:null};
+
+if(!text){
+return{type:99,text:'',numberKey:null}
+}
+
+if(/^https?:\/\//i.test(text)){
+return{type:5,text,numberKey:null}
+}
+
 const first=Array.from(text)[0]||'';
-if(/^\p{Script=Han}$/u.test(first))return{type:1,text,numberKey:null};
-if(/^[A-Za-z]$/.test(first))return{type:2,text,numberKey:null};
-const nm=text.match(/^[+-]?(?:\d+(?:\.\d+)?|\.\d+)/);
-if(nm)return{type:3,text,numberKey:Number(nm[0])};
+
+if(/^\p{Script=Han}$/u.test(first)){
+return{type:1,text,numberKey:null}
+}
+
+if(/^[A-Za-z]$/.test(first)){
+return{type:2,text,numberKey:null}
+}
+
+const nm=text.match(
+/^[+-]?(?:\d+(?:\.\d+)?|\.\d+)/
+);
+
+if(nm){
+return{
+type:3,
+text,
+numberKey:Number(nm[0])
+}
+}
+
 return{type:4,text,numberKey:null}
 }
 
-const a=info(a0),b=info(b0);
+const a=info(a0),
+b=info(b0);
+
 if(a.type!==b.type)return a.type-b.type;
 
 if(a.type===1){
 let r=pinyinCollator.compare(a.text,b.text);
+
 if(r!==0)return r;
+
 r=strokeCollator.compare(a.text,b.text);
+
 if(r!==0)return r
 }
 
 if(a.type===2){
-const r=a.text.localeCompare(b.text,'en',{sensitivity:'base',numeric:true});
+const r=a.text.localeCompare(
+b.text,
+'en',
+{sensitivity:'base',numeric:true}
+);
+
 if(r!==0)return r
 }
 
-if(a.type===3&&a.numberKey!==b.numberKey)return a.numberKey-b.numberKey;
+if(a.type===3&&a.numberKey!==b.numberKey){
+return a.numberKey-b.numberKey
+}
 
-const r=generalCollator.compare(a.text,b.text);
+const r=generalCollator.compare(
+a.text,
+b.text
+);
+
 if(r!==0)return r;
+
 return a.text<b.text?-1:a.text>b.text?1:0
 }
 
 function compareFirstRemarkText(a0,b0){
-return compareLabelByBracketedNumber(a0,b0,compareFirstRemarkTextBase)
+return compareLabelByBracketedNumber(
+a0,
+b0,
+compareFirstRemarkTextBase
+)
 }
 
 function compareStructuredRemarkText(a0,b0){
-return compareLabelByBracketedNumber(a0,b0,compareStructuredText)
+return compareLabelByBracketedNumber(
+a0,
+b0,
+compareStructuredText
+)
 }
 
 function compareLegacyPages(a,b){
-const ar=normalizeRemarks(a&&a.remark),br=normalizeRemarks(b&&b.remark),
-a1=ar[0]||'',b1=br[0]||'',a2=ar[1]||'',b2=br[1]||'',
-ha2=Boolean(a2),hb2=Boolean(b2),ha1=Boolean(a1),hb1=Boolean(b1);
+const ar=normalizeRemarks(a&&a.remark),
+br=normalizeRemarks(b&&b.remark),
+a1=ar[0]||'',
+b1=br[0]||'',
+a2=ar[1]||'',
+b2=br[1]||'',
+ha2=Boolean(a2),
+hb2=Boolean(b2),
+ha1=Boolean(a1),
+hb1=Boolean(b1);
 
-if(ha2!==hb2)return ha2?-1:1;
+if(ha2!==hb2){
+return ha2?-1:1
+}
 
 if(ha2&&hb2){
-const ad=getRemarkDateSortKey(a2),bd=getRemarkDateSortKey(b2);
+const ad=getRemarkDateSortKey(a2),
+bd=getRemarkDateSortKey(b2);
+
 if(ad!==bd)return ad-bd;
 
 const r1=compareFirstRemarkText(a1,b1);
+
 if(r1!==0)return r1;
 
 if(!Number.isFinite(ad)){
@@ -435,183 +1489,446 @@ const r2=compareStructuredRemarkText(a2,b2);
 if(r2!==0)return r2
 }
 
-return compareStructuredText(a&&a.title,b&&b.title)
+return compareStructuredText(
+a&&a.title,
+b&&b.title
+)
 }
 
-if(ha1!==hb1)return ha1?-1:1;
+if(ha1!==hb1){
+return ha1?-1:1
+}
 
 if(ha1&&hb1){
 const r=compareFirstRemarkText(a1,b1);
+
 if(r!==0)return r;
-return compareStructuredText(a&&a.title,b&&b.title)
+
+return compareStructuredText(
+a&&a.title,
+b&&b.title
+)
 }
 
-return compareStructuredText(a&&a.title,b&&b.title)
+return compareStructuredText(
+a&&a.title,
+b&&b.title
+)
+}
+
+function compareRemarkLabelText(a0,b0){
+const aText=normalizeRemarkValue(a0),
+bText=normalizeRemarkValue(b0);
+
+if(!aText&&!bText)return 0;
+if(!aText)return 1;
+if(!bText)return -1;
+
+const a=getStructuredSortInfo(aText),
+b=getStructuredSortInfo(bText);
+
+const rank=info=>
+info.type===0?0:
+info.type===1?1:
+info.type===2?2:
+info.type===3?3:
+info.type===5?4:
+5;
+
+const aRank=rank(a),
+bRank=rank(b);
+
+if(aRank!==bRank){
+return aRank-bRank
+}
+
+if(
+a.type===0 &&
+a.dateKey!==b.dateKey
+){
+return a.dateKey-b.dateKey
+}
+
+return compareLabelByBracketedNumber(
+aText,
+bText,
+compareStructuredText
+)
 }
 
 function sortPages(){
 pages.sort((a,b)=>{
-const ar=normalizeRemarks(a&&a.remark),br=normalizeRemarks(b&&b.remark),
-a1=ar[0]||'',b1=br[0]||'',a2=ar[1]||'',b2=br[1]||'',
-a1Date=getRemarkDateSortKey(a1),b1Date=getRemarkDateSortKey(b1),
-a2Date=getRemarkDateSortKey(a2),b2Date=getRemarkDateSortKey(b2),
-aGroup=Number.isFinite(a1Date)?0:Number.isFinite(a2Date)?1:2,
-bGroup=Number.isFinite(b1Date)?0:Number.isFinite(b2Date)?1:2;
+const ar=normalizeRemarks(a&&a.remark),
+br=normalizeRemarks(b&&b.remark),
+a1=ar[0]||'',
+b1=br[0]||'',
+a2=ar[1]||'',
+b2=br[1]||'';
 
-if(aGroup!==bGroup)return aGroup-bGroup;
+const r1=compareRemarkLabelText(
+a1,
+b1
+);
 
-if(aGroup===0){
-if(a1Date!==b1Date)return a1Date-b1Date;
-const r2=compareStructuredRemarkText(a2,b2);
-if(r2!==0)return r2;
-return compareStructuredText(a&&a.title,b&&b.title)
-}
-
-if(aGroup===1){
-const r1=compareFirstRemarkText(a1,b1);
 if(r1!==0)return r1;
-const r2=compareStructuredRemarkText(a2,b2);
-if(r2!==0)return r2;
-return compareStructuredText(a&&a.title,b&&b.title)
-}
 
-return compareLegacyPages(a,b)
+const r2=compareRemarkLabelText(
+a2,
+b2
+);
+
+if(r2!==0)return r2;
+
+return compareStructuredText(
+a&&a.title,
+b&&b.title
+)
 })
 }
 
 function parsePageInput(input){
-const raw=String(input||'').trim(),match=raw.match(/^\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)$/i);
-if(match)return{title:match[1].trim(),url:match[2].trim(),titleMode:'markdown'};
-if(/^https?:\/\/[^\s]+$/i.test(raw))return{title:raw,url:raw,titleMode:'url'};
-return{title:raw,url:'',titleMode:'text'}
+const raw=String(input||'').trim(),
+match=raw.match(
+/^\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)$/i
+);
+
+if(match){
+return{
+title:match[1].trim(),
+url:match[2].trim(),
+titleMode:'markdown'
+}
+}
+
+if(/^https?:\/\/[^\s]+$/i.test(raw)){
+return{
+title:raw,
+url:raw,
+titleMode:'url'
+}
+}
+
+return{
+title:raw,
+url:'',
+titleMode:'text'
+}
 }
 
 function escapeHtml(text){
 if(!text)return'';
+
 const div=document.createElement('div');
 div.textContent=text;
+
 return div.innerHTML
 }
 
 function cloneValue(value){
-return value==null?value:structuredClone(value)
+return value==null
+?value
+:structuredClone(value)
 }
 
 function hashString(value){
-let h1=2166136261,h2=2246822519;
+let h1=2166136261,
+h2=2246822519;
+
 const text=String(value);
+
 for(let i=0;i<text.length;i++){
 const code=text.charCodeAt(i);
-h1^=code;h1=Math.imul(h1,16777619);
-h2^=code;h2=Math.imul(h2,3266489917);h2^=h2>>>13
+
+h1^=code;
+h1=Math.imul(h1,16777619);
+
+h2^=code;
+h2=Math.imul(h2,3266489917);
+h2^=h2>>>13
 }
+
 return`${(h1>>>0).toString(36)}${(h2>>>0).toString(36)}`
 }
 
 function createPageId(){
-if(globalThis.crypto?.randomUUID)return crypto.randomUUID();
+if(globalThis.crypto?.randomUUID){
+return crypto.randomUUID()
+}
+
 return`p-${Date.now().toString(36)}-${Math.random().toString(36).slice(2,10)}-${Math.random().toString(36).slice(2,8)}`
 }
 
 function legacyPageIdentity(item){
-const title=String(item?.title||'').normalize('NFC').trim(),url=String(item?.url||'').trim();
-return url?`url:${url}`:`title:${title}`
+const title=String(item?.title||'')
+.normalize('NFC')
+.trim(),
+url=String(item?.url||'').trim();
+
+return url
+?`url:${url}`
+:`title:${title}`
 }
 
 function normalizePageArray(items){
-const source=Array.isArray(items)?items:[],counts=new Map(),used=new Set(),result=[];
+const source=Array.isArray(items)?items:[],
+counts=new Map(),
+used=new Set(),
+result=[];
+
 source.forEach(raw=>{
-if(!raw||raw.__pagesDeleted===true||raw.deleted===true)return;
-const title=String(raw.title||'').normalize('NFC').trim();
+if(
+!raw ||
+raw.__pagesDeleted===true ||
+raw.deleted===true
+){
+return
+}
+
+const title=String(raw.title||'')
+.normalize('NFC')
+.trim();
+
 if(!title)return;
-const identity=legacyPageIdentity(raw),occurrence=(counts.get(identity)||0)+1;
+
+const identity=legacyPageIdentity(raw),
+occurrence=(counts.get(identity)||0)+1;
+
 counts.set(identity,occurrence);
-let id=typeof raw.id==='string'&&raw.id.trim()?raw.id.trim():`legacy-${hashString(identity)}-${occurrence}`;
-if(used.has(id))id=`${id}-${hashString(JSON.stringify(raw))}`;
-while(used.has(id))id=`${id}-x`;
+
+let id=
+typeof raw.id==='string' &&
+raw.id.trim()
+?raw.id.trim()
+:`legacy-${hashString(identity)}-${occurrence}`;
+
+if(used.has(id)){
+id=`${id}-${hashString(JSON.stringify(raw))}`
+}
+
+while(used.has(id)){
+id=`${id}-x`
+}
+
 used.add(id);
-const url=String(raw.url||'').trim(),titleMode=['markdown','url','text'].includes(raw.titleMode)?raw.titleMode:(url?(title===url?'url':'markdown'):'text');
-result.push({id,title,url,titleMode,note:String(raw.note||'').normalize('NFC').trim(),remark:normalizeRemarks(raw.remark)})
+
+const url=String(raw.url||'').trim(),
+titleMode=
+['markdown','url','text']
+.includes(raw.titleMode)
+?raw.titleMode
+:(
+url
+?(
+title===url
+?'url'
+:'markdown'
+)
+:'text'
+);
+
+result.push({
+id,
+title,
+url,
+titleMode,
+note:String(raw.note||'').normalize('NFC').trim(),
+remark:normalizeRemarks(raw.remark)
+})
 });
+
 return result
 }
 
 function normalizeTombstones(items){
 const map=new Map();
-(Array.isArray(items)?items:[]).forEach(raw=>{
+
+(Array.isArray(items)?items:[])
+.forEach(raw=>{
 if(!raw)return;
+
 const id=String(raw.id||'').trim();
+
 if(!id)return;
-const deletedAt=Number.isFinite(Number(raw.deletedAt))?Number(raw.deletedAt):0;
+
+const deletedAt=
+Number.isFinite(Number(raw.deletedAt))
+?Number(raw.deletedAt)
+:0;
+
 const previous=map.get(id);
-if(!previous||deletedAt>previous.deletedAt)map.set(id,{id,deletedAt})
+
+if(
+!previous ||
+deletedAt>previous.deletedAt
+){
+map.set(id,{id,deletedAt})
+}
 });
+
 return[...map.values()]
 }
 
 function normalizeSnapshot(payload){
-let rawPages=[],rawTombstones=[];
+let rawPages=[],
+rawTombstones=[];
+
 if(Array.isArray(payload)){
-rawPages=payload.filter(item=>item&&item.__pagesDeleted!==true&&item.deleted!==true);
-rawTombstones=payload.filter(item=>item&&(item.__pagesDeleted===true||item.deleted===true))
-}else if(payload&&typeof payload==='object'){
-rawPages=Array.isArray(payload.pages)?payload.pages:[];
-rawTombstones=Array.isArray(payload.tombstones)?payload.tombstones:[]
+rawPages=payload.filter(
+item=>
+item &&
+item.__pagesDeleted!==true &&
+item.deleted!==true
+);
+
+rawTombstones=payload.filter(
+item=>
+item &&
+(
+item.__pagesDeleted===true ||
+item.deleted===true
+)
+)
+}else if(
+payload &&
+typeof payload==='object'
+){
+rawPages=Array.isArray(payload.pages)
+?payload.pages
+:[];
+
+rawTombstones=Array.isArray(payload.tombstones)
+?payload.tombstones
+:[]
 }
-const normalizedPages=normalizePageArray(rawPages),normalizedTombstones=normalizeTombstones(rawTombstones),deletedIds=new Set(normalizedTombstones.map(item=>item.id));
-return{pages:normalizedPages.filter(item=>!deletedIds.has(item.id)),tombstones:normalizedTombstones}
+
+const normalizedPages=normalizePageArray(rawPages),
+normalizedTombstones=normalizeTombstones(rawTombstones),
+deletedIds=new Set(
+normalizedTombstones.map(item=>item.id)
+);
+
+return{
+pages:normalizedPages.filter(
+item=>!deletedIds.has(item.id)
+),
+tombstones:normalizedTombstones
+}
 }
 
 function getLocalSnapshot(){
-return normalizeSnapshot({pages,tombstones})
+return normalizeSnapshot({
+pages,
+tombstones
+})
 }
 
-function applySnapshot(snapshot,{render=true}={}){
+function applySnapshot(
+snapshot,
+{render=true}={}
+){
 const normalized=normalizeSnapshot(snapshot);
+
 pages=normalized.pages;
 tombstones=normalized.tombstones;
-if(render)applySortAndRender();
+
+if(render){
+applySortAndRender()
+}
+
 return normalized
 }
 
 function pageComparable(item){
 if(!item)return null;
-return{id:item.id,title:item.title,url:item.url,titleMode:item.titleMode,note:item.note,remark:normalizeRemarks(item.remark)}
+
+return{
+id:item.id,
+title:item.title,
+url:item.url,
+titleMode:item.titleMode,
+note:item.note,
+remark:normalizeRemarks(item.remark)
+}
 }
 
 function canonicalSnapshot(snapshot){
 const normalized=normalizeSnapshot(snapshot);
+
 return{
-pages:normalized.pages.map(pageComparable).sort((a,b)=>a.id.localeCompare(b.id)),
-tombstones:normalized.tombstones.map(item=>({id:item.id,deletedAt:Number(item.deletedAt)||0})).sort((a,b)=>a.id.localeCompare(b.id))
+pages:normalized.pages
+.map(pageComparable)
+.sort((a,b)=>a.id.localeCompare(b.id)),
+tombstones:normalized.tombstones
+.map(item=>({
+id:item.id,
+deletedAt:Number(item.deletedAt)||0
+}))
+.sort((a,b)=>a.id.localeCompare(b.id))
 }
 }
 
 function getFingerprint(snapshot){
-const raw=JSON.stringify(canonicalSnapshot(snapshot));
+const raw=JSON.stringify(
+canonicalSnapshot(snapshot)
+);
+
 return`${raw.length}:${hashString(raw)}`
 }
 
 function makeRemotePayload(snapshot){
 const normalized=normalizeSnapshot(snapshot);
+
 return[
 ...normalized.pages.map(pageComparable),
-...normalized.tombstones.map(item=>({id:item.id,__pagesDeleted:true,deletedAt:Number(item.deletedAt)||0}))
+...normalized.tombstones.map(item=>({
+id:item.id,
+__pagesDeleted:true,
+deletedAt:Number(item.deletedAt)||0
+}))
 ]
 }
 
 function assertSyncSize(snapshot){
-const raw=JSON.stringify(makeRemotePayload(snapshot),null,2);
-if(new TextEncoder().encode(raw).length>MAX_SYNC_BYTES)throw new Error('数据超过 750 KB 同步上限');
+const raw=JSON.stringify(
+makeRemotePayload(snapshot),
+null,
+2
+);
+
+if(
+new TextEncoder()
+.encode(raw)
+.length >
+MAX_SYNC_BYTES
+){
+throw new Error(
+'数据超过 750 KB 同步上限'
+)
+}
+
 return raw
 }
 
 function upsertTombstone(id,deletedAt=Date.now()){
 const key=String(id||'').trim();
+
 if(!key)return;
-const existing=tombstones.find(item=>item.id===key);
-if(existing)existing.deletedAt=Math.max(Number(existing.deletedAt)||0,Number(deletedAt)||Date.now());
-else tombstones.push({id:key,deletedAt:Number(deletedAt)||Date.now()})
+
+const existing=tombstones.find(
+item=>item.id===key
+);
+
+if(existing){
+existing.deletedAt=Math.max(
+Number(existing.deletedAt)||0,
+Number(deletedAt)||Date.now()
+)
+}else{
+tombstones.push({
+id:key,
+deletedAt:Number(deletedAt)||Date.now()
+})
+}
 }
 
 function getSyncTarget(){
@@ -619,100 +1936,355 @@ return`${String(config.owner||'').trim()}/${String(config.repo||'').trim()}/${St
 }
 
 function emptySyncMeta(target=getSyncTarget()){
-return{target,sha:null,fingerprint:null,dirty:false,lastSyncAt:null}
+return{
+target,
+sha:null,
+fingerprint:null,
+dirty:false,
+lastSyncAt:null
+}
 }
 
 async function loadSyncState(){
-let storedMeta=null,storedBase=null;
-try{[storedMeta,storedBase]=await Promise.all([idbGet(SYNC_META_KEY),idbGet(SYNC_BASE_KEY)])}catch(error){console.warn('读取同步基线失败:',error)}
-if(storedMeta&&typeof storedMeta==='object'){
-syncMeta={target:typeof storedMeta.target==='string'?storedMeta.target:'',sha:typeof storedMeta.sha==='string'?storedMeta.sha:null,fingerprint:typeof storedMeta.fingerprint==='string'?storedMeta.fingerprint:null,dirty:Boolean(storedMeta.dirty),lastSyncAt:typeof storedMeta.lastSyncAt==='string'?storedMeta.lastSyncAt:null}
-}else syncMeta=emptySyncMeta('');
-syncBase=storedBase?normalizeSnapshot(storedBase):null
+let storedMeta=null,
+storedBase=null;
+
+try{
+[
+storedMeta,
+storedBase
+]=await Promise.all([
+idbGet(SYNC_META_KEY),
+idbGet(SYNC_BASE_KEY)
+])
+}catch(error){
+console.warn('读取同步基线失败:',error)
+}
+
+if(
+storedMeta &&
+typeof storedMeta==='object'
+){
+syncMeta={
+target:
+typeof storedMeta.target==='string'
+?storedMeta.target
+:'',
+
+sha:
+typeof storedMeta.sha==='string'
+?storedMeta.sha
+:null,
+
+fingerprint:
+typeof storedMeta.fingerprint==='string'
+?storedMeta.fingerprint
+:null,
+
+dirty:Boolean(storedMeta.dirty),
+
+lastSyncAt:
+typeof storedMeta.lastSyncAt==='string'
+?storedMeta.lastSyncAt
+:null
+}
+}else{
+syncMeta=emptySyncMeta('')
+}
+
+syncBase=storedBase
+?normalizeSnapshot(storedBase)
+:null
 }
 
 function persistSyncMeta(){
-return idbSet(SYNC_META_KEY,{...syncMeta})
+return idbSet(
+SYNC_META_KEY,
+{...syncMeta}
+)
 }
 
 function persistSyncBase(){
-return syncBase?idbSet(SYNC_BASE_KEY,canonicalSnapshot(syncBase)):idbDelete(SYNC_BASE_KEY)
+return syncBase
+?idbSet(
+SYNC_BASE_KEY,
+canonicalSnapshot(syncBase)
+)
+:idbDelete(
+SYNC_BASE_KEY
+)
 }
 
 async function persistSyncState(){
-await Promise.allSettled([persistSyncMeta(),persistSyncBase()])
+await Promise.allSettled([
+persistSyncMeta(),
+persistSyncBase()
+])
 }
 
 function ensureSyncTarget(){
 const target=getSyncTarget();
-if(syncMeta.target===target)return false;
+
+if(syncMeta.target===target){
+return false
+}
+
 syncMeta=emptySyncMeta(target);
 syncBase=null;
+
 void persistSyncState();
+
 return true
 }
 
 function updateLastSyncDisplay(){
-if(!syncMeta.lastSyncAt||syncMeta.target!==getSyncTarget()){
-lastSyncTime.textContent=syncMeta.dirty?'有未同步修改':'未同步';
+if(
+!syncMeta.lastSyncAt ||
+syncMeta.target!==getSyncTarget()
+){
+lastSyncTime.textContent=
+syncMeta.dirty
+?'有未同步修改'
+:'未同步';
+
 return
 }
+
 const date=new Date(syncMeta.lastSyncAt);
-lastSyncTime.textContent=Number.isNaN(date.getTime())?'已同步':`已同步 ${date.toLocaleString()}`
+
+lastSyncTime.textContent=
+Number.isNaN(date.getTime())
+?'已同步'
+:`已同步 ${date.toLocaleString()}`
 }
 
 function valuesEqual(a,b){
-return JSON.stringify(a)===JSON.stringify(b)
+return JSON.stringify(a)===
+JSON.stringify(b)
 }
 
-function mergeRemarkValues(baseValue,localValue,remoteValue){
-const base=normalizeRemarks(baseValue),local=normalizeRemarks(localValue),remote=normalizeRemarks(remoteValue),key=value=>remarkHistoryKey(value),baseKeys=new Set(base.map(key)),localKeys=new Set(local.map(key)),remoteKeys=new Set(remote.map(key)),removed=new Set(),result=[];
-base.forEach(value=>{const k=key(value);if(!localKeys.has(k)||!remoteKeys.has(k))removed.add(k)});
-base.forEach(value=>{if(!removed.has(key(value)))result.push(value)});
-[...local,...remote].forEach(value=>{const k=key(value);if(!baseKeys.has(k)&&!result.some(item=>key(item)===k))result.push(value)});
+function mergeRemarkValues(
+baseValue,
+localValue,
+remoteValue
+){
+const base=normalizeRemarks(baseValue),
+local=normalizeRemarks(localValue),
+remote=normalizeRemarks(remoteValue),
+key=value=>remarkHistoryKey(value),
+baseKeys=new Set(base.map(key)),
+localKeys=new Set(local.map(key)),
+remoteKeys=new Set(remote.map(key)),
+removed=new Set(),
+result=[];
+
+base.forEach(value=>{
+const k=key(value);
+
+if(
+!localKeys.has(k) ||
+!remoteKeys.has(k)
+){
+removed.add(k)
+}
+});
+
+base.forEach(value=>{
+if(!removed.has(key(value))){
+result.push(value)
+}
+});
+
+[
+...local,
+...remote
+]
+.forEach(value=>{
+const k=key(value);
+
+if(
+!baseKeys.has(k) &&
+!result.some(
+item=>key(item)===k
+)
+){
+result.push(value)
+}
+});
+
 return normalizeRemarks(result)
 }
 
 function entityMap(snapshot){
-const normalized=normalizeSnapshot(snapshot),map=new Map();
-normalized.pages.forEach(item=>map.set(item.id,{kind:'page',value:item}));
-normalized.tombstones.forEach(item=>map.set(item.id,{kind:'deleted',value:item}));
+const normalized=normalizeSnapshot(snapshot),
+map=new Map();
+
+normalized.pages.forEach(item=>{
+map.set(item.id,{
+kind:'page',
+value:item
+})
+});
+
+normalized.tombstones.forEach(item=>{
+map.set(item.id,{
+kind:'deleted',
+value:item
+})
+});
+
 return map
 }
 
 function entityEqual(a,b){
 if(!a&&!b)return true;
-if(!a||!b||a.kind!==b.kind)return false;
-if(a.kind==='deleted')return true;
-return valuesEqual(pageComparable(a.value),pageComparable(b.value))
+
+if(
+!a ||
+!b ||
+a.kind!==b.kind
+){
+return false
 }
 
-function mergePageRecord(id,base,local,remote,preference,conflicts){
-const merged={id},scalarFields=['title','url','titleMode','note'];
+if(a.kind==='deleted'){
+return true
+}
+
+return valuesEqual(
+pageComparable(a.value),
+pageComparable(b.value)
+)
+}
+
+function mergePageRecord(
+id,
+base,
+local,
+remote,
+preference,
+conflicts
+){
+const merged={id},
+scalarFields=[
+'title',
+'url',
+'titleMode',
+'note'
+];
+
 scalarFields.forEach(field=>{
-const b=base?.[field],l=local?.[field],r=remote?.[field];
-if(valuesEqual(l,r))merged[field]=cloneValue(l);
-else if(base&&valuesEqual(l,b))merged[field]=cloneValue(r);
-else if(base&&valuesEqual(r,b))merged[field]=cloneValue(l);
-else{
-conflicts.push({id,field,local:cloneValue(l),remote:cloneValue(r)});
-merged[field]=cloneValue(preference==='remote'?r:l)
+const b=base?.[field],
+l=local?.[field],
+r=remote?.[field];
+
+if(valuesEqual(l,r)){
+merged[field]=cloneValue(l)
+}else if(
+base &&
+valuesEqual(l,b)
+){
+merged[field]=cloneValue(r)
+}else if(
+base &&
+valuesEqual(r,b)
+){
+merged[field]=cloneValue(l)
+}else{
+conflicts.push({
+id,
+field,
+local:cloneValue(l),
+remote:cloneValue(r)
+});
+
+merged[field]=cloneValue(
+preference==='remote'
+?r
+:l
+)
 }
 });
-const bRemarks=base?.remark||[],lRemarks=local?.remark||[],rRemarks=remote?.remark||[];
-if(valuesEqual(lRemarks,rRemarks))merged.remark=normalizeRemarks(lRemarks);
-else if(base&&valuesEqual(lRemarks,bRemarks))merged.remark=normalizeRemarks(rRemarks);
-else if(base&&valuesEqual(rRemarks,bRemarks))merged.remark=normalizeRemarks(lRemarks);
-else merged.remark=mergeRemarkValues(bRemarks,lRemarks,rRemarks);
+
+const bRemarks=base?.remark||[],
+lRemarks=local?.remark||[],
+rRemarks=remote?.remark||[];
+
+if(valuesEqual(lRemarks,rRemarks)){
+merged.remark=normalizeRemarks(lRemarks)
+}else if(
+base &&
+valuesEqual(lRemarks,bRemarks)
+){
+merged.remark=normalizeRemarks(rRemarks)
+}else if(
+base &&
+valuesEqual(rRemarks,bRemarks)
+){
+merged.remark=normalizeRemarks(lRemarks)
+}else{
+merged.remark=mergeRemarkValues(
+bRemarks,
+lRemarks,
+rRemarks
+)
+}
+
 return normalizePageArray([merged])[0]||null
 }
 
-function mergeSnapshots(baseSnapshot,localSnapshot,remoteSnapshot,preference=null){
-const baseMap=entityMap(baseSnapshot||{pages:[],tombstones:[]}),localMap=entityMap(localSnapshot),remoteMap=entityMap(remoteSnapshot),ids=new Set([...baseMap.keys(),...localMap.keys(),...remoteMap.keys()]),conflicts=[],pagesOut=[],tombstonesOut=[],now=Date.now();
-const deletedEntity=(id,source=null)=>({kind:'deleted',value:{id,deletedAt:Number(source?.value?.deletedAt)||now}});
-const chooseConflict=(id,field,l,r)=>{conflicts.push({id,field,local:l,remote:r});return preference==='remote'?r:l};
+function mergeSnapshots(
+baseSnapshot,
+localSnapshot,
+remoteSnapshot,
+preference=null
+){
+const baseMap=entityMap(
+baseSnapshot||{
+pages:[],
+tombstones:[]
+}
+),
+localMap=entityMap(localSnapshot),
+remoteMap=entityMap(remoteSnapshot),
+ids=new Set([
+...baseMap.keys(),
+...localMap.keys(),
+...remoteMap.keys()
+]),
+conflicts=[],
+pagesOut=[],
+tombstonesOut=[],
+now=Date.now();
+
+const deletedEntity=(id,source=null)=>({
+kind:'deleted',
+value:{
+id,
+deletedAt:
+Number(source?.value?.deletedAt)||
+now
+}
+});
+
+const chooseConflict=(id,field,l,r)=>{
+conflicts.push({
+id,
+field,
+local:l,
+remote:r
+});
+
+return preference==='remote'
+?r
+:l
+};
+
 for(const id of ids){
-let b=baseMap.get(id)||null,l=localMap.get(id)||null,r=remoteMap.get(id)||null;
+let b=baseMap.get(id)||null,
+l=localMap.get(id)||null,
+r=remoteMap.get(id)||null;
+
 if(b?.kind==='page'){
 if(!l)l=deletedEntity(id);
 if(!r)r=deletedEntity(id)
@@ -720,51 +2292,161 @@ if(!r)r=deletedEntity(id)
 if(!l)l=b;
 if(!r)r=b
 }
+
 let chosen=null;
+
 if(entityEqual(l,r)){
-if(l?.kind==='deleted'&&r?.kind==='deleted')chosen=deletedEntity(id,{value:{deletedAt:Math.max(Number(l.value.deletedAt)||0,Number(r.value.deletedAt)||0)}});
-else chosen=l||r
-}else if(entityEqual(l,b))chosen=r;
-else if(entityEqual(r,b))chosen=l;
-else if(!b){
-if(!l)chosen=r;
-else if(!r)chosen=l;
-else if(l.kind==='page'&&r.kind==='page')chosen={kind:'page',value:mergePageRecord(id,null,l.value,r.value,preference,conflicts)};
-else chosen=chooseConflict(id,'__delete__',l,r)
-}else if(l?.kind==='deleted'&&r?.kind==='deleted'){
-chosen=deletedEntity(id,{value:{deletedAt:Math.max(Number(l.value.deletedAt)||0,Number(r.value.deletedAt)||0)}})
-}else if(l?.kind==='page'&&r?.kind==='page'){
-chosen={kind:'page',value:mergePageRecord(id,b.kind==='page'?b.value:null,l.value,r.value,preference,conflicts)}
+if(
+l?.kind==='deleted' &&
+r?.kind==='deleted'
+){
+chosen=deletedEntity(id,{
+value:{
+deletedAt:Math.max(
+Number(l.value.deletedAt)||0,
+Number(r.value.deletedAt)||0
+)
+}
+})
 }else{
-chosen=chooseConflict(id,'__delete__',l,r)
+chosen=l||r
 }
+}else if(entityEqual(l,b)){
+chosen=r
+}else if(entityEqual(r,b)){
+chosen=l
+}else if(!b){
+if(!l){
+chosen=r
+}else if(!r){
+chosen=l
+}else if(
+l.kind==='page' &&
+r.kind==='page'
+){
+chosen={
+kind:'page',
+value:mergePageRecord(
+id,
+null,
+l.value,
+r.value,
+preference,
+conflicts
+)
+}
+}else{
+chosen=chooseConflict(
+id,
+'__delete__',
+l,
+r
+)
+}
+}else if(
+l?.kind==='deleted' &&
+r?.kind==='deleted'
+){
+chosen=deletedEntity(id,{
+value:{
+deletedAt:Math.max(
+Number(l.value.deletedAt)||0,
+Number(r.value.deletedAt)||0
+)
+}
+})
+}else if(
+l?.kind==='page' &&
+r?.kind==='page'
+){
+chosen={
+kind:'page',
+value:mergePageRecord(
+id,
+b.kind==='page'
+?b.value
+:null,
+l.value,
+r.value,
+preference,
+conflicts
+)
+}
+}else{
+chosen=chooseConflict(
+id,
+'__delete__',
+l,
+r
+)
+}
+
 if(!chosen)continue;
-if(chosen.kind==='deleted')tombstonesOut.push({id,deletedAt:Number(chosen.value.deletedAt)||now});
-else if(chosen.value)pagesOut.push(chosen.value)
+
+if(chosen.kind==='deleted'){
+tombstonesOut.push({
+id,
+deletedAt:
+Number(chosen.value.deletedAt)||
+now
+})
+}else if(chosen.value){
+pagesOut.push(chosen.value)
 }
-return{snapshot:normalizeSnapshot({pages:pagesOut,tombstones:tombstonesOut}),conflicts}
+}
+
+return{
+snapshot:normalizeSnapshot({
+pages:pagesOut,
+tombstones:tombstonesOut
+}),
+conflicts
+}
 }
 
 function formatConflictSummary(conflicts){
-const ids=new Set(conflicts.map(item=>item.id));
+const ids=new Set(
+conflicts.map(item=>item.id)
+);
+
 return`${conflicts.length} 个字段 / ${ids.size} 个条目`
 }
 
 function markLocalChange(){
 localMutationVersion++;
 syncMeta.dirty=true;
-void persistSyncMeta().catch(error=>console.warn('保存同步状态失败:',error));
+
+void persistSyncMeta()
+.catch(
+error=>
+console.warn(
+'保存同步状态失败:',
+error
+)
+);
+
 if(isConfigValid()){
-setCloudStatus('offline','待同步');
-lastSyncTime.textContent='有未同步修改'
+setCloudStatus(
+'offline',
+'待同步'
+);
+
+lastSyncTime.textContent=
+'有未同步修改'
 }
-if(syncInFlight)syncRequested=true;
+
+if(syncInFlight){
+syncRequested=true
+}
+
 scheduleAutoSync()
 }
 
 function scheduleAutoSync(){
 if(!isConfigValid())return;
+
 clearTimeout(autoSyncTimer);
+
 autoSyncTimer=setTimeout(()=>{
 autoSyncTimer=null;
 syncToCloud(false,false)
@@ -772,51 +2454,124 @@ syncToCloud(false,false)
 }
 
 function clearPassiveSyncTimer(){
-if(passiveSyncTimer!==null){clearTimeout(passiveSyncTimer);passiveSyncTimer=null}
+if(passiveSyncTimer!==null){
+clearTimeout(passiveSyncTimer);
+passiveSyncTimer=null
+}
 }
 
 function wakePassiveSync(){
-if(!localStateReady||!isConfigValid()||document.hidden||!editModal.classList.contains('hidden')||!configModal.classList.contains('hidden'))return;
+if(
+!localStateReady ||
+!isConfigValid() ||
+document.hidden ||
+!editModal.classList.contains('hidden') ||
+!configModal.classList.contains('hidden')
+){
+return
+}
+
 clearPassiveSyncTimer();
+
 passiveSyncTimer=setTimeout(()=>{
 passiveSyncTimer=null;
-if(Date.now()-lastPassiveSyncAt<PASSIVE_SYNC_MIN_INTERVAL)return;
+
+if(
+Date.now()-lastPassiveSyncAt <
+PASSIVE_SYNC_MIN_INTERVAL
+){
+return
+}
+
 lastPassiveSyncAt=Date.now();
+
 syncToCloud(false,false)
 },PASSIVE_SYNC_DELAY)
 }
 
 function utf8ToBase64(text){
-const bytes=new TextEncoder().encode(text);let binary='';
-for(let offset=0;offset<bytes.length;offset+=0x8000)binary+=String.fromCharCode(...bytes.subarray(offset,offset+0x8000));
+const bytes=new TextEncoder().encode(text);
+
+let binary='';
+
+for(
+let offset=0;
+offset<bytes.length;
+offset+=0x8000
+){
+binary+=String.fromCharCode(
+...bytes.subarray(
+offset,
+offset+0x8000
+)
+)
+}
+
 return btoa(binary)
 }
 
 function base64ToUtf8(base64){
-const binary=atob(String(base64||'').replace(/\s/g,'')),bytes=new Uint8Array(binary.length);
-for(let i=0;i<binary.length;i++)bytes[i]=binary.charCodeAt(i);
-return new TextDecoder('utf-8',{fatal:true}).decode(bytes)
+const binary=atob(
+String(base64||'')
+.replace(/\s/g,'')
+),
+bytes=new Uint8Array(binary.length);
+
+for(let i=0;i<binary.length;i++){
+bytes[i]=binary.charCodeAt(i)
+}
+
+return new TextDecoder(
+'utf-8',
+{fatal:true}
+)
+.decode(bytes)
 }
 
 async function loadConfig(){
-let parsed={};
-let persistedToken='';
+let parsed={},
+persistedToken='';
+
 try{
 parsed=await idbGet(CONFIG_KEY)||{};
-persistedToken=String(await idbGet(TOKEN_PERSISTED_KEY)||'')
+
+persistedToken=String(
+await idbGet(TOKEN_PERSISTED_KEY)||
+''
+)
 }catch(error){
-console.error('读取 Pages 配置失败:',error)
+console.error(
+'读取 Pages 配置失败:',
+error
+)
 }
 
-const rememberToken=typeof parsed.rememberToken==='boolean'?parsed.rememberToken:true;
-memoryToken=rememberToken?persistedToken:'';
+const rememberToken=
+typeof parsed.rememberToken==='boolean'
+?parsed.rememberToken
+:true;
+
+memoryToken=
+rememberToken
+?persistedToken
+:'';
 
 config={
 token:memoryToken,
 rememberToken,
-owner:typeof parsed.owner==='string'?parsed.owner:'',
-repo:typeof parsed.repo==='string'?parsed.repo:'',
-file:typeof parsed.file==='string'&&parsed.file.trim()?parsed.file.trim():'pages_data.json'
+owner:
+typeof parsed.owner==='string'
+?parsed.owner
+:'',
+repo:
+typeof parsed.repo==='string'
+?parsed.repo
+:'',
+file:
+typeof parsed.file==='string' &&
+parsed.file.trim()
+?parsed.file.trim()
+:'pages_data.json'
 };
 
 cfgToken.value=config.token;
@@ -825,7 +2580,11 @@ cfgOwner.value=config.owner;
 cfgRepo.value=config.repo;
 cfgFile.value=config.file;
 
-return Boolean(config.owner||config.repo||config.token)
+return Boolean(
+config.owner ||
+config.repo ||
+config.token
+)
 }
 
 async function saveConfig(){
@@ -843,244 +2602,1013 @@ repo:config.repo,
 file:config.file
 });
 
-if(config.rememberToken)await idbSet(TOKEN_PERSISTED_KEY,config.token);
-else await idbDelete(TOKEN_PERSISTED_KEY)
+if(config.rememberToken){
+await idbSet(
+TOKEN_PERSISTED_KEY,
+config.token
+)
+}else{
+await idbDelete(
+TOKEN_PERSISTED_KEY
+)
+}
 }
 
 function isConfigValid(){
-return config.token&&config.owner&&config.repo&&config.file
+return Boolean(
+config.token &&
+config.owner &&
+config.repo &&
+config.file
+)
 }
 
 async function githubApi(method,endpoint,body=null){
-const url=`https://api.github.com/repos/${encodeURIComponent(config.owner)}/${encodeURIComponent(config.repo)}/${endpoint}`,
-headers={'Authorization':`token ${config.token}`,'Accept':'application/vnd.github+json'},
-options={method,headers};
-if(body!==null){headers['Content-Type']='application/json';options.body=JSON.stringify(body)}
-const response=await fetch(url,options),raw=await response.text();
+const url=
+`https://api.github.com/repos/${encodeURIComponent(config.owner)}/${encodeURIComponent(config.repo)}/${endpoint}`;
+
+const headers={
+'Authorization':`token ${config.token}`,
+'Accept':'application/vnd.github+json'
+};
+
+const options={
+method,
+headers
+};
+
+if(body!==null){
+headers['Content-Type']='application/json';
+options.body=JSON.stringify(body)
+}
+
+const response=await fetch(
+url,
+options
+);
+
+const raw=await response.text();
+
 let payload=null;
-if(raw){try{payload=JSON.parse(raw)}catch(error){payload={message:raw}}}
-if(!response.ok){const error=new Error(payload?.message||`HTTP ${response.status}`);error.status=response.status;throw error}
+
+if(raw){
+try{
+payload=JSON.parse(raw)
+}catch(error){
+payload={message:raw}
+}
+}
+
+if(!response.ok){
+const error=new Error(
+payload?.message||
+`HTTP ${response.status}`
+);
+
+error.status=response.status;
+
+throw error
+}
+
 return payload
 }
 
 async function readRemoteState(){
-if(!isConfigValid())throw new Error('请先配置 GitHub 连接');
+if(!isConfigValid()){
+throw new Error(
+'请先配置 GitHub 连接'
+)
+}
+
 try{
-const data=await githubApi('GET',`contents/${String(config.file).split('/').filter(Boolean).map(encodeURIComponent).join('/')}`);
-if(!data||data.type!=='file'||!data.sha||!data.content)throw new Error('云端文件无法安全读取');
-if(Number.isFinite(Number(data.size))&&Number(data.size)>MAX_SYNC_BYTES)throw new Error('云端文件超过 750 KB 同步上限');
-const parsed=JSON.parse(base64ToUtf8(data.content)),state=normalizeSnapshot(parsed),rawItems=Array.isArray(parsed)?parsed:(Array.isArray(parsed?.pages)?parsed.pages:[]),needsMigration=!Array.isArray(parsed)||rawItems.some(item=>item&&item.__pagesDeleted!==true&&item.deleted!==true&&!(typeof item.id==='string'&&item.id.trim()));
+const data=await githubApi(
+'GET',
+`contents/${String(config.file).split('/').filter(Boolean).map(encodeURIComponent).join('/')}`
+);
+
+if(
+!data ||
+data.type!=='file' ||
+!data.sha ||
+!data.content
+){
+throw new Error(
+'云端文件无法安全读取'
+)
+}
+
+if(
+Number.isFinite(Number(data.size)) &&
+Number(data.size)>MAX_SYNC_BYTES
+){
+throw new Error(
+'云端文件超过 750 KB 同步上限'
+)
+}
+
+const parsed=JSON.parse(
+base64ToUtf8(data.content)
+);
+
+const state=normalizeSnapshot(parsed);
+
+const rawItems=Array.isArray(parsed)
+?parsed
+:(
+Array.isArray(parsed?.pages)
+?parsed.pages
+:[]
+);
+
+const needsMigration=
+!Array.isArray(parsed) ||
+rawItems.some(
+item=>
+item &&
+item.__pagesDeleted!==true &&
+item.deleted!==true &&
+!(
+typeof item.id==='string' &&
+item.id.trim()
+)
+);
+
 assertSyncSize(state);
-return{exists:true,sha:data.sha,state,needsMigration}
+
+return{
+exists:true,
+sha:data.sha,
+state,
+needsMigration
+}
 }catch(error){
-if(error?.status===404)return{exists:false,sha:null,state:{pages:[],tombstones:[]}};
+if(error?.status===404){
+return{
+exists:false,
+sha:null,
+state:{
+pages:[],
+tombstones:[]
+}
+}
+}
+
 throw error
 }
 }
 
-async function writeRemoteState(snapshot,sha=null){
-const raw=assertSyncSize(snapshot),body={message:`更新 Pages 数据 - ${new Date().toLocaleString()}`,content:utf8ToBase64(raw)};
-if(sha)body.sha=sha;
-const result=await githubApi('PUT',`contents/${String(config.file).split('/').filter(Boolean).map(encodeURIComponent).join('/')}`,body);
+async function writeRemoteState(
+snapshot,
+sha=null
+){
+const raw=assertSyncSize(snapshot);
+
+const body={
+message:
+`更新 Pages 数据 - ${new Date().toLocaleString()}`,
+content:utf8ToBase64(raw)
+};
+
+if(sha){
+body.sha=sha
+}
+
+const result=await githubApi(
+'PUT',
+`contents/${String(config.file).split('/').filter(Boolean).map(encodeURIComponent).join('/')}`,
+body
+);
+
 return result?.content?.sha||null
 }
 
-async function persistSyncedBase(snapshot,sha){
-const normalized=normalizeSnapshot(snapshot),baseFingerprint=getFingerprint(normalized),currentFingerprint=getFingerprint(getLocalSnapshot());
+async function persistSyncedBase(
+snapshot,
+sha
+){
+const normalized=normalizeSnapshot(snapshot),
+baseFingerprint=getFingerprint(normalized),
+currentFingerprint=getFingerprint(
+getLocalSnapshot()
+);
+
 syncBase=normalized;
-syncMeta={target:getSyncTarget(),sha:sha||null,fingerprint:baseFingerprint,dirty:currentFingerprint!==baseFingerprint,lastSyncAt:new Date().toISOString()};
+
+syncMeta={
+target:getSyncTarget(),
+sha:sha||null,
+fingerprint:baseFingerprint,
+dirty:
+currentFingerprint!==baseFingerprint,
+lastSyncAt:
+new Date().toISOString()
+};
+
 await persistSyncState();
 updateLastSyncDisplay()
 }
 
-async function finalizeSyncedState(syncedSnapshot,sha,localAtStart,mutationAtStart,{applySynced=true}={}){
-const normalizedSynced=normalizeSnapshot(syncedSnapshot);
-if(localMutationVersion===mutationAtStart){
-if(applySynced)applySnapshot(normalizedSynced);
-await persistSyncedBase(normalizedSynced,sha);
+async function finalizeSyncedState(
+syncedSnapshot,
+sha,
+localAtStart,
+mutationAtStart,
+{applySynced=true}={}
+){
+const normalizedSynced=
+normalizeSnapshot(syncedSnapshot);
+
+if(
+localMutationVersion===
+mutationAtStart
+){
+if(applySynced){
+applySnapshot(normalizedSynced)
+}
+
+await persistSyncedBase(
+normalizedSynced,
+sha
+);
+
 return
 }
-const current=getLocalSnapshot(),rebased=mergeSnapshots(localAtStart,current,normalizedSynced,'local').snapshot;
+
+const current=getLocalSnapshot();
+
+const rebased=mergeSnapshots(
+localAtStart,
+current,
+normalizedSynced,
+'local'
+).snapshot;
+
 applySnapshot(rebased);
-await persistSyncedBase(normalizedSynced,sha);
+
+await persistSyncedBase(
+normalizedSynced,
+sha
+);
+
 syncMeta.dirty=true;
+
 await persistSyncMeta();
+
 syncRequested=true;
-setCloudStatus('offline','待同步');
-lastSyncTime.textContent='有未同步修改'
+
+setCloudStatus(
+'offline',
+'待同步'
+);
+
+lastSyncTime.textContent=
+'有未同步修改'
 }
 
-async function performSync({showMessage=true,interactive=showMessage}={}){
+async function performSync({
+showMessage=true,
+interactive=showMessage
+}={}){
 ensureSyncTarget();
-const localAtStart=getLocalSnapshot(),mutationAtStart=localMutationVersion,localFingerprint=getFingerprint(localAtStart),baselineFingerprint=syncMeta.fingerprint,hasBaseline=Boolean(syncBase&&typeof baselineFingerprint==='string');
-setCloudStatus('syncing','同步中...');
+
+const localAtStart=getLocalSnapshot(),
+mutationAtStart=localMutationVersion,
+localFingerprint=getFingerprint(localAtStart),
+baselineFingerprint=syncMeta.fingerprint,
+hasBaseline=Boolean(
+syncBase &&
+typeof baselineFingerprint==='string'
+);
+
+setCloudStatus(
+'syncing',
+'同步中...'
+);
+
 let conflictPreference=null;
-for(let attempt=0;attempt<MAX_WRITE_CONFLICT_RETRIES;attempt++){
-const remote=await readRemoteState();
+
+for(
+let attempt=0;
+attempt<MAX_WRITE_CONFLICT_RETRIES;
+attempt++
+){
+const remote=
+await readRemoteState();
+
 if(!remote.exists){
-if(hasBaseline&&!interactive){
-setCloudStatus('offline','云端文件已删除');
-showToast('云端数据文件已删除，请点击“同步”确认是否重新创建','error');
-return{ok:false,conflict:true}
+if(
+hasBaseline &&
+!interactive
+){
+setCloudStatus(
+'offline',
+'云端文件已删除'
+);
+
+showToast(
+'云端数据文件已删除，请点击“同步”确认是否重新创建',
+'error'
+);
+
+return{
+ok:false,
+conflict:true
 }
-if(hasBaseline&&interactive&&!confirm('云端数据文件已删除。是否用当前本地数据重新创建？'))return{ok:false,conflict:true};
+}
+
+if(
+hasBaseline &&
+interactive &&
+!confirm(
+'云端数据文件已删除。是否用当前本地数据重新创建？'
+)
+){
+return{
+ok:false,
+conflict:true
+}
+}
+
 try{
-const sha=await writeRemoteState(localAtStart);
-await finalizeSyncedState(localAtStart,sha,localAtStart,mutationAtStart,{applySynced:false});
-setCloudStatus(syncMeta.dirty?'offline':'online',syncMeta.dirty?'待同步':'已连接');
-if(showMessage)showToast('已创建云端数据文件','success');
-return{ok:true,conflict:false}
+const sha=
+await writeRemoteState(
+localAtStart
+);
+
+await finalizeSyncedState(
+localAtStart,
+sha,
+localAtStart,
+mutationAtStart,
+{applySynced:false}
+);
+
+setCloudStatus(
+syncMeta.dirty
+?'offline'
+:'online',
+syncMeta.dirty
+?'待同步'
+:'已连接'
+);
+
+if(showMessage){
+showToast(
+'已创建云端数据文件',
+'success'
+)
+}
+
+return{
+ok:true,
+conflict:false
+}
 }catch(error){
-if(error?.status===409&&attempt<MAX_WRITE_CONFLICT_RETRIES-1)continue;
+if(
+error?.status===409 &&
+attempt<
+MAX_WRITE_CONFLICT_RETRIES-1
+){
+continue
+}
+
 throw error
 }
 }
-const remoteFingerprint=getFingerprint(remote.state);
-if(localFingerprint===remoteFingerprint){
+
+const remoteFingerprint=
+getFingerprint(remote.state);
+
+if(
+localFingerprint===
+remoteFingerprint
+){
 let finalSha=remote.sha;
+
 if(remote.needsMigration){
-try{finalSha=await writeRemoteState(remote.state,remote.sha)}catch(error){if(error?.status===409&&attempt<MAX_WRITE_CONFLICT_RETRIES-1)continue;throw error}
-}
-await finalizeSyncedState(remote.state,finalSha,localAtStart,mutationAtStart,{applySynced:false});
-setCloudStatus(syncMeta.dirty?'offline':'online',syncMeta.dirty?'待同步':'已连接');
-if(showMessage)showToast(remote.needsMigration?'同步格式已升级，本地与云端已一致':'本地与云端已一致','success');
-return{ok:true,conflict:false}
-}
-if(!hadStoredState&&!hasBaseline){
-await finalizeSyncedState(remote.state,remote.sha,localAtStart,mutationAtStart,{applySynced:true});
-setCloudStatus(syncMeta.dirty?'offline':'online',syncMeta.dirty?'待同步':'已连接');
-if(showMessage)showToast(`已从云端更新 ${pages.length} 个条目`,'success');
-return{ok:true,conflict:false}
-}
-const base=hasBaseline?syncBase:{pages:[],tombstones:[]},baseFingerprint=hasBaseline?baselineFingerprint:getFingerprint(base),localChanged=localFingerprint!==baseFingerprint,remoteChanged=remoteFingerprint!==baseFingerprint;
-if(hasBaseline&&localChanged&&!remoteChanged){
 try{
-const sha=await writeRemoteState(localAtStart,remote.sha);
-await finalizeSyncedState(localAtStart,sha,localAtStart,mutationAtStart,{applySynced:false});
-setCloudStatus(syncMeta.dirty?'offline':'online',syncMeta.dirty?'待同步':'已连接');
-if(showMessage)showToast('本地数据已上传','success');
-return{ok:true,conflict:false}
+finalSha=await writeRemoteState(
+remote.state,
+remote.sha
+)
 }catch(error){
-if(error?.status===409&&attempt<MAX_WRITE_CONFLICT_RETRIES-1)continue;
+if(
+error?.status===409 &&
+attempt<
+MAX_WRITE_CONFLICT_RETRIES-1
+){
+continue
+}
+
 throw error
 }
 }
-if(hasBaseline&&!localChanged&&remoteChanged){
-await finalizeSyncedState(remote.state,remote.sha,localAtStart,mutationAtStart,{applySynced:true});
-setCloudStatus(syncMeta.dirty?'offline':'online',syncMeta.dirty?'待同步':'已连接');
-if(showMessage)showToast(`已从云端更新 ${pages.length} 个条目`,'success');
-return{ok:true,conflict:false}
+
+await finalizeSyncedState(
+remote.state,
+finalSha,
+localAtStart,
+mutationAtStart,
+{applySynced:false}
+);
+
+setCloudStatus(
+syncMeta.dirty
+?'offline'
+:'online',
+syncMeta.dirty
+?'待同步'
+:'已连接'
+);
+
+if(showMessage){
+showToast(
+remote.needsMigration
+?'同步格式已升级，本地与云端已一致'
+:'本地与云端已一致',
+'success'
+)
 }
-let mergedResult=mergeSnapshots(base,localAtStart,remote.state,conflictPreference);
-if(mergedResult.conflicts.length&&!conflictPreference){
+
+return{
+ok:true,
+conflict:false
+}
+}
+
+if(
+!hadStoredState &&
+!hasBaseline
+){
+await finalizeSyncedState(
+remote.state,
+remote.sha,
+localAtStart,
+mutationAtStart,
+{applySynced:true}
+);
+
+setCloudStatus(
+syncMeta.dirty
+?'offline'
+:'online',
+syncMeta.dirty
+?'待同步'
+:'已连接'
+);
+
+if(showMessage){
+showToast(
+`已从云端更新 ${pages.length} 个条目`,
+'success'
+)
+}
+
+return{
+ok:true,
+conflict:false
+}
+}
+
+const base=
+hasBaseline
+?syncBase
+:{
+pages:[],
+tombstones:[]
+};
+
+const baseFingerprint=
+hasBaseline
+?baselineFingerprint
+:getFingerprint(base);
+
+const localChanged=
+localFingerprint!==baseFingerprint;
+
+const remoteChanged=
+remoteFingerprint!==baseFingerprint;
+
+if(
+hasBaseline &&
+localChanged &&
+!remoteChanged
+){
+try{
+const sha=await writeRemoteState(
+localAtStart,
+remote.sha
+);
+
+await finalizeSyncedState(
+localAtStart,
+sha,
+localAtStart,
+mutationAtStart,
+{applySynced:false}
+);
+
+setCloudStatus(
+syncMeta.dirty
+?'offline'
+:'online',
+syncMeta.dirty
+?'待同步'
+:'已连接'
+);
+
+if(showMessage){
+showToast(
+'本地数据已上传',
+'success'
+)
+}
+
+return{
+ok:true,
+conflict:false
+}
+}catch(error){
+if(
+error?.status===409 &&
+attempt<
+MAX_WRITE_CONFLICT_RETRIES-1
+){
+continue
+}
+
+throw error
+}
+}
+
+if(
+hasBaseline &&
+!localChanged &&
+remoteChanged
+){
+await finalizeSyncedState(
+remote.state,
+remote.sha,
+localAtStart,
+mutationAtStart,
+{applySynced:true}
+);
+
+setCloudStatus(
+syncMeta.dirty
+?'offline'
+:'online',
+syncMeta.dirty
+?'待同步'
+:'已连接'
+);
+
+if(showMessage){
+showToast(
+`已从云端更新 ${pages.length} 个条目`,
+'success'
+)
+}
+
+return{
+ok:true,
+conflict:false
+}
+}
+
+let mergedResult=
+mergeSnapshots(
+base,
+localAtStart,
+remote.state,
+conflictPreference
+);
+
+if(
+mergedResult.conflicts.length &&
+!conflictPreference
+){
 if(!interactive){
-setCloudStatus('offline','存在冲突');
-showToast(`检测到跨设备同字段冲突：${formatConflictSummary(mergedResult.conflicts)}。请点击“同步”处理。`,'error');
-return{ok:false,conflict:true}
+setCloudStatus(
+'offline',
+'存在冲突'
+);
+
+showToast(
+`检测到跨设备同字段冲突：${formatConflictSummary(mergedResult.conflicts)}。请点击“同步”处理。`,
+'error'
+);
+
+return{
+ok:false,
+conflict:true
 }
-const preferLocal=confirm(`检测到跨设备同字段冲突：${formatConflictSummary(mergedResult.conflicts)}。\n\n确定：冲突字段优先采用本机值；未冲突字段仍自动合并。\n取消：继续选择是否优先采用云端值。`);
-if(preferLocal)conflictPreference='local';
-else{
-const preferRemote=confirm('是否让冲突字段优先采用云端值？未冲突字段仍自动合并。');
-if(!preferRemote){setCloudStatus('offline','存在冲突');showToast('已取消同步，数据未被覆盖','info');return{ok:false,conflict:true}}
+}
+
+const preferLocal=confirm(
+`检测到跨设备同字段冲突：${formatConflictSummary(mergedResult.conflicts)}。
+
+确定：冲突字段优先采用本机值；未冲突字段仍自动合并。
+取消：继续选择是否优先采用云端值。`
+);
+
+if(preferLocal){
+conflictPreference='local'
+}else{
+const preferRemote=confirm(
+'是否让冲突字段优先采用云端值？未冲突字段仍自动合并。'
+);
+
+if(!preferRemote){
+setCloudStatus(
+'offline',
+'存在冲突'
+);
+
+showToast(
+'已取消同步，数据未被覆盖',
+'info'
+);
+
+return{
+ok:false,
+conflict:true
+}
+}
+
 conflictPreference='remote'
 }
-mergedResult=mergeSnapshots(base,localAtStart,remote.state,conflictPreference)
+
+mergedResult=mergeSnapshots(
+base,
+localAtStart,
+remote.state,
+conflictPreference
+)
 }
-const merged=mergedResult.snapshot,mergedFingerprint=getFingerprint(merged);
-if(mergedFingerprint===remoteFingerprint){
-await finalizeSyncedState(merged,remote.sha,localAtStart,mutationAtStart,{applySynced:true});
-setCloudStatus(syncMeta.dirty?'offline':'online',syncMeta.dirty?'待同步':'已连接');
-if(showMessage)showToast('已合并并采用云端最新版','success');
-return{ok:true,conflict:false}
+
+const merged=
+mergedResult.snapshot;
+
+const mergedFingerprint=
+getFingerprint(merged);
+
+if(
+mergedFingerprint===
+remoteFingerprint
+){
+await finalizeSyncedState(
+merged,
+remote.sha,
+localAtStart,
+mutationAtStart,
+{applySynced:true}
+);
+
+setCloudStatus(
+syncMeta.dirty
+?'offline'
+:'online',
+syncMeta.dirty
+?'待同步'
+:'已连接'
+);
+
+if(showMessage){
+showToast(
+'已合并并采用云端最新版',
+'success'
+)
 }
+
+return{
+ok:true,
+conflict:false
+}
+}
+
 try{
-const sha=await writeRemoteState(merged,remote.sha);
-await finalizeSyncedState(merged,sha,localAtStart,mutationAtStart,{applySynced:true});
-setCloudStatus(syncMeta.dirty?'offline':'online',syncMeta.dirty?'待同步':'已连接');
-if(showMessage)showToast(mergedResult.conflicts.length?'冲突字段已按选择处理，其余修改已自动合并':'两台设备的修改已自动合并并同步','success');
-return{ok:true,conflict:false}
+const sha=await writeRemoteState(
+merged,
+remote.sha
+);
+
+await finalizeSyncedState(
+merged,
+sha,
+localAtStart,
+mutationAtStart,
+{applySynced:true}
+);
+
+setCloudStatus(
+syncMeta.dirty
+?'offline'
+:'online',
+syncMeta.dirty
+?'待同步'
+:'已连接'
+);
+
+if(showMessage){
+showToast(
+mergedResult.conflicts.length
+?'冲突字段已按选择处理，其余修改已自动合并'
+:'两台设备的修改已自动合并并同步',
+'success'
+)
+}
+
+return{
+ok:true,
+conflict:false
+}
 }catch(error){
-if(error?.status===409&&attempt<MAX_WRITE_CONFLICT_RETRIES-1)continue;
+if(
+error?.status===409 &&
+attempt<
+MAX_WRITE_CONFLICT_RETRIES-1
+){
+continue
+}
+
 throw error
 }
 }
-throw new Error('多次重试后仍无法完成同步')
+
+throw new Error(
+'多次重试后仍无法完成同步'
+)
 }
 
-function syncToCloud(showMessage=true,interactive=showMessage){
+function syncToCloud(
+showMessage=true,
+interactive=showMessage
+){
 if(!isConfigValid()){
-if(showMessage)showToast('请先点击 "配置" 按钮设置 GitHub 连接','error');
+if(showMessage){
+showToast(
+'请先点击 "配置" 按钮设置 GitHub 连接',
+'error'
+)
+}
+
 return Promise.resolve(false)
 }
-clearTimeout(autoSyncTimer);autoSyncTimer=null;
+
+clearTimeout(autoSyncTimer);
+autoSyncTimer=null;
+
 syncRequested=true;
-if(showMessage)syncShowResult=true;
-if(interactive)syncInteractive=true;
-if(syncInFlight)return syncInFlight;
+
+if(showMessage){
+syncShowResult=true
+}
+
+if(interactive){
+syncInteractive=true
+}
+
+if(syncInFlight){
+return syncInFlight
+}
+
 syncInFlight=(async()=>{
 let allOk=true;
+
 while(syncRequested){
-const announce=syncShowResult,allowInteraction=syncInteractive;
-syncRequested=false;syncShowResult=false;syncInteractive=false;isSyncing=true;syncBtn.disabled=true;
-let result={ok:false,conflict:false};
-try{result=await performSync({showMessage:announce,interactive:allowInteraction})}
-catch(error){console.error('同步失败:',error);setCloudStatus('offline',error?.status===409?'存在冲突':'同步失败');if(announce||!document.hidden)showToast(`同步失败：${error?.message||error}`,'error');result={ok:false,conflict:error?.status===409}}
-finally{isSyncing=false;syncBtn.disabled=false}
-allOk=allOk&&result.ok;
-if(!result.ok){syncRequested=false;break}
+const announce=syncShowResult,
+allowInteraction=syncInteractive;
+
+syncRequested=false;
+syncShowResult=false;
+syncInteractive=false;
+isSyncing=true;
+syncBtn.disabled=true;
+
+let result={
+ok:false,
+conflict:false
+};
+
+try{
+result=await performSync({
+showMessage:announce,
+interactive:allowInteraction
+})
+}catch(error){
+console.error(
+'同步失败:',
+error
+);
+
+setCloudStatus(
+'offline',
+error?.status===409
+?'存在冲突'
+:'同步失败'
+);
+
+if(
+announce ||
+!document.hidden
+){
+showToast(
+`同步失败：${error?.message||error}`,
+'error'
+)
 }
+
+result={
+ok:false,
+conflict:
+error?.status===409
+}
+}finally{
+isSyncing=false;
+syncBtn.disabled=false
+}
+
+allOk=
+allOk &&
+result.ok;
+
+if(!result.ok){
+syncRequested=false;
+break
+}
+}
+
 return allOk
-})().finally(()=>{syncInFlight=null});
+})().finally(()=>{
+syncInFlight=null
+});
+
 return syncInFlight
 }
 
 async function loadFromCloud(){
 await loadWorkingCopy();
+
 ensureSyncTarget();
+
 if(!isConfigValid()){
-setCloudStatus('offline','未配置');
+setCloudStatus(
+'offline',
+'未配置'
+);
+
 updateLastSyncDisplay();
+
 return
 }
-const ok=await syncToCloud(false,false);
-if(ok&&!syncMeta.dirty)setCloudStatus('online','已连接');
-else if(!ok&&statusText.textContent==='同步中...')setCloudStatus('offline','同步失败')
+
+const ok=
+await syncToCloud(
+false,
+false
+);
+
+if(
+ok &&
+!syncMeta.dirty
+){
+setCloudStatus(
+'online',
+'已连接'
+)
+}else if(
+!ok &&
+statusText.textContent==='同步中...'
+){
+setCloudStatus(
+'offline',
+'同步失败'
+)
+}
 }
 
 async function loadWorkingCopy(){
-const embedded=readEmbeddedBackup(),record=embedded?null:await readBestWorkingCopy();
+const embedded=
+readEmbeddedBackup();
+
+const record=
+embedded
+?null
+:await readBestWorkingCopy();
+
 let snapshot=null;
+
 if(embedded){
-snapshot=normalizeSnapshot({pages:embedded.pages,tombstones:embedded.tombstones});
+snapshot=normalizeSnapshot({
+pages:embedded.pages,
+tombstones:embedded.tombstones
+});
+
 hadStoredState=true;
-if(Array.isArray(embedded.remarkHistory))remarkHistory=embedded.remarkHistory.map(normalizeRemarkValue).filter(Boolean);
-if(Array.isArray(embedded.remarkHidden))remarkHidden=new Set(embedded.remarkHidden.map(remarkHistoryKey).filter(Boolean));
-showToast(`已从 HTML 备份恢复 ${snapshot.pages.length} 个条目`,'success')
+
+if(
+Array.isArray(
+embedded.remarkHistory
+)
+){
+remarkHistory=
+embedded.remarkHistory
+.map(normalizeRemarkValue)
+.filter(Boolean)
+}
+
+if(
+Array.isArray(
+embedded.remarkHidden
+)
+){
+remarkHidden=new Set(
+embedded.remarkHidden
+.map(remarkHistoryKey)
+.filter(Boolean)
+)
+}
+
+showToast(
+`已从 HTML 备份恢复 ${snapshot.pages.length} 个条目`,
+'success'
+)
 }else if(record){
-snapshot=normalizeSnapshot({pages:record.pages,tombstones:record.tombstones});
+snapshot=normalizeSnapshot({
+pages:record.pages,
+tombstones:record.tombstones
+});
+
 hadStoredState=true
 }else{
-snapshot=normalizeSnapshot({pages:[
-{title:'10个必知技巧',url:'https://example.com/10-tips',note:'数字开头示例'},
-{title:'2个方法',url:'https://example.com/2-methods',note:'数字开头示例'},
-{title:'Apple',url:'https://apple.com',note:'英文开头'},
-{title:'GitHub',url:'https://github.com',note:'英文开头'},
-{title:'大',url:'https://example.com/da',note:'中文 - D'},
-{title:'丹',url:'https://example.com/dan',note:'中文 - D'},
-{title:'东',url:'https://example.com/dong',note:'中文 - D'},
-{title:'访问',url:'https://example.com/visit',note:'中文 - F'},
-{title:'苹',url:'https://example.com/ping',note:'中文 - P'}
-],tombstones:[]});
+snapshot=normalizeSnapshot({
+pages:[
+{
+title:'10个必知技巧',
+url:'https://example.com/10-tips',
+note:'数字开头示例'
+},
+{
+title:'2个方法',
+url:'https://example.com/2-methods',
+note:'数字开头示例'
+},
+{
+title:'Apple',
+url:'https://apple.com',
+note:'英文开头'
+},
+{
+title:'GitHub',
+url:'https://github.com',
+note:'英文开头'
+},
+{
+title:'大',
+url:'https://example.com/da',
+note:'中文 - D'
+},
+{
+title:'丹',
+url:'https://example.com/dan',
+note:'中文 - D'
+},
+{
+title:'东',
+url:'https://example.com/dong',
+note:'中文 - D'
+},
+{
+title:'访问',
+url:'https://example.com/visit',
+note:'中文 - F'
+},
+{
+title:'苹',
+url:'https://example.com/ping',
+note:'中文 - P'
+}
+],
+tombstones:[]
+});
+
 hadStoredState=false
 }
-pages=snapshot.pages;tombstones=snapshot.tombstones;
+
+pages=snapshot.pages;
+tombstones=snapshot.tombstones;
+
 applySortAndRender()
 }
 
 function applySortAndRender(){
-const normalized=getLocalSnapshot();
-pages=normalized.pages;tombstones=normalized.tombstones;
+const normalized=
+getLocalSnapshot();
+
+pages=normalized.pages;
+tombstones=normalized.tombstones;
+
 sortPages();
 rebuildRemarkHistory();
 renderTable();
@@ -1088,11 +3616,27 @@ saveWorkingCopy()
 }
 
 function renderTable(){
-const remarkedCount=pages.reduce((count,item)=>count+(normalizeRemarks(item&&item.remark).length?1:0),0);
-countDisplay.textContent=`${remarkedCount}/${pages.length}`;
+const remarkedCount=
+pages.reduce(
+(count,item)=>
+count+
+(
+normalizeRemarks(
+item&&item.remark
+).length
+?1
+:0
+),
+0
+);
+
+countDisplay.textContent=
+`${remarkedCount}/${pages.length}`;
 
 if(pages.length===0){
-tableBody.innerHTML='<tr class="empty-row"><td>列表为空，添加一个吧！</td></tr>';
+tableBody.innerHTML=
+'<tr class="empty-row"><td>列表为空，添加一个吧！</td></tr>';
+
 return
 }
 
@@ -1103,132 +3647,292 @@ const title=escapeHtml(item.title||''),
 url=escapeHtml(item.url||''),
 note=escapeHtml(item.note||''),
 remarkValues=normalizeRemarks(item.remark),
-displayHtml=url?`<a href="${url}" target="_blank" rel="noopener noreferrer" draggable="false">${title}</a>`:title,
-noteHtml=note?`<div class="title-note">${note}</div>`:'',
-remarkHtml=remarkValues.length
-?`<div class="title-remark">${remarkValues.map(value=>`<div class="remark-line">${escapeHtml(value)}</div>`).join('')}</div>`
-:'<div class="title-remark"></div>';
 
-html+=`<tr data-index="${index}"><td class="col-title">${displayHtml}${noteHtml}${remarkHtml}<button class="row-edit-link edit-btn" data-index="${index}" type="button">编辑</button></td></tr>`
+displayHtml=
+url
+?`<a href="${url}" target="_blank" rel="noopener noreferrer" draggable="false">${title}</a>`
+:title,
+
+noteHtml=
+note
+?`<div class="title-note">${note}</div>`
+:'',
+
+remarkHtml=
+remarkValues.length
+?`<div class="title-remark">${remarkValues.map(value=>`<div class="remark-line">${escapeHtml(value)}</div>`).join('')}</div>`
+:'',
+
+detailsHtml=
+(noteHtml||remarkHtml)
+?`<div class="title-details">${noteHtml}${remarkHtml}</div>`
+:'';
+
+html+=
+`<tr data-index="${index}"><td class="col-title">${displayHtml}${detailsHtml}<button class="row-edit-link edit-btn" data-index="${index}" type="button">编辑</button></td></tr>`
 });
 
 tableBody.innerHTML=html;
 
-document.querySelectorAll('#tableBody .col-title > a').forEach(link=>{
-link.addEventListener('dragstart',e=>e.preventDefault());
+document
+.querySelectorAll(
+'#tableBody .col-title > a'
+)
+.forEach(link=>{
+link.addEventListener(
+'dragstart',
+e=>e.preventDefault()
+);
 
-link.addEventListener('click',function(e){
-const selection=window.getSelection(),
-hasSelected=selection&&!selection.isCollapsed&&(this.contains(selection.anchorNode)||this.contains(selection.focusNode));
-if(hasSelected)e.preventDefault()
-})
+link.addEventListener(
+'click',
+function(e){
+const selection=
+window.getSelection();
+
+const hasSelected=
+selection &&
+!selection.isCollapsed &&
+(
+this.contains(selection.anchorNode) ||
+this.contains(selection.focusNode)
+);
+
+if(hasSelected){
+e.preventDefault()
+}
+}
+)
 });
 
-document.querySelectorAll('#tableBody .edit-btn').forEach(btn=>btn.addEventListener('click',function(e){
+document
+.querySelectorAll(
+'#tableBody .edit-btn'
+)
+.forEach(btn=>{
+btn.addEventListener(
+'click',
+function(e){
 e.stopPropagation();
-const index=this.getAttribute('data-index');
+
+const index=
+this.getAttribute(
+'data-index'
+);
 
 if(index!==null){
-const idx=parseInt(index,10);
-if(!isNaN(idx)&&idx>=0&&idx<pages.length)openEditModal(idx)
-}
-}));
+const idx=
+parseInt(
+index,
+10
+);
 
-requestAnimationFrame(syncBackToTopPosition)
+if(
+!isNaN(idx) &&
+idx>=0 &&
+idx<pages.length
+){
+openEditModal(idx)
+}
+}
+}
+)
+});
+
+requestAnimationFrame(
+syncBackToTopPosition
+)
 }
 
 function openEditModal(index){
 editingIndex=index;
+
 const item=pages[index];
-editTitleDisplay.textContent=item.title;
+
+editTitleDisplay.textContent=
+item.title;
 
 if(item.url){
-const mode=item.titleMode||(item.title===item.url?'url':'markdown');
-editPageInput.value=mode==='url'?item.url:`[${item.title}](${item.url})`
+const mode=
+item.titleMode ||
+(
+item.title===item.url
+?'url'
+:'markdown'
+);
+
+editPageInput.value=
+mode==='url'
+?item.url
+:`[${item.title}](${item.url})`
 }else{
-editPageInput.value=item.title
+editPageInput.value=
+item.title
 }
 
-editNoteInput.value=item.note||'';
-editRemarkPicker.setValues(item.remark);
-editModal.classList.remove('hidden');
-setTimeout(()=>editPageInput.focus(),100)
+editNoteInput.value=
+item.note||'';
+
+editRemarkPicker.setValues(
+item.remark
+);
+
+editModal.classList.remove(
+'hidden'
+);
+
+setTimeout(
+()=>editPageInput.focus(),
+100
+)
 }
 
 function closeEditModal(){
-editModal.classList.add('hidden');
+editModal.classList.add(
+'hidden'
+);
+
 editingIndex=null
 }
 
 function saveEdit(){
-if(editingIndex===null||editingIndex<0||editingIndex>=pages.length){
-alert('编辑出错，请重试。');
+if(
+editingIndex===null ||
+editingIndex<0 ||
+editingIndex>=pages.length
+){
+alert(
+'编辑出错，请重试。'
+);
+
 closeEditModal();
+
 return
 }
 
-const raw=editPageInput.value.trim();
+const raw=
+editPageInput.value.trim();
 
 if(!raw){
-alert('请填写 Page 字段。');
+alert(
+'请填写 Page 字段。'
+);
+
 editPageInput.focus();
+
 return
 }
 
-const parsed=parsePageInput(raw);
+const parsed=
+parsePageInput(raw);
 
 if(!parsed.title){
-alert('请正确填写格式：[标题](链接)');
+alert(
+'请正确填写格式：[标题](链接)'
+);
+
 editPageInput.focus();
+
 return
 }
 
-pages[editingIndex].title=parsed.title;
-pages[editingIndex].url=parsed.url;
-pages[editingIndex].titleMode=parsed.titleMode;
-pages[editingIndex].note=editNoteInput.value.trim();
-pages[editingIndex].remark=editRemarkPicker.getValues();
+pages[editingIndex].title=
+parsed.title;
 
-rememberRemark(pages[editingIndex].remark);
+pages[editingIndex].url=
+parsed.url;
+
+pages[editingIndex].titleMode=
+parsed.titleMode;
+
+pages[editingIndex].note=
+editNoteInput.value.trim();
+
+pages[editingIndex].remark=
+editRemarkPicker.getValues();
+
+rememberRemark(
+pages[editingIndex].remark
+);
+
 closeEditModal();
 applySortAndRender();
 markLocalChange()
 }
 
 function deleteEditingEntry(){
-if(editingIndex===null||editingIndex<0||editingIndex>=pages.length){
-alert('删除出错，请重试。');
+if(
+editingIndex===null ||
+editingIndex<0 ||
+editingIndex>=pages.length
+){
+alert(
+'删除出错，请重试。'
+);
+
 closeEditModal();
+
 return
 }
 
-const item=pages[editingIndex];
+const item=
+pages[editingIndex];
 
-if(!confirm(`确定要删除 "${item.title}" 吗？`))return;
+if(
+!confirm(
+`确定要删除 "${item.title}" 吗？`
+)
+){
+return
+}
 
-const removed=pages.splice(editingIndex,1)[0];
-if(removed?.id)upsertTombstone(removed.id);
+const removed=
+pages.splice(
+editingIndex,
+1
+)[0];
+
+if(removed?.id){
+upsertTombstone(
+removed.id
+)
+}
+
 closeEditModal();
 applySortAndRender();
 markLocalChange()
 }
 
 function addPage(){
-const raw=pageInput.value.trim(),
-note=noteInput.value.trim(),
-remark=remarkPicker.getValues();
+const raw=
+pageInput.value.trim(),
+
+note=
+noteInput.value.trim(),
+
+remark=
+remarkPicker.getValues();
 
 if(!raw){
-alert('请填写“标题”字段。');
+alert(
+'请填写“标题”字段。'
+);
+
 pageInput.focus();
+
 return
 }
 
-const parsed=parsePageInput(raw);
+const parsed=
+parsePageInput(raw);
 
 if(!parsed.title){
-alert('请正确填写格式：[标题](链接)');
+alert(
+'请正确填写格式：[标题](链接)'
+);
+
 pageInput.focus();
+
 return
 }
 
@@ -1242,188 +3946,451 @@ remark
 });
 
 rememberRemark(remark);
+
 applySortAndRender();
 markLocalChange();
 
 pageInput.value='';
 noteInput.value='';
+
 remarkPicker.setValues([]);
+
 pageInput.focus()
 }
 
 function getExportSiteName(){
-const raw=(document.title||document.querySelector('h1')?.childNodes?.[0]?.textContent||'page').trim();
-return raw.replace(/[\\/:*?"<>|\s]+/g,'')||'page'
+const raw=
+(
+document.title ||
+document.querySelector('h1')
+?.childNodes?.[0]
+?.textContent ||
+'page'
+)
+.trim();
+
+return raw.replace(
+/[\\/:*?"<>|\s]+/g,
+''
+)||'page'
 }
 
 function createBackupSnapshot(){
-const snapshot=getLocalSnapshot();
+const snapshot=
+getLocalSnapshot();
+
 return{
 format:'pages-html-backup',
 version:2,
 exportedAt:Date.now(),
-pages:structuredClone(snapshot.pages),
-tombstones:structuredClone(snapshot.tombstones),
-remarkHistory:[...remarkHistory],
-remarkHidden:[...remarkHidden]
+pages:
+structuredClone(snapshot.pages),
+tombstones:
+structuredClone(snapshot.tombstones),
+remarkHistory:[
+...remarkHistory
+],
+remarkHidden:[
+...remarkHidden
+]
 }
 }
 
-function readEmbeddedBackup(doc=document){
-const node=doc.getElementById('pagesBackupData');
+function readEmbeddedBackup(
+doc=document
+){
+const node=
+doc.getElementById(
+'pagesBackupData'
+);
+
 if(!node)return null;
 
 try{
-const backup=JSON.parse(node.textContent||'');
+const backup=
+JSON.parse(
+node.textContent||''
+);
 
-if(!backup||backup.format!=='pages-html-backup'||![1,2].includes(backup.version)||!Array.isArray(backup.pages))return null;
+if(
+!backup ||
+backup.format!=='pages-html-backup' ||
+![1,2].includes(backup.version) ||
+!Array.isArray(backup.pages)
+){
+return null
+}
 
 return backup
 }catch(error){
-console.warn('HTML 备份数据解析失败:',error);
+console.warn(
+'HTML 备份数据解析失败:',
+error
+);
+
 return null
 }
 }
 
 function buildBackupHtml(){
-const clone=document.documentElement.cloneNode(true);
+const clone=
+document.documentElement
+.cloneNode(true);
 
-clone.querySelectorAll('.remark-tags').forEach(node=>node.remove());
+clone
+.querySelectorAll(
+'.remark-tags'
+)
+.forEach(
+node=>node.remove()
+);
 
-['remarkOptions','editRemarkOptions'].forEach(id=>{
-const node=clone.querySelector('#'+id);
-if(node)node.replaceChildren()
+[
+'remarkOptions',
+'editRemarkOptions'
+]
+.forEach(id=>{
+const node=
+clone.querySelector(
+'#'+id
+);
+
+if(node){
+node.replaceChildren()
+}
 });
 
-['remarkDropdown','editRemarkDropdown','editModal','configModal'].forEach(id=>clone.querySelector('#'+id)?.classList.add('hidden'));
+[
+'remarkDropdown',
+'editRemarkDropdown',
+'editModal',
+'configModal'
+]
+.forEach(id=>{
+clone
+.querySelector(
+'#'+id
+)
+?.classList.add(
+'hidden'
+)
+});
 
-const tokenInput=clone.querySelector('#cfgToken');
+const tokenInput=
+clone.querySelector(
+'#cfgToken'
+);
 
 if(tokenInput){
 tokenInput.value='';
-tokenInput.removeAttribute('value')
+tokenInput.removeAttribute(
+'value'
+)
 }
 
-const file=clone.querySelector('#fileInput');
-if(file)file.value='';
+const file=
+clone.querySelector(
+'#fileInput'
+);
 
-clone.querySelector('#pagesBackupData')?.remove();
+if(file){
+file.value=''
+}
 
-const backupScript=document.createElement('script');
-backupScript.id='pagesBackupData';
-backupScript.type='application/json';
-backupScript.textContent=JSON.stringify(createBackupSnapshot()).replace(/</g,'\\u003c');
+clone
+.querySelector(
+'#pagesBackupData'
+)
+?.remove();
 
-clone.querySelector('body')?.appendChild(backupScript);
+const backupScript=
+document.createElement(
+'script'
+);
 
-return '<!DOCTYPE html>\n'+clone.outerHTML
+backupScript.id=
+'pagesBackupData';
+
+backupScript.type=
+'application/json';
+
+backupScript.textContent=
+JSON.stringify(
+createBackupSnapshot()
+)
+.replace(
+/</g,
+'\\u003c'
+);
+
+clone
+.querySelector('body')
+?.appendChild(
+backupScript
+);
+
+return'<!DOCTYPE html>\n'+
+clone.outerHTML
 }
 
 function exportData(){
 if(pages.length===0){
-alert('列表为空，没有什么可导出的。');
+alert(
+'列表为空，没有什么可导出的。'
+);
+
 return
 }
 
-const html=buildBackupHtml(),
-blob=new Blob([html],{type:'text/html;charset=utf-8'}),
-url=URL.createObjectURL(blob),
-a=document.createElement('a'),
-unixTime=Math.floor(Date.now()/1000);
+const html=
+buildBackupHtml();
+
+const blob=
+new Blob(
+[html],
+{
+type:
+'text/html;charset=utf-8'
+}
+);
+
+const url=
+URL.createObjectURL(
+blob
+);
+
+const a=
+document.createElement(
+'a'
+);
+
+const unixTime=
+Math.floor(
+Date.now()/1000
+);
 
 a.href=url;
-a.download=`${getExportSiteName()}${unixTime}.html`;
+
+a.download=
+`${getExportSiteName()}${unixTime}.html`;
 
 document.body.appendChild(a);
+
 a.click();
+
 document.body.removeChild(a);
+
 URL.revokeObjectURL(url);
 
-showToast('HTML 备份导出成功','success')
+showToast(
+'HTML 备份导出成功',
+'success'
+)
 }
 
-function parseImportPayload(text,fileName=''){
-const trimmed=String(text||'').trim();
+function parseImportPayload(
+text,
+fileName=''
+){
+const trimmed=
+String(text||'')
+.trim();
 
 try{
-const parsed=JSON.parse(trimmed);
+const parsed=
+JSON.parse(trimmed);
 
 if(Array.isArray(parsed)){
 return{
-pages:parsed.filter(item=>item&&item.__pagesDeleted!==true&&item.deleted!==true),
+pages:
+parsed.filter(
+item=>
+item &&
+item.__pagesDeleted!==true &&
+item.deleted!==true
+),
+
 remarkHistory:null,
 remarkHidden:null,
-tombstones:parsed.filter(item=>item&&(item.__pagesDeleted===true||item.deleted===true)),
+
+tombstones:
+parsed.filter(
+item=>
+item &&
+(
+item.__pagesDeleted===true ||
+item.deleted===true
+)
+),
+
 source:'JSON'
 }
 }
 
-if(parsed&&Array.isArray(parsed.pages)){
+if(
+parsed &&
+Array.isArray(parsed.pages)
+){
 return{
 pages:parsed.pages,
-remarkHistory:parsed.remarkHistory,
-remarkHidden:parsed.remarkHidden,
-tombstones:parsed.tombstones,
+remarkHistory:
+parsed.remarkHistory,
+remarkHidden:
+parsed.remarkHidden,
+tombstones:
+parsed.tombstones,
 source:'JSON'
 }
 }
 }catch(error){}
 
-const looksLikeHtml=/\.html?$/i.test(fileName)||/^<!doctype\s+html/i.test(trimmed)||/<html[\s>]/i.test(trimmed);
+const looksLikeHtml=
+/\.html?$/i.test(fileName) ||
+/^<!doctype\s+html/i.test(trimmed) ||
+/<html[\s>]/i.test(trimmed);
 
-if(!looksLikeHtml)throw new Error('不是有效的 JSON 或 HTML 备份文件');
+if(!looksLikeHtml){
+throw new Error(
+'不是有效的 JSON 或 HTML 备份文件'
+)
+}
 
-const doc=new DOMParser().parseFromString(trimmed,'text/html'),
-backup=readEmbeddedBackup(doc);
+const doc=
+new DOMParser()
+.parseFromString(
+trimmed,
+'text/html'
+);
 
-if(!backup)throw new Error('HTML 文件中未找到有效的 Pages 备份数据');
+const backup=
+readEmbeddedBackup(doc);
+
+if(!backup){
+throw new Error(
+'HTML 文件中未找到有效的 Pages 备份数据'
+)
+}
 
 return{
 pages:backup.pages,
-remarkHistory:backup.remarkHistory,
-remarkHidden:backup.remarkHidden,
-tombstones:backup.tombstones,
+remarkHistory:
+backup.remarkHistory,
+remarkHidden:
+backup.remarkHidden,
+tombstones:
+backup.tombstones,
 source:'HTML'
 }
 }
 
 function importData(file){
-const reader=new FileReader();
+const reader=
+new FileReader();
 
 reader.onload=function(e){
 try{
-const imported=parseImportPayload(e.target.result,file.name),
-valid=normalizePageArray(imported.pages);
+const imported=
+parseImportPayload(
+e.target.result,
+file.name
+);
+
+const valid=
+normalizePageArray(
+imported.pages
+);
 
 if(valid.length===0){
-alert('文件中没有找到有效的条目。');
+alert(
+'文件中没有找到有效的条目。'
+);
+
 return
 }
 
-if(pages.length>0&&!confirm(`当前有 ${pages.length} 个条目，导入将完全替换当前列表。确定继续吗？`))return;
-
-const importedIds=new Set(valid.map(item=>item.id));
-pages.forEach(item=>{if(item?.id&&!importedIds.has(item.id))upsertTombstone(item.id)});
-pages=valid;
-if(Array.isArray(imported.tombstones))tombstones=normalizeTombstones([...tombstones,...imported.tombstones]);
-
-if(Array.isArray(imported.remarkHistory)){
-remarkHistory=imported.remarkHistory.map(normalizeRemarkValue).filter(Boolean)
+if(
+pages.length>0 &&
+!confirm(
+`当前有 ${pages.length} 个条目，导入将完全替换当前列表。确定继续吗？`
+)
+){
+return
 }
 
-if(Array.isArray(imported.remarkHidden)){
-remarkHidden=new Set(imported.remarkHidden.map(remarkHistoryKey).filter(Boolean))
+const importedIds=
+new Set(
+valid.map(item=>item.id)
+);
+
+pages.forEach(item=>{
+if(
+item?.id &&
+!importedIds.has(item.id)
+){
+upsertTombstone(
+item.id
+)
+}
+});
+
+pages=valid;
+
+if(
+Array.isArray(
+imported.tombstones
+)
+){
+tombstones=
+normalizeTombstones([
+...tombstones,
+...imported.tombstones
+])
+}
+
+if(
+Array.isArray(
+imported.remarkHistory
+)
+){
+remarkHistory=
+imported.remarkHistory
+.map(normalizeRemarkValue)
+.filter(Boolean)
+}
+
+if(
+Array.isArray(
+imported.remarkHidden
+)
+){
+remarkHidden=
+new Set(
+imported.remarkHidden
+.map(remarkHistoryKey)
+.filter(Boolean)
+)
 }
 
 applySortAndRender();
+
 saveRemarkHidden();
 saveRemarkHistory();
 
-showToast(`成功从 ${imported.source} 导入 ${pages.length} 个条目`,'success');
+showToast(
+`成功从 ${imported.source} 导入 ${pages.length} 个条目`,
+'success'
+);
+
 markLocalChange()
 }catch(err){
-console.error('导入失败:',err);
-alert(`解析文件失败：${err.message||'文件格式无效'}`)
+console.error(
+'导入失败:',
+err
+);
+
+alert(
+`解析文件失败：${err.message||'文件格式无效'}`
+)
 }
 };
 
@@ -1431,89 +4398,213 @@ reader.readAsText(file)
 }
 
 function setCloudStatus(status,text){
-statusDot.className='dot '+status;
-statusText.textContent=text
+statusDot.className=
+'dot '+status;
+
+statusText.textContent=
+text
 }
 
-function showToast(message,type='info'){
-toast.textContent=message;
-toast.className='toast '+type;
-toast.classList.remove('hidden');
+function showToast(
+message,
+type='info'
+){
+toast.textContent=
+message;
 
-clearTimeout(toastTimer);
-toastTimer=setTimeout(()=>toast.classList.add('hidden'),3000)
+toast.className=
+'toast '+type;
+
+toast.classList.remove(
+'hidden'
+);
+
+clearTimeout(
+toastTimer
+);
+
+toastTimer=
+setTimeout(
+()=>{
+toast.classList.add(
+'hidden'
+)
+},
+3000
+)
 }
 
 function syncConfigVisualViewport(){
-const vv=window.visualViewport,
-height=vv?vv.height:window.innerHeight,
-top=vv?vv.offsetTop:0;
+const vv=
+window.visualViewport;
 
-document.documentElement.style.setProperty('--config-vv-height',`${Math.max(1,Math.round(height))}px`);
-document.documentElement.style.setProperty('--config-vv-top',`${Math.max(0,Math.round(top))}px`)
+const height=
+vv
+?vv.height
+:window.innerHeight;
+
+const top=
+vv
+?vv.offsetTop
+:0;
+
+document.documentElement
+.style
+.setProperty(
+'--config-vv-height',
+`${Math.max(1,Math.round(height))}px`
+);
+
+document.documentElement
+.style
+.setProperty(
+'--config-vv-top',
+`${Math.max(0,Math.round(top))}px`
+)
 }
 
 function syncBackToTopPosition(){
-if(!tableWrapper||!backToTopBtn)return;
+if(
+!tableWrapper ||
+!backToTopBtn
+){
+return
+}
 
-const rect=tableWrapper.getBoundingClientRect(),
-buttonWidth=backToTopBtn.offsetWidth||30,
-viewportWidth=document.documentElement.clientWidth||window.innerWidth,
-preferredLeft=rect.right+30,
-maxLeft=Math.max(3,viewportWidth-buttonWidth-3);
+const rect=
+tableWrapper.getBoundingClientRect();
 
-backToTopBtn.style.left=`${Math.max(3,Math.round(Math.min(preferredLeft,maxLeft)))}px`;
-backToTopBtn.style.right='auto'
+const buttonWidth=
+backToTopBtn.offsetWidth||30;
+
+const viewportWidth=
+document.documentElement.clientWidth||
+window.innerWidth;
+
+const preferredLeft=
+rect.right+30;
+
+const maxLeft=
+Math.max(
+3,
+viewportWidth-buttonWidth-3
+);
+
+backToTopBtn.style.left=
+`${Math.max(
+3,
+Math.round(
+Math.min(
+preferredLeft,
+maxLeft
+)
+)
+)}px`;
+
+backToTopBtn.style.right=
+'auto'
 }
 
 function isMobileConfigLayout(){
-return window.matchMedia('(max-width: 700px)').matches
+return window
+.matchMedia(
+'(max-width: 700px)'
+)
+.matches
 }
 
 function openConfigModal(){
-cfgToken.value=config.token||'';
-cfgRememberToken.checked=config.rememberToken!==false;
-cfgOwner.value=config.owner||'';
-cfgRepo.value=config.repo||'';
-cfgFile.value=config.file||'pages_data.json';
+cfgToken.value=
+config.token||'';
+
+cfgRememberToken.checked=
+config.rememberToken!==false;
+
+cfgOwner.value=
+config.owner||'';
+
+cfgRepo.value=
+config.repo||'';
+
+cfgFile.value=
+config.file||'pages_data.json';
 
 syncConfigVisualViewport();
-configModal.classList.remove('hidden');
 
-const scroll=configModal.querySelector('.config-scroll');
+configModal.classList.remove(
+'hidden'
+);
 
-if(scroll)scroll.scrollTop=0;
+const scroll=
+configModal.querySelector(
+'.config-scroll'
+);
+
+if(scroll){
+scroll.scrollTop=0
+}
 
 if(!isMobileConfigLayout()){
-requestAnimationFrame(()=>cfgToken.focus({preventScroll:true}))
+requestAnimationFrame(
+()=>{
+cfgToken.focus({
+preventScroll:true
+})
+}
+)
 }
 }
 
 function closeConfigModal(){
-configModal.classList.add('hidden')
+configModal.classList.add(
+'hidden'
+)
 }
 
 async function saveConfigAndConnect(){
-const token=cfgToken.value.trim(),
-owner=cfgOwner.value.trim(),
-repo=cfgRepo.value.trim(),
-file=cfgFile.value.trim()||'pages_data.json';
+const token=
+cfgToken.value.trim();
+
+const owner=
+cfgOwner.value.trim();
+
+const repo=
+cfgRepo.value.trim();
+
+const file=
+cfgFile.value.trim()||
+'pages_data.json';
 
 if(!token){
-showToast('请输入 GitHub Token','error');
+showToast(
+'请输入 GitHub Token',
+'error'
+);
+
 cfgToken.focus();
+
 return
 }
 
 if(!owner){
-showToast('请输入仓库所有者','error');
+showToast(
+'请输入仓库所有者',
+'error'
+);
+
 cfgOwner.focus();
+
 return
 }
 
 if(!repo){
-showToast('请输入仓库名称','error');
+showToast(
+'请输入仓库名称',
+'error'
+);
+
 cfgRepo.focus();
+
 return
 }
 
@@ -1525,26 +4616,55 @@ config.file=file;
 try{
 await saveConfig()
 }catch(error){
-console.error('保存配置失败:',error);
-showToast('保存配置失败：浏览器本地数据库不可用','error');
+console.error(
+'保存配置失败:',
+error
+);
+
+showToast(
+'保存配置失败：浏览器本地数据库不可用',
+'error'
+);
+
 return
 }
 
 closeConfigModal();
-showToast('配置已保存，正在连接...','info');
+
+showToast(
+'配置已保存，正在连接...',
+'info'
+);
+
 ensureSyncTarget();
-await syncToCloud(true,true)
+
+await syncToCloud(
+true,
+true
+)
 }
 
-addBtn.addEventListener('click',addPage);
+addBtn.addEventListener(
+'click',
+addPage
+);
 
-document.querySelectorAll('.add-section .form-group input, .add-section .form-group textarea').forEach(input=>{
+document
+.querySelectorAll(
+'.add-section .form-group input, .add-section .form-group textarea'
+)
+.forEach(input=>{
 if(input===remarkInput)return;
 
-input.addEventListener('keydown',function(e){
+input.addEventListener(
+'keydown',
+function(e){
 if(e.key==='Enter'){
 if(this.tagName==='TEXTAREA'){
-if(e.ctrlKey||e.shiftKey){
+if(
+e.ctrlKey ||
+e.shiftKey
+){
 e.preventDefault();
 addPage()
 }
@@ -1553,113 +4673,244 @@ e.preventDefault();
 addPage()
 }
 }
-})
+}
+)
 });
 
-exportBtn.addEventListener('click',exportData);
+exportBtn.addEventListener(
+'click',
+exportData
+);
 
-importBtn.addEventListener('click',()=>fileInput.click());
+importBtn.addEventListener(
+'click',
+()=>{
+fileInput.click()
+}
+);
 
-fileInput.addEventListener('change',function(){
-if(this.files&&this.files.length>0){
-importData(this.files[0]);
+fileInput.addEventListener(
+'change',
+function(){
+if(
+this.files &&
+this.files.length>0
+){
+importData(
+this.files[0]
+);
+
 this.value=''
 }
-});
+}
+);
 
-syncBtn.addEventListener('click',()=>{
-if(pages.length===0&&tombstones.length===0&&!syncMeta.dirty){
-showToast('没有数据需要同步','info');
+syncBtn.addEventListener(
+'click',
+()=>{
+if(
+pages.length===0 &&
+tombstones.length===0 &&
+!syncMeta.dirty
+){
+showToast(
+'没有数据需要同步',
+'info'
+);
+
 return
 }
-syncToCloud(true,true)
-});
+
+syncToCloud(
+true,
+true
+)
+}
+);
 
 if(window.visualViewport){
-window.visualViewport.addEventListener('resize',syncConfigVisualViewport);
-window.visualViewport.addEventListener('scroll',syncConfigVisualViewport)
+window.visualViewport
+.addEventListener(
+'resize',
+syncConfigVisualViewport
+);
+
+window.visualViewport
+.addEventListener(
+'scroll',
+syncConfigVisualViewport
+)
 }
 
-window.addEventListener('resize',()=>{
+window.addEventListener(
+'resize',
+()=>{
 syncConfigVisualViewport();
 syncBackToTopPosition()
-});
+}
+);
 
-window.addEventListener('orientationchange',()=>{
+window.addEventListener(
+'orientationchange',
+()=>{
 syncConfigVisualViewport();
 syncBackToTopPosition()
-});
+}
+);
 
 syncConfigVisualViewport();
 syncBackToTopPosition();
-configBtn.addEventListener('click',openConfigModal);
+
+configBtn.addEventListener(
+'click',
+openConfigModal
+);
 
 function fastScrollToTop(duration=10){
-const startY=window.scrollY||window.pageYOffset||0;
+const startY=
+window.scrollY||
+window.pageYOffset||
+0;
 
 if(startY<=0)return;
 
-if(backToTopAnimationFrame!==null){
-cancelAnimationFrame(backToTopAnimationFrame);
+if(
+backToTopAnimationFrame!==null
+){
+cancelAnimationFrame(
+backToTopAnimationFrame
+);
+
 backToTopAnimationFrame=null
 }
 
-const startTime=performance.now(),
-easeOutCubic=progress=>1-Math.pow(1-progress,3);
+const startTime=
+performance.now();
+
+const easeOutCubic=
+progress=>
+1-Math.pow(
+1-progress,
+3
+);
 
 function step(now){
-const progress=Math.min(1,(now-startTime)/duration),
-eased=easeOutCubic(progress);
+const progress=
+Math.min(
+1,
+(now-startTime)/duration
+);
 
-window.scrollTo(0,Math.round(startY*(1-eased)));
+const eased=
+easeOutCubic(progress);
+
+window.scrollTo(
+0,
+Math.round(
+startY*(1-eased)
+)
+);
 
 if(progress<1){
-backToTopAnimationFrame=requestAnimationFrame(step)
+backToTopAnimationFrame=
+requestAnimationFrame(step)
 }else{
 backToTopAnimationFrame=null;
 window.scrollTo(0,0)
 }
 }
 
-backToTopAnimationFrame=requestAnimationFrame(step)
+backToTopAnimationFrame=
+requestAnimationFrame(step)
 }
 
-backToTopBtn.addEventListener('click',()=>fastScrollToTop(10));
+backToTopBtn.addEventListener(
+'click',
+()=>fastScrollToTop(10)
+);
 
-configCancelBtn.addEventListener('click',closeConfigModal);
-configSaveBtn.addEventListener('click',saveConfigAndConnect);
+configCancelBtn.addEventListener(
+'click',
+closeConfigModal
+);
 
-configModal.addEventListener('click',function(e){
-if(e.target===this)closeConfigModal()
-});
+configSaveBtn.addEventListener(
+'click',
+saveConfigAndConnect
+);
 
-editDeleteBtn.addEventListener('click',deleteEditingEntry);
-editCancelBtn.addEventListener('click',closeEditModal);
-editSaveBtn.addEventListener('click',saveEdit);
+configModal.addEventListener(
+'click',
+function(e){
+if(e.target===this){
+closeConfigModal()
+}
+}
+);
+
+editDeleteBtn.addEventListener(
+'click',
+deleteEditingEntry
+);
+
+editCancelBtn.addEventListener(
+'click',
+closeEditModal
+);
+
+editSaveBtn.addEventListener(
+'click',
+saveEdit
+);
 
 let editOverlayPointerDown=false;
 
-editModal.addEventListener('pointerdown',function(e){
-editOverlayPointerDown=e.target===this
-});
+editModal.addEventListener(
+'pointerdown',
+function(e){
+editOverlayPointerDown=
+e.target===this
+}
+);
 
-editModal.addEventListener('pointerup',function(e){
-const shouldClose=editOverlayPointerDown&&e.target===this;
+editModal.addEventListener(
+'pointerup',
+function(e){
+const shouldClose=
+editOverlayPointerDown &&
+e.target===this;
+
 editOverlayPointerDown=false;
-if(shouldClose)closeEditModal()
-});
 
-editModal.addEventListener('pointercancel',()=>{
+if(shouldClose){
+closeEditModal()
+}
+}
+);
+
+editModal.addEventListener(
+'pointercancel',
+()=>{
 editOverlayPointerDown=false
-});
+}
+);
 
-document.querySelectorAll('#editModal .form-group input, #editModal .form-group textarea').forEach(input=>{
+document
+.querySelectorAll(
+'#editModal .form-group input, #editModal .form-group textarea'
+)
+.forEach(input=>{
 if(input===editRemarkInput)return;
 
-input.addEventListener('keydown',function(e){
+input.addEventListener(
+'keydown',
+function(e){
 if(e.key==='Enter'){
 if(this.tagName==='TEXTAREA'){
-if(e.ctrlKey||e.shiftKey){
+if(
+e.ctrlKey ||
+e.shiftKey
+){
 e.preventDefault();
 saveEdit()
 }
@@ -1668,10 +4919,12 @@ e.preventDefault();
 saveEdit()
 }
 }
-})
+}
+)
 });
 
-const remarkPicker=setupRemarkCombo({
+const remarkPicker=
+setupRemarkCombo({
 input:remarkInput,
 dropdown:remarkDropdown,
 options:remarkOptions,
@@ -1680,7 +4933,8 @@ submit:addPage,
 manageOptions:true
 });
 
-const editRemarkPicker=setupRemarkCombo({
+const editRemarkPicker=
+setupRemarkCombo({
 input:editRemarkInput,
 dropdown:editRemarkDropdown,
 options:editRemarkOptions,
@@ -1688,29 +4942,78 @@ combo:editRemarkCombo,
 submit:saveEdit
 });
 
-window.addEventListener('pagehide',()=>{
-if(localStateReady)void saveWorkingCopy()
-});
+window.addEventListener(
+'pagehide',
+()=>{
+if(localStateReady){
+void saveWorkingCopy()
+}
+}
+);
 
-window.addEventListener('online',wakePassiveSync);
-window.addEventListener('focus',wakePassiveSync);
-window.addEventListener('pageshow',wakePassiveSync);
+window.addEventListener(
+'online',
+wakePassiveSync
+);
 
-document.addEventListener('visibilitychange',()=>{
-if(localStateReady&&document.visibilityState==='hidden')void saveWorkingCopy();
-if(localStateReady&&document.visibilityState==='visible')wakePassiveSync()
-});
+window.addEventListener(
+'focus',
+wakePassiveSync
+);
+
+window.addEventListener(
+'pageshow',
+wakePassiveSync
+);
+
+document.addEventListener(
+'visibilitychange',
+()=>{
+if(
+localStateReady &&
+document.visibilityState==='hidden'
+){
+void saveWorkingCopy()
+}
+
+if(
+localStateReady &&
+document.visibilityState==='visible'
+){
+wakePassiveSync()
+}
+}
+);
 
 (async function initialize(){
 void requestPersistentStorage();
-await Promise.all([loadRemarkState(),loadConfig(),loadSyncState()]);
+
+await Promise.all([
+loadRemarkState(),
+loadConfig(),
+loadSyncState()
+]);
+
 await loadFromCloud();
+
 localStateReady=true;
+
 updateLastSyncDisplay()
 })().catch(error=>{
-console.error('Pages 初始化失败:',error);
-setCloudStatus('offline','本地存储初始化失败');
-showToast('本地存储初始化失败，请检查浏览器权限','error')
+console.error(
+'Pages 初始化失败:',
+error
+);
+
+setCloudStatus(
+'offline',
+'本地存储初始化失败'
+);
+
+showToast(
+'本地存储初始化失败，请检查浏览器权限',
+'error'
+)
 });
 })();
 </script>

@@ -133,10 +133,12 @@ body{width:100%;max-width:100%;padding:.75rem .5rem;overflow-x:hidden}.container
 
 <script>
 (function(){
-const CONFIG_KEY='pages_github_config',TOKEN_PERSISTED_KEY='pages_github_token_persisted_v1',WORKING_COPY_KEY='pages_working_copy_v1',REMARK_HISTORY_KEY='pages_remark_history_v1',REMARK_HIDDEN_KEY='pages_remark_hidden_v1';
+const CONFIG_KEY='pages_github_config',TOKEN_PERSISTED_KEY='pages_github_token_persisted_v1',WORKING_COPY_KEY='pages_working_copy_v1',REMARK_HISTORY_KEY='pages_remark_history_v1',REMARK_HIDDEN_KEY='pages_remark_hidden_v1',SYNC_META_KEY='pages_sync_meta_v2',SYNC_BASE_KEY='pages_sync_base_v2';
 const DB_NAME='pages_app_storage_v1',DB_VERSION=1,DB_STORE='kv',OPFS_WORKING_COPY_FILE='pages-working-copy-v1.json';
-let pages=[],editingIndex=null,isSyncing=false,remarkHistory=[],remarkHidden=new Set(),backToTopAnimationFrame=null;
-let config={token:'',rememberToken:true,owner:'',repo:'',file:'pages_data.json'},memoryToken='',dbPromise=null,workingCopyQueue=Promise.resolve(),workingCopyRevision=0,localStateReady=false;
+const AUTO_SYNC_DELAY=700,PASSIVE_SYNC_DELAY=700,PASSIVE_SYNC_MIN_INTERVAL=3000,MAX_SYNC_BYTES=750*1024,MAX_WRITE_CONFLICT_RETRIES=3;
+let pages=[],tombstones=[],editingIndex=null,isSyncing=false,remarkHistory=[],remarkHidden=new Set(),backToTopAnimationFrame=null;
+let config={token:'',rememberToken:true,owner:'',repo:'',file:'pages_data.json'},memoryToken='',dbPromise=null,workingCopyQueue=Promise.resolve(),workingCopyRevision=0,localStateReady=false,hadStoredState=false;
+let syncMeta={target:'',sha:null,fingerprint:null,dirty:false,lastSyncAt:null},syncBase=null,localMutationVersion=0,syncInFlight=null,syncRequested=false,syncShowResult=false,syncInteractive=false,autoSyncTimer=null,passiveSyncTimer=null,lastPassiveSyncAt=0;
 
 const pageInput=document.getElementById('pageInput'),noteInput=document.getElementById('noteInput'),remarkCombo=document.getElementById('remarkCombo'),remarkInput=document.getElementById('remarkInput'),remarkDropdown=document.getElementById('remarkDropdown'),remarkOptions=document.getElementById('remarkOptions'),addBtn=document.getElementById('addBtn'),tableBody=document.getElementById('tableBody'),countDisplay=document.getElementById('countDisplay'),exportBtn=document.getElementById('exportBtn'),importBtn=document.getElementById('importBtn'),fileInput=document.getElementById('fileInput'),syncBtn=document.getElementById('syncBtn'),lastSyncTime=document.getElementById('lastSyncTime'),statusDot=document.getElementById('statusDot'),statusText=document.getElementById('statusText'),configBtn=document.getElementById('configBtn'),backToTopBtn=document.getElementById('backToTopBtn'),tableWrapper=document.querySelector('.table-wrapper');
 const editModal=document.getElementById('editModal'),editTitleDisplay=document.getElementById('editTitleDisplay'),editPageInput=document.getElementById('editPageInput'),editNoteInput=document.getElementById('editNoteInput'),editRemarkCombo=document.getElementById('editRemarkCombo'),editRemarkInput=document.getElementById('editRemarkInput'),editRemarkDropdown=document.getElementById('editRemarkDropdown'),editRemarkOptions=document.getElementById('editRemarkOptions'),editDeleteBtn=document.getElementById('editDeleteBtn'),editCancelBtn=document.getElementById('editCancelBtn'),editSaveBtn=document.getElementById('editSaveBtn');
@@ -155,11 +157,11 @@ return dbPromise
 async function idbGet(key){const db=await openDb();return new Promise((resolve,reject)=>{const tx=db.transaction(DB_STORE,'readonly'),req=tx.objectStore(DB_STORE).get(key);req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error||new Error('IndexedDB 读取失败'))})}
 async function idbSet(key,value){const db=await openDb();return new Promise((resolve,reject)=>{const tx=db.transaction(DB_STORE,'readwrite');tx.objectStore(DB_STORE).put(value,key);tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error||new Error('IndexedDB 写入失败'));tx.onabort=()=>reject(tx.error||new Error('IndexedDB 写入中止'))})}
 async function idbDelete(key){const db=await openDb();return new Promise((resolve,reject)=>{const tx=db.transaction(DB_STORE,'readwrite');tx.objectStore(DB_STORE).delete(key);tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error||new Error('IndexedDB 删除失败'));tx.onabort=()=>reject(tx.error||new Error('IndexedDB 写入中止'))})}
-function isValidWorkingCopy(record){return Boolean(record&&record.version===1&&Array.isArray(record.pages)&&Number.isFinite(Number(record.savedAt)))}
+function isValidWorkingCopy(record){return Boolean(record&&(record.version===1||record.version===2)&&Array.isArray(record.pages)&&Number.isFinite(Number(record.savedAt)))}
 async function readOpfsWorkingCopy(){if(!navigator.storage?.getDirectory)throw new Error('OPFS 不可用');const root=await navigator.storage.getDirectory(),handle=await root.getFileHandle(OPFS_WORKING_COPY_FILE);const file=await handle.getFile();return JSON.parse(await file.text())}
 async function writeOpfsWorkingCopy(record){if(!navigator.storage?.getDirectory)throw new Error('OPFS 不可用');const root=await navigator.storage.getDirectory(),handle=await root.getFileHandle(OPFS_WORKING_COPY_FILE,{create:true}),writer=await handle.createWritable();try{await writer.write(JSON.stringify(record));await writer.close()}catch(error){try{await writer.abort()}catch{}throw error}}
 async function persistWorkingCopy(record){const results=await Promise.allSettled([idbSet(WORKING_COPY_KEY,record),writeOpfsWorkingCopy(record)]);if(!results.some(result=>result.status==='fulfilled'))throw new Error('IndexedDB 与 OPFS 均保存失败')}
-function saveWorkingCopy(){const record={version:1,savedAt:Date.now(),revision:++workingCopyRevision,pages:structuredClone(pages)};workingCopyQueue=workingCopyQueue.catch(()=>{}).then(()=>persistWorkingCopy(record)).catch(error=>console.error('保存 Pages 工作副本失败:',error));return workingCopyQueue}
+function saveWorkingCopy(){const snapshot=getLocalSnapshot(),record={version:2,savedAt:Date.now(),revision:++workingCopyRevision,pages:structuredClone(snapshot.pages),tombstones:structuredClone(snapshot.tombstones)};workingCopyQueue=workingCopyQueue.catch(()=>{}).then(()=>persistWorkingCopy(record)).catch(error=>console.error('保存 Pages 工作副本失败:',error));return workingCopyQueue}
 async function readBestWorkingCopy(){let idbRecord=null,opfsRecord=null;try{idbRecord=await idbGet(WORKING_COPY_KEY)}catch(error){console.warn('读取 IndexedDB 工作副本失败:',error)}try{opfsRecord=await readOpfsWorkingCopy()}catch(error){if(error?.name!=='NotFoundError')console.warn('读取 OPFS 工作副本失败:',error)}const valid=[idbRecord,opfsRecord].filter(isValidWorkingCopy).sort((a,b)=>Number(b.savedAt)-Number(a.savedAt));const best=valid[0]||null;if(best){const repairs=await Promise.allSettled([idbSet(WORKING_COPY_KEY,best),writeOpfsWorkingCopy(best)]);if(repairs.every(result=>result.status==='rejected'))console.warn('工作副本恢复后无法重新建立本地双副本')}return best}
 async function requestPersistentStorage(){try{if(navigator.storage?.persist)await navigator.storage.persist()}catch(error){console.warn('请求持久存储失败:',error)}}
 function persistRemarkHidden(){void idbSet(REMARK_HIDDEN_KEY,[...remarkHidden]).catch(error=>console.error('保存已删除备注选项失败:',error))}
@@ -271,7 +273,7 @@ input.value='';
 renderTags();
 closeMenu();
 applySortAndRender();
-if(isConfigValid())syncToCloud(false)
+markLocalChange()
 }
 
 function deleteHistoryOption(value){
@@ -293,7 +295,7 @@ input.value='';
 renderTags();
 closeMenu();
 applySortAndRender();
-if(isConfigValid())syncToCloud(false)
+markLocalChange()
 }
 
 function createOptionButton(value,checked){const button=document.createElement('button');button.type='button';button.className='remark-option';button.textContent=(checked?'✓ ':'')+value;button.setAttribute('role','option');button.setAttribute('aria-selected',String(checked));button.addEventListener('pointerdown',event=>{event.preventDefault();event.stopPropagation();choose(value)});button.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();closeMenu()});return button}
@@ -493,6 +495,311 @@ div.textContent=text;
 return div.innerHTML
 }
 
+function cloneValue(value){
+return value==null?value:structuredClone(value)
+}
+
+function hashString(value){
+let h1=2166136261,h2=2246822519;
+const text=String(value);
+for(let i=0;i<text.length;i++){
+const code=text.charCodeAt(i);
+h1^=code;h1=Math.imul(h1,16777619);
+h2^=code;h2=Math.imul(h2,3266489917);h2^=h2>>>13
+}
+return`${(h1>>>0).toString(36)}${(h2>>>0).toString(36)}`
+}
+
+function createPageId(){
+if(globalThis.crypto?.randomUUID)return crypto.randomUUID();
+return`p-${Date.now().toString(36)}-${Math.random().toString(36).slice(2,10)}-${Math.random().toString(36).slice(2,8)}`
+}
+
+function legacyPageIdentity(item){
+const title=String(item?.title||'').normalize('NFC').trim(),url=String(item?.url||'').trim();
+return url?`url:${url}`:`title:${title}`
+}
+
+function normalizePageArray(items){
+const source=Array.isArray(items)?items:[],counts=new Map(),used=new Set(),result=[];
+source.forEach(raw=>{
+if(!raw||raw.__pagesDeleted===true||raw.deleted===true)return;
+const title=String(raw.title||'').normalize('NFC').trim();
+if(!title)return;
+const identity=legacyPageIdentity(raw),occurrence=(counts.get(identity)||0)+1;
+counts.set(identity,occurrence);
+let id=typeof raw.id==='string'&&raw.id.trim()?raw.id.trim():`legacy-${hashString(identity)}-${occurrence}`;
+if(used.has(id))id=`${id}-${hashString(JSON.stringify(raw))}`;
+while(used.has(id))id=`${id}-x`;
+used.add(id);
+const url=String(raw.url||'').trim(),titleMode=['markdown','url','text'].includes(raw.titleMode)?raw.titleMode:(url?(title===url?'url':'markdown'):'text');
+result.push({id,title,url,titleMode,note:String(raw.note||'').normalize('NFC').trim(),remark:normalizeRemarks(raw.remark)})
+});
+return result
+}
+
+function normalizeTombstones(items){
+const map=new Map();
+(Array.isArray(items)?items:[]).forEach(raw=>{
+if(!raw)return;
+const id=String(raw.id||'').trim();
+if(!id)return;
+const deletedAt=Number.isFinite(Number(raw.deletedAt))?Number(raw.deletedAt):0;
+const previous=map.get(id);
+if(!previous||deletedAt>previous.deletedAt)map.set(id,{id,deletedAt})
+});
+return[...map.values()]
+}
+
+function normalizeSnapshot(payload){
+let rawPages=[],rawTombstones=[];
+if(Array.isArray(payload)){
+rawPages=payload.filter(item=>item&&item.__pagesDeleted!==true&&item.deleted!==true);
+rawTombstones=payload.filter(item=>item&&(item.__pagesDeleted===true||item.deleted===true))
+}else if(payload&&typeof payload==='object'){
+rawPages=Array.isArray(payload.pages)?payload.pages:[];
+rawTombstones=Array.isArray(payload.tombstones)?payload.tombstones:[]
+}
+const normalizedPages=normalizePageArray(rawPages),normalizedTombstones=normalizeTombstones(rawTombstones),deletedIds=new Set(normalizedTombstones.map(item=>item.id));
+return{pages:normalizedPages.filter(item=>!deletedIds.has(item.id)),tombstones:normalizedTombstones}
+}
+
+function getLocalSnapshot(){
+return normalizeSnapshot({pages,tombstones})
+}
+
+function applySnapshot(snapshot,{render=true}={}){
+const normalized=normalizeSnapshot(snapshot);
+pages=normalized.pages;
+tombstones=normalized.tombstones;
+if(render)applySortAndRender();
+return normalized
+}
+
+function pageComparable(item){
+if(!item)return null;
+return{id:item.id,title:item.title,url:item.url,titleMode:item.titleMode,note:item.note,remark:normalizeRemarks(item.remark)}
+}
+
+function canonicalSnapshot(snapshot){
+const normalized=normalizeSnapshot(snapshot);
+return{
+pages:normalized.pages.map(pageComparable).sort((a,b)=>a.id.localeCompare(b.id)),
+tombstones:normalized.tombstones.map(item=>({id:item.id,deletedAt:Number(item.deletedAt)||0})).sort((a,b)=>a.id.localeCompare(b.id))
+}
+}
+
+function getFingerprint(snapshot){
+const raw=JSON.stringify(canonicalSnapshot(snapshot));
+return`${raw.length}:${hashString(raw)}`
+}
+
+function makeRemotePayload(snapshot){
+const normalized=normalizeSnapshot(snapshot);
+return[
+...normalized.pages.map(pageComparable),
+...normalized.tombstones.map(item=>({id:item.id,__pagesDeleted:true,deletedAt:Number(item.deletedAt)||0}))
+]
+}
+
+function assertSyncSize(snapshot){
+const raw=JSON.stringify(makeRemotePayload(snapshot),null,2);
+if(new TextEncoder().encode(raw).length>MAX_SYNC_BYTES)throw new Error('数据超过 750 KB 同步上限');
+return raw
+}
+
+function upsertTombstone(id,deletedAt=Date.now()){
+const key=String(id||'').trim();
+if(!key)return;
+const existing=tombstones.find(item=>item.id===key);
+if(existing)existing.deletedAt=Math.max(Number(existing.deletedAt)||0,Number(deletedAt)||Date.now());
+else tombstones.push({id:key,deletedAt:Number(deletedAt)||Date.now()})
+}
+
+function getSyncTarget(){
+return`${String(config.owner||'').trim()}/${String(config.repo||'').trim()}/${String(config.file||'pages_data.json').trim()}`
+}
+
+function emptySyncMeta(target=getSyncTarget()){
+return{target,sha:null,fingerprint:null,dirty:false,lastSyncAt:null}
+}
+
+async function loadSyncState(){
+let storedMeta=null,storedBase=null;
+try{[storedMeta,storedBase]=await Promise.all([idbGet(SYNC_META_KEY),idbGet(SYNC_BASE_KEY)])}catch(error){console.warn('读取同步基线失败:',error)}
+if(storedMeta&&typeof storedMeta==='object'){
+syncMeta={target:typeof storedMeta.target==='string'?storedMeta.target:'',sha:typeof storedMeta.sha==='string'?storedMeta.sha:null,fingerprint:typeof storedMeta.fingerprint==='string'?storedMeta.fingerprint:null,dirty:Boolean(storedMeta.dirty),lastSyncAt:typeof storedMeta.lastSyncAt==='string'?storedMeta.lastSyncAt:null}
+}else syncMeta=emptySyncMeta('');
+syncBase=storedBase?normalizeSnapshot(storedBase):null
+}
+
+function persistSyncMeta(){
+return idbSet(SYNC_META_KEY,{...syncMeta})
+}
+
+function persistSyncBase(){
+return syncBase?idbSet(SYNC_BASE_KEY,canonicalSnapshot(syncBase)):idbDelete(SYNC_BASE_KEY)
+}
+
+async function persistSyncState(){
+await Promise.allSettled([persistSyncMeta(),persistSyncBase()])
+}
+
+function ensureSyncTarget(){
+const target=getSyncTarget();
+if(syncMeta.target===target)return false;
+syncMeta=emptySyncMeta(target);
+syncBase=null;
+void persistSyncState();
+return true
+}
+
+function updateLastSyncDisplay(){
+if(!syncMeta.lastSyncAt||syncMeta.target!==getSyncTarget()){
+lastSyncTime.textContent=syncMeta.dirty?'有未同步修改':'未同步';
+return
+}
+const date=new Date(syncMeta.lastSyncAt);
+lastSyncTime.textContent=Number.isNaN(date.getTime())?'已同步':`已同步 ${date.toLocaleString()}`
+}
+
+function valuesEqual(a,b){
+return JSON.stringify(a)===JSON.stringify(b)
+}
+
+function mergeRemarkValues(baseValue,localValue,remoteValue){
+const base=normalizeRemarks(baseValue),local=normalizeRemarks(localValue),remote=normalizeRemarks(remoteValue),key=value=>remarkHistoryKey(value),baseKeys=new Set(base.map(key)),localKeys=new Set(local.map(key)),remoteKeys=new Set(remote.map(key)),removed=new Set(),result=[];
+base.forEach(value=>{const k=key(value);if(!localKeys.has(k)||!remoteKeys.has(k))removed.add(k)});
+base.forEach(value=>{if(!removed.has(key(value)))result.push(value)});
+[...local,...remote].forEach(value=>{const k=key(value);if(!baseKeys.has(k)&&!result.some(item=>key(item)===k))result.push(value)});
+return normalizeRemarks(result)
+}
+
+function entityMap(snapshot){
+const normalized=normalizeSnapshot(snapshot),map=new Map();
+normalized.pages.forEach(item=>map.set(item.id,{kind:'page',value:item}));
+normalized.tombstones.forEach(item=>map.set(item.id,{kind:'deleted',value:item}));
+return map
+}
+
+function entityEqual(a,b){
+if(!a&&!b)return true;
+if(!a||!b||a.kind!==b.kind)return false;
+if(a.kind==='deleted')return true;
+return valuesEqual(pageComparable(a.value),pageComparable(b.value))
+}
+
+function mergePageRecord(id,base,local,remote,preference,conflicts){
+const merged={id},scalarFields=['title','url','titleMode','note'];
+scalarFields.forEach(field=>{
+const b=base?.[field],l=local?.[field],r=remote?.[field];
+if(valuesEqual(l,r))merged[field]=cloneValue(l);
+else if(base&&valuesEqual(l,b))merged[field]=cloneValue(r);
+else if(base&&valuesEqual(r,b))merged[field]=cloneValue(l);
+else{
+conflicts.push({id,field,local:cloneValue(l),remote:cloneValue(r)});
+merged[field]=cloneValue(preference==='remote'?r:l)
+}
+});
+const bRemarks=base?.remark||[],lRemarks=local?.remark||[],rRemarks=remote?.remark||[];
+if(valuesEqual(lRemarks,rRemarks))merged.remark=normalizeRemarks(lRemarks);
+else if(base&&valuesEqual(lRemarks,bRemarks))merged.remark=normalizeRemarks(rRemarks);
+else if(base&&valuesEqual(rRemarks,bRemarks))merged.remark=normalizeRemarks(lRemarks);
+else merged.remark=mergeRemarkValues(bRemarks,lRemarks,rRemarks);
+return normalizePageArray([merged])[0]||null
+}
+
+function mergeSnapshots(baseSnapshot,localSnapshot,remoteSnapshot,preference=null){
+const baseMap=entityMap(baseSnapshot||{pages:[],tombstones:[]}),localMap=entityMap(localSnapshot),remoteMap=entityMap(remoteSnapshot),ids=new Set([...baseMap.keys(),...localMap.keys(),...remoteMap.keys()]),conflicts=[],pagesOut=[],tombstonesOut=[],now=Date.now();
+const deletedEntity=(id,source=null)=>({kind:'deleted',value:{id,deletedAt:Number(source?.value?.deletedAt)||now}});
+const chooseConflict=(id,field,l,r)=>{conflicts.push({id,field,local:l,remote:r});return preference==='remote'?r:l};
+for(const id of ids){
+let b=baseMap.get(id)||null,l=localMap.get(id)||null,r=remoteMap.get(id)||null;
+if(b?.kind==='page'){
+if(!l)l=deletedEntity(id);
+if(!r)r=deletedEntity(id)
+}else if(b?.kind==='deleted'){
+if(!l)l=b;
+if(!r)r=b
+}
+let chosen=null;
+if(entityEqual(l,r)){
+if(l?.kind==='deleted'&&r?.kind==='deleted')chosen=deletedEntity(id,{value:{deletedAt:Math.max(Number(l.value.deletedAt)||0,Number(r.value.deletedAt)||0)}});
+else chosen=l||r
+}else if(entityEqual(l,b))chosen=r;
+else if(entityEqual(r,b))chosen=l;
+else if(!b){
+if(!l)chosen=r;
+else if(!r)chosen=l;
+else if(l.kind==='page'&&r.kind==='page')chosen={kind:'page',value:mergePageRecord(id,null,l.value,r.value,preference,conflicts)};
+else chosen=chooseConflict(id,'__delete__',l,r)
+}else if(l?.kind==='deleted'&&r?.kind==='deleted'){
+chosen=deletedEntity(id,{value:{deletedAt:Math.max(Number(l.value.deletedAt)||0,Number(r.value.deletedAt)||0)}})
+}else if(l?.kind==='page'&&r?.kind==='page'){
+chosen={kind:'page',value:mergePageRecord(id,b.kind==='page'?b.value:null,l.value,r.value,preference,conflicts)}
+}else{
+chosen=chooseConflict(id,'__delete__',l,r)
+}
+if(!chosen)continue;
+if(chosen.kind==='deleted')tombstonesOut.push({id,deletedAt:Number(chosen.value.deletedAt)||now});
+else if(chosen.value)pagesOut.push(chosen.value)
+}
+return{snapshot:normalizeSnapshot({pages:pagesOut,tombstones:tombstonesOut}),conflicts}
+}
+
+function formatConflictSummary(conflicts){
+const ids=new Set(conflicts.map(item=>item.id));
+return`${conflicts.length} 个字段 / ${ids.size} 个条目`
+}
+
+function markLocalChange(){
+localMutationVersion++;
+syncMeta.dirty=true;
+void persistSyncMeta().catch(error=>console.warn('保存同步状态失败:',error));
+if(isConfigValid()){
+setCloudStatus('offline','待同步');
+lastSyncTime.textContent='有未同步修改'
+}
+if(syncInFlight)syncRequested=true;
+scheduleAutoSync()
+}
+
+function scheduleAutoSync(){
+if(!isConfigValid())return;
+clearTimeout(autoSyncTimer);
+autoSyncTimer=setTimeout(()=>{
+autoSyncTimer=null;
+syncToCloud(false,false)
+},AUTO_SYNC_DELAY)
+}
+
+function clearPassiveSyncTimer(){
+if(passiveSyncTimer!==null){clearTimeout(passiveSyncTimer);passiveSyncTimer=null}
+}
+
+function wakePassiveSync(){
+if(!localStateReady||!isConfigValid()||document.hidden||!editModal.classList.contains('hidden')||!configModal.classList.contains('hidden'))return;
+clearPassiveSyncTimer();
+passiveSyncTimer=setTimeout(()=>{
+passiveSyncTimer=null;
+if(Date.now()-lastPassiveSyncAt<PASSIVE_SYNC_MIN_INTERVAL)return;
+lastPassiveSyncAt=Date.now();
+syncToCloud(false,false)
+},PASSIVE_SYNC_DELAY)
+}
+
+function utf8ToBase64(text){
+const bytes=new TextEncoder().encode(text);let binary='';
+for(let offset=0;offset<bytes.length;offset+=0x8000)binary+=String.fromCharCode(...bytes.subarray(offset,offset+0x8000));
+return btoa(binary)
+}
+
+function base64ToUtf8(base64){
+const binary=atob(String(base64||'').replace(/\s/g,'')),bytes=new Uint8Array(binary.length);
+for(let i=0;i<binary.length;i++)bytes[i]=binary.charCodeAt(i);
+return new TextDecoder('utf-8',{fatal:true}).decode(bytes)
+}
+
 async function loadConfig(){
 let parsed={};
 let persistedToken='';
@@ -547,135 +854,278 @@ return config.token&&config.owner&&config.repo&&config.file
 }
 
 async function githubApi(method,endpoint,body=null){
-const url=`https://api.github.com/repos/${config.owner}/${config.repo}/${endpoint}`,
-headers={
-'Authorization':`token ${config.token}`,
-'Accept':'application/vnd.github.v3+json',
-'Content-Type':'application/json'
-},
+const url=`https://api.github.com/repos/${encodeURIComponent(config.owner)}/${encodeURIComponent(config.repo)}/${endpoint}`,
+headers={'Authorization':`token ${config.token}`,'Accept':'application/vnd.github+json'},
 options={method,headers};
-
-if(body)options.body=JSON.stringify(body);
-
-const response=await fetch(url,options);
-
-if(!response.ok){
-const error=await response.json().catch(()=>({}));
-throw new Error(error.message||`HTTP ${response.status}`)
+if(body!==null){headers['Content-Type']='application/json';options.body=JSON.stringify(body)}
+const response=await fetch(url,options),raw=await response.text();
+let payload=null;
+if(raw){try{payload=JSON.parse(raw)}catch(error){payload={message:raw}}}
+if(!response.ok){const error=new Error(payload?.message||`HTTP ${response.status}`);error.status=response.status;throw error}
+return payload
 }
 
-return response.json()
-}
-
-async function loadFromGitHub(){
+async function readRemoteState(){
 if(!isConfigValid())throw new Error('请先配置 GitHub 连接');
+try{
+const data=await githubApi('GET',`contents/${String(config.file).split('/').filter(Boolean).map(encodeURIComponent).join('/')}`);
+if(!data||data.type!=='file'||!data.sha||!data.content)throw new Error('云端文件无法安全读取');
+if(Number.isFinite(Number(data.size))&&Number(data.size)>MAX_SYNC_BYTES)throw new Error('云端文件超过 750 KB 同步上限');
+const parsed=JSON.parse(base64ToUtf8(data.content)),state=normalizeSnapshot(parsed),rawItems=Array.isArray(parsed)?parsed:(Array.isArray(parsed?.pages)?parsed.pages:[]),needsMigration=!Array.isArray(parsed)||rawItems.some(item=>item&&item.__pagesDeleted!==true&&item.deleted!==true&&!(typeof item.id==='string'&&item.id.trim()));
+assertSyncSize(state);
+return{exists:true,sha:data.sha,state,needsMigration}
+}catch(error){
+if(error?.status===404)return{exists:false,sha:null,state:{pages:[],tombstones:[]}};
+throw error
+}
+}
+
+async function writeRemoteState(snapshot,sha=null){
+const raw=assertSyncSize(snapshot),body={message:`更新 Pages 数据 - ${new Date().toLocaleString()}`,content:utf8ToBase64(raw)};
+if(sha)body.sha=sha;
+const result=await githubApi('PUT',`contents/${String(config.file).split('/').filter(Boolean).map(encodeURIComponent).join('/')}`,body);
+return result?.content?.sha||null
+}
+
+async function persistSyncedBase(snapshot,sha){
+const normalized=normalizeSnapshot(snapshot),baseFingerprint=getFingerprint(normalized),currentFingerprint=getFingerprint(getLocalSnapshot());
+syncBase=normalized;
+syncMeta={target:getSyncTarget(),sha:sha||null,fingerprint:baseFingerprint,dirty:currentFingerprint!==baseFingerprint,lastSyncAt:new Date().toISOString()};
+await persistSyncState();
+updateLastSyncDisplay()
+}
+
+async function finalizeSyncedState(syncedSnapshot,sha,localAtStart,mutationAtStart,{applySynced=true}={}){
+const normalizedSynced=normalizeSnapshot(syncedSnapshot);
+if(localMutationVersion===mutationAtStart){
+if(applySynced)applySnapshot(normalizedSynced);
+await persistSyncedBase(normalizedSynced,sha);
+return
+}
+const current=getLocalSnapshot(),rebased=mergeSnapshots(localAtStart,current,normalizedSynced,'local').snapshot;
+applySnapshot(rebased);
+await persistSyncedBase(normalizedSynced,sha);
+syncMeta.dirty=true;
+await persistSyncMeta();
+syncRequested=true;
+setCloudStatus('offline','待同步');
+lastSyncTime.textContent='有未同步修改'
+}
+
+async function performSync({showMessage=true,interactive=showMessage}={}){
+ensureSyncTarget();
+const localAtStart=getLocalSnapshot(),mutationAtStart=localMutationVersion,localFingerprint=getFingerprint(localAtStart),baselineFingerprint=syncMeta.fingerprint,hasBaseline=Boolean(syncBase&&typeof baselineFingerprint==='string');
+setCloudStatus('syncing','同步中...');
+let conflictPreference=null;
+for(let attempt=0;attempt<MAX_WRITE_CONFLICT_RETRIES;attempt++){
+const remote=await readRemoteState();
+
+if(!remote.exists){
+if(hasBaseline&&!interactive){
+setCloudStatus('offline','云端文件已删除');
+showToast('云端数据文件已删除，请点击“同步”确认是否重新创建','error');
+return{ok:false,conflict:true}
+}
+
+if(hasBaseline&&interactive&&!confirm('云端数据文件已删除。是否用当前本地数据重新创建？'))return{ok:false,conflict:true};
 
 try{
-const data=await githubApi('GET',`contents/${config.file}`),
-decoded=decodeURIComponent(escape(atob(data.content)));
-return JSON.parse(decoded)
-}catch(e){
-if(e.message.includes('404'))return null;
-throw e
+const sha=await writeRemoteState(localAtStart);
+await finalizeSyncedState(localAtStart,sha,localAtStart,mutationAtStart,{applySynced:false});
+setCloudStatus(syncMeta.dirty?'offline':'online',syncMeta.dirty?'待同步':'已连接');
+if(showMessage)showToast('已创建云端数据文件','success');
+return{ok:true,conflict:false}
+}catch(error){
+if(error?.status===409&&attempt<MAX_WRITE_CONFLICT_RETRIES-1)continue;
+throw error
 }
 }
 
-async function syncToCloud(showToastMsg=true){
-if(isSyncing)return;
+const remoteFingerprint=getFingerprint(remote.state);
 
+if(localFingerprint===remoteFingerprint){
+let finalSha=remote.sha;
+
+if(remote.needsMigration){
+try{
+finalSha=await writeRemoteState(remote.state,remote.sha)
+}catch(error){
+if(error?.status===409&&attempt<MAX_WRITE_CONFLICT_RETRIES-1)continue;
+throw error
+}
+}
+
+await finalizeSyncedState(remote.state,finalSha,localAtStart,mutationAtStart,{applySynced:false});
+setCloudStatus(syncMeta.dirty?'offline':'online',syncMeta.dirty?'待同步':'已连接');
+if(showMessage)showToast(remote.needsMigration?'同步格式已升级，本地与云端已一致':'本地与云端已一致','success');
+return{ok:true,conflict:false}
+}
+
+if(!hadStoredState&&!hasBaseline){
+await finalizeSyncedState(remote.state,remote.sha,localAtStart,mutationAtStart,{applySynced:true});
+setCloudStatus(syncMeta.dirty?'offline':'online',syncMeta.dirty?'待同步':'已连接');
+if(showMessage)showToast(`已从云端更新 ${pages.length} 个条目`,'success');
+return{ok:true,conflict:false}
+}
+
+const base=hasBaseline?syncBase:{pages:[],tombstones:[]},
+baseFingerprint=hasBaseline?baselineFingerprint:getFingerprint(base),
+localChanged=localFingerprint!==baseFingerprint,
+remoteChanged=remoteFingerprint!==baseFingerprint;
+
+if(hasBaseline&&localChanged&&!remoteChanged){
+try{
+const sha=await writeRemoteState(localAtStart,remote.sha);
+await finalizeSyncedState(localAtStart,sha,localAtStart,mutationAtStart,{applySynced:false});
+setCloudStatus(syncMeta.dirty?'offline':'online',syncMeta.dirty?'待同步':'已连接');
+if(showMessage)showToast('本地数据已上传','success');
+return{ok:true,conflict:false}
+}catch(error){
+if(error?.status===409&&attempt<MAX_WRITE_CONFLICT_RETRIES-1)continue;
+throw error
+}
+}
+
+if(hasBaseline&&!localChanged&&remoteChanged){
+await finalizeSyncedState(remote.state,remote.sha,localAtStart,mutationAtStart,{applySynced:true});
+setCloudStatus(syncMeta.dirty?'offline':'online',syncMeta.dirty?'待同步':'已连接');
+if(showMessage)showToast(`已从云端更新 ${pages.length} 个条目`,'success');
+return{ok:true,conflict:false}
+}
+
+let mergedResult=mergeSnapshots(base,localAtStart,remote.state,conflictPreference);
+
+if(mergedResult.conflicts.length&&!conflictPreference){
+if(!interactive){
+setCloudStatus('offline','存在冲突');
+showToast(`检测到跨设备同字段冲突：${formatConflictSummary(mergedResult.conflicts)}。请点击“同步”处理。`,'error');
+return{ok:false,conflict:true}
+}
+
+const preferLocal=confirm(`检测到跨设备同字段冲突：${formatConflictSummary(mergedResult.conflicts)}。
+
+确定：冲突字段优先采用本机值；未冲突字段仍自动合并。
+取消：继续选择是否优先采用云端值。`);
+
+if(preferLocal){
+conflictPreference='local'
+}else{
+const preferRemote=confirm('是否让冲突字段优先采用云端值？未冲突字段仍自动合并。');
+
+if(!preferRemote){
+setCloudStatus('offline','存在冲突');
+showToast('已取消同步，数据未被覆盖','info');
+return{ok:false,conflict:true}
+}
+
+conflictPreference='remote'
+}
+
+mergedResult=mergeSnapshots(base,localAtStart,remote.state,conflictPreference)
+}
+
+const merged=mergedResult.snapshot,
+mergedFingerprint=getFingerprint(merged);
+
+if(mergedFingerprint===remoteFingerprint){
+await finalizeSyncedState(merged,remote.sha,localAtStart,mutationAtStart,{applySynced:true});
+setCloudStatus(syncMeta.dirty?'offline':'online',syncMeta.dirty?'待同步':'已连接');
+if(showMessage)showToast('已合并并采用云端最新版','success');
+return{ok:true,conflict:false}
+}
+
+try{
+const sha=await writeRemoteState(merged,remote.sha);
+await finalizeSyncedState(merged,sha,localAtStart,mutationAtStart,{applySynced:true});
+setCloudStatus(syncMeta.dirty?'offline':'online',syncMeta.dirty?'待同步':'已连接');
+if(showMessage)showToast(mergedResult.conflicts.length?'冲突字段已按选择处理，其余修改已自动合并':'两台设备的修改已自动合并并同步','success');
+return{ok:true,conflict:false}
+}catch(error){
+if(error?.status===409&&attempt<MAX_WRITE_CONFLICT_RETRIES-1)continue;
+throw error
+}
+}
+
+throw new Error('多次重试后仍无法完成同步')
+}
+
+function syncToCloud(showMessage=true,interactive=showMessage){
 if(!isConfigValid()){
-showToast('请先点击 "配置" 按钮设置 GitHub 连接','error');
-return
+if(showMessage)showToast('请先点击 "配置" 按钮设置 GitHub 连接','error');
+return Promise.resolve(false)
 }
 
-if(pages.length===0){
-showToast('没有数据需要同步','info');
-return
-}
+clearTimeout(autoSyncTimer);
+autoSyncTimer=null;
+syncRequested=true;
 
+if(showMessage)syncShowResult=true;
+if(interactive)syncInteractive=true;
+if(syncInFlight)return syncInFlight;
+
+syncInFlight=(async()=>{
+let allOk=true;
+
+while(syncRequested){
+const announce=syncShowResult,
+allowInteraction=syncInteractive;
+
+syncRequested=false;
+syncShowResult=false;
+syncInteractive=false;
 isSyncing=true;
 syncBtn.disabled=true;
-setCloudStatus('syncing','同步中...');
+
+let result={ok:false,conflict:false};
 
 try{
-let sha=null;
+result=await performSync({showMessage:announce,interactive:allowInteraction})
+}catch(error){
+console.error('同步失败:',error);
+setCloudStatus('offline',error?.status===409?'存在冲突':'同步失败');
 
-try{
-const res=await fetch(`https://api.github.com/repos/${config.owner}/${config.repo}/contents/${config.file}`,{
-headers:{'Authorization':`token ${config.token}`}
-});
-
-if(res.status===200){
-const data=await res.json();
-sha=data.sha
+if(announce||!document.hidden){
+showToast(`同步失败：${error?.message||error}`,'error')
 }
-}catch(e){}
 
-const content=btoa(unescape(encodeURIComponent(JSON.stringify(pages,null,2)))),
-body={
-message:`更新数据 - ${new Date().toLocaleString()}`,
-content
-};
-
-if(sha)body.sha=sha;
-
-const res=await fetch(`https://api.github.com/repos/${config.owner}/${config.repo}/contents/${config.file}`,{
-method:'PUT',
-headers:{
-'Authorization':`token ${config.token}`,
-'Content-Type':'application/json'
-},
-body:JSON.stringify(body)
-}),
-result=await res.json();
-
-if(res.status===200||res.status===201){
-void saveWorkingCopy();
-const now=new Date();
-lastSyncTime.textContent=`已同步 ${now.toLocaleString()}`;
-if(showToastMsg)showToast(`成功同步 ${pages.length} 个条目到 GitHub`,'success');
-setCloudStatus('online','已连接')
-}else{
-throw new Error(result.message||'未知错误')
-}
-}catch(e){
-console.error('同步失败:',e);
-showToast(`同步失败：${e.message}`,'error');
-setCloudStatus('offline','同步失败')
+result={ok:false,conflict:error?.status===409}
 }finally{
 isSyncing=false;
 syncBtn.disabled=false
 }
+
+allOk=allOk&&result.ok;
+
+if(!result.ok){
+syncRequested=false;
+break
+}
+}
+
+return allOk
+})().finally(()=>{
+syncInFlight=null
+});
+
+return syncInFlight
 }
 
 async function loadFromCloud(){
+await loadWorkingCopy();
+ensureSyncTarget();
+
 if(!isConfigValid()){
 setCloudStatus('offline','未配置');
-await loadWorkingCopy();
+updateLastSyncDisplay();
 return
 }
 
-setCloudStatus('syncing','加载中...');
+const ok=await syncToCloud(false,false);
 
-try{
-const data=await loadFromGitHub();
-
-if(data&&Array.isArray(data)&&data.length>0){
-pages=data.filter(item=>item.title&&item.title.trim()!=='');
-applySortAndRender();
-const now=new Date();
-lastSyncTime.textContent=`已同步 ${now.toLocaleString()}`;
-setCloudStatus('online','已连接');
-showToast(`从 GitHub 加载了 ${pages.length} 个条目`,'success')
-}else{
-showToast('云端无数据，从本地工作副本加载','info');
-await loadWorkingCopy();
-if(pages.length>0)setTimeout(()=>syncToCloud(false),500)
-}
-}catch(e){
-console.error('加载云端数据失败:',e);
-showToast(`加载云端失败：${e.message}，从本地工作副本加载`,'error');
-await loadWorkingCopy()
+if(ok&&!syncMeta.dirty){
+setCloudStatus('online','已连接')
+}else if(!ok&&statusText.textContent==='同步中...'){
+setCloudStatus('offline','同步失败')
 }
 }
 
@@ -683,15 +1133,35 @@ async function loadWorkingCopy(){
 const embedded=readEmbeddedBackup(),
 record=embedded?null:await readBestWorkingCopy();
 
+let snapshot=null;
+
 if(embedded){
-pages=embedded.pages.filter(item=>item&&item.title&&String(item.title).trim()!=='');
-if(Array.isArray(embedded.remarkHistory))remarkHistory=embedded.remarkHistory.map(normalizeRemarkValue).filter(Boolean);
-if(Array.isArray(embedded.remarkHidden))remarkHidden=new Set(embedded.remarkHidden.map(remarkHistoryKey).filter(Boolean));
-showToast(`已从 HTML 备份恢复 ${pages.length} 个条目`,'success')
+snapshot=normalizeSnapshot({
+pages:embedded.pages,
+tombstones:embedded.tombstones
+});
+
+hadStoredState=true;
+
+if(Array.isArray(embedded.remarkHistory)){
+remarkHistory=embedded.remarkHistory.map(normalizeRemarkValue).filter(Boolean)
+}
+
+if(Array.isArray(embedded.remarkHidden)){
+remarkHidden=new Set(embedded.remarkHidden.map(remarkHistoryKey).filter(Boolean))
+}
+
+showToast(`已从 HTML 备份恢复 ${snapshot.pages.length} 个条目`,'success')
 }else if(record){
-pages=record.pages.filter(item=>item&&item.title&&String(item.title).trim()!=='')
+snapshot=normalizeSnapshot({
+pages:record.pages,
+tombstones:record.tombstones
+});
+
+hadStoredState=true
 }else{
-pages=[
+snapshot=normalizeSnapshot({
+pages:[
 {title:'10个必知技巧',url:'https://example.com/10-tips',note:'数字开头示例'},
 {title:'2个方法',url:'https://example.com/2-methods',note:'数字开头示例'},
 {title:'Apple',url:'https://apple.com',note:'英文开头'},
@@ -701,13 +1171,22 @@ pages=[
 {title:'东',url:'https://example.com/dong',note:'中文 - D'},
 {title:'访问',url:'https://example.com/visit',note:'中文 - F'},
 {title:'苹',url:'https://example.com/ping',note:'中文 - P'}
-]
+],
+tombstones:[]
+});
+
+hadStoredState=false
 }
 
+pages=snapshot.pages;
+tombstones=snapshot.tombstones;
 applySortAndRender()
 }
 
 function applySortAndRender(){
+const normalized=getLocalSnapshot();
+pages=normalized.pages;
+tombstones=normalized.tombstones;
 sortPages();
 rebuildRemarkHistory();
 renderTable();
@@ -747,17 +1226,22 @@ link.addEventListener('dragstart',e=>e.preventDefault());
 link.addEventListener('click',function(e){
 const selection=window.getSelection(),
 hasSelected=selection&&!selection.isCollapsed&&(this.contains(selection.anchorNode)||this.contains(selection.focusNode));
+
 if(hasSelected)e.preventDefault()
 })
 });
 
 document.querySelectorAll('#tableBody .edit-btn').forEach(btn=>btn.addEventListener('click',function(e){
 e.stopPropagation();
+
 const index=this.getAttribute('data-index');
 
 if(index!==null){
 const idx=parseInt(index,10);
-if(!isNaN(idx)&&idx>=0&&idx<pages.length)openEditModal(idx)
+
+if(!isNaN(idx)&&idx>=0&&idx<pages.length){
+openEditModal(idx)
+}
 }
 }));
 
@@ -819,8 +1303,7 @@ pages[editingIndex].remark=editRemarkPicker.getValues();
 rememberRemark(pages[editingIndex].remark);
 closeEditModal();
 applySortAndRender();
-
-if(isConfigValid())syncToCloud(false)
+markLocalChange()
 }
 
 function deleteEditingEntry(){
@@ -834,11 +1317,15 @@ const item=pages[editingIndex];
 
 if(!confirm(`确定要删除 "${item.title}" 吗？`))return;
 
-pages.splice(editingIndex,1);
+const removed=pages.splice(editingIndex,1)[0];
+
+if(removed?.id){
+upsertTombstone(removed.id)
+}
+
 closeEditModal();
 applySortAndRender();
-
-if(isConfigValid())syncToCloud(false)
+markLocalChange()
 }
 
 function addPage(){
@@ -861,6 +1348,7 @@ return
 }
 
 pages.push({
+id:createPageId(),
 title:parsed.title,
 url:parsed.url,
 titleMode:parsed.titleMode,
@@ -870,8 +1358,7 @@ remark
 
 rememberRemark(remark);
 applySortAndRender();
-
-if(isConfigValid())syncToCloud(false);
+markLocalChange();
 
 pageInput.value='';
 noteInput.value='';
@@ -885,11 +1372,14 @@ return raw.replace(/[\\/:*?"<>|\s]+/g,'')||'page'
 }
 
 function createBackupSnapshot(){
+const snapshot=getLocalSnapshot();
+
 return{
 format:'pages-html-backup',
-version:1,
+version:2,
 exportedAt:Date.now(),
-pages:structuredClone(pages),
+pages:structuredClone(snapshot.pages),
+tombstones:structuredClone(snapshot.tombstones),
 remarkHistory:[...remarkHistory],
 remarkHidden:[...remarkHidden]
 }
@@ -897,12 +1387,15 @@ remarkHidden:[...remarkHidden]
 
 function readEmbeddedBackup(doc=document){
 const node=doc.getElementById('pagesBackupData');
+
 if(!node)return null;
 
 try{
 const backup=JSON.parse(node.textContent||'');
 
-if(!backup||backup.format!=='pages-html-backup'||backup.version!==1||!Array.isArray(backup.pages))return null;
+if(!backup||backup.format!=='pages-html-backup'||![1,2].includes(backup.version)||!Array.isArray(backup.pages)){
+return null
+}
 
 return backup
 }catch(error){
@@ -918,10 +1411,13 @@ clone.querySelectorAll('.remark-tags').forEach(node=>node.remove());
 
 ['remarkOptions','editRemarkOptions'].forEach(id=>{
 const node=clone.querySelector('#'+id);
+
 if(node)node.replaceChildren()
 });
 
-['remarkDropdown','editRemarkDropdown','editModal','configModal'].forEach(id=>clone.querySelector('#'+id)?.classList.add('hidden'));
+['remarkDropdown','editRemarkDropdown','editModal','configModal'].forEach(id=>{
+clone.querySelector('#'+id)?.classList.add('hidden')
+});
 
 const tokenInput=clone.querySelector('#cfgToken');
 
@@ -931,6 +1427,7 @@ tokenInput.removeAttribute('value')
 }
 
 const file=clone.querySelector('#fileInput');
+
 if(file)file.value='';
 
 clone.querySelector('#pagesBackupData')?.remove();
@@ -976,9 +1473,10 @@ const parsed=JSON.parse(trimmed);
 
 if(Array.isArray(parsed)){
 return{
-pages:parsed,
+pages:parsed.filter(item=>item&&item.__pagesDeleted!==true&&item.deleted!==true),
 remarkHistory:null,
 remarkHidden:null,
+tombstones:parsed.filter(item=>item&&(item.__pagesDeleted===true||item.deleted===true)),
 source:'JSON'
 }
 }
@@ -988,6 +1486,7 @@ return{
 pages:parsed.pages,
 remarkHistory:parsed.remarkHistory,
 remarkHidden:parsed.remarkHidden,
+tombstones:parsed.tombstones,
 source:'JSON'
 }
 }
@@ -995,17 +1494,22 @@ source:'JSON'
 
 const looksLikeHtml=/\.html?$/i.test(fileName)||/^<!doctype\s+html/i.test(trimmed)||/<html[\s>]/i.test(trimmed);
 
-if(!looksLikeHtml)throw new Error('不是有效的 JSON 或 HTML 备份文件');
+if(!looksLikeHtml){
+throw new Error('不是有效的 JSON 或 HTML 备份文件')
+}
 
 const doc=new DOMParser().parseFromString(trimmed,'text/html'),
 backup=readEmbeddedBackup(doc);
 
-if(!backup)throw new Error('HTML 文件中未找到有效的 Pages 备份数据');
+if(!backup){
+throw new Error('HTML 文件中未找到有效的 Pages 备份数据')
+}
 
 return{
 pages:backup.pages,
 remarkHistory:backup.remarkHistory,
 remarkHidden:backup.remarkHidden,
+tombstones:backup.tombstones,
 source:'HTML'
 }
 }
@@ -1016,16 +1520,30 @@ const reader=new FileReader();
 reader.onload=function(e){
 try{
 const imported=parseImportPayload(e.target.result,file.name),
-valid=imported.pages.filter(item=>item&&item.title&&String(item.title).trim()!=='');
+valid=normalizePageArray(imported.pages);
 
 if(valid.length===0){
 alert('文件中没有找到有效的条目。');
 return
 }
 
-if(pages.length>0&&!confirm(`当前有 ${pages.length} 个条目，导入将完全替换当前列表。确定继续吗？`))return;
+if(pages.length>0&&!confirm(`当前有 ${pages.length} 个条目，导入将完全替换当前列表。确定继续吗？`)){
+return
+}
+
+const importedIds=new Set(valid.map(item=>item.id));
+
+pages.forEach(item=>{
+if(item?.id&&!importedIds.has(item.id)){
+upsertTombstone(item.id)
+}
+});
 
 pages=valid;
+
+if(Array.isArray(imported.tombstones)){
+tombstones=normalizeTombstones([...tombstones,...imported.tombstones])
+}
 
 if(Array.isArray(imported.remarkHistory)){
 remarkHistory=imported.remarkHistory.map(normalizeRemarkValue).filter(Boolean)
@@ -1040,8 +1558,7 @@ saveRemarkHidden();
 saveRemarkHistory();
 
 showToast(`成功从 ${imported.source} 导入 ${pages.length} 个条目`,'success');
-
-if(isConfigValid())syncToCloud(false)
+markLocalChange()
 }catch(err){
 console.error('导入失败:',err);
 alert(`解析文件失败：${err.message||'文件格式无效'}`)
@@ -1153,7 +1670,8 @@ return
 
 closeConfigModal();
 showToast('配置已保存，正在连接...','info');
-await loadFromCloud()
+ensureSyncTarget();
+await syncToCloud(true,true)
 }
 
 addBtn.addEventListener('click',addPage);
@@ -1188,11 +1706,12 @@ this.value=''
 });
 
 syncBtn.addEventListener('click',()=>{
-if(pages.length===0){
+if(pages.length===0&&tombstones.length===0&&!syncMeta.dirty){
 showToast('没有数据需要同步','info');
 return
 }
-syncToCloud(true)
+
+syncToCloud(true,true)
 });
 
 if(window.visualViewport){
@@ -1266,7 +1785,10 @@ editOverlayPointerDown=e.target===this
 editModal.addEventListener('pointerup',function(e){
 const shouldClose=editOverlayPointerDown&&e.target===this;
 editOverlayPointerDown=false;
-if(shouldClose)closeEditModal()
+
+if(shouldClose){
+closeEditModal()
+}
 });
 
 editModal.addEventListener('pointercancel',()=>{
@@ -1312,15 +1834,33 @@ window.addEventListener('pagehide',()=>{
 if(localStateReady)void saveWorkingCopy()
 });
 
+window.addEventListener('online',wakePassiveSync);
+window.addEventListener('focus',wakePassiveSync);
+window.addEventListener('pageshow',wakePassiveSync);
+
 document.addEventListener('visibilitychange',()=>{
-if(localStateReady&&document.visibilityState==='hidden')void saveWorkingCopy()
+if(localStateReady&&document.visibilityState==='hidden'){
+void saveWorkingCopy()
+}
+
+if(localStateReady&&document.visibilityState==='visible'){
+wakePassiveSync()
+}
 });
 
 (async function initialize(){
 void requestPersistentStorage();
-await Promise.all([loadRemarkState(),loadConfig()]);
+
+await Promise.all([
+loadRemarkState(),
+loadConfig(),
+loadSyncState()
+]);
+
 await loadFromCloud();
-localStateReady=true
+
+localStateReady=true;
+updateLastSyncDisplay()
 })().catch(error=>{
 console.error('Pages 初始化失败:',error);
 setCloudStatus('offline','本地存储初始化失败');

@@ -31,7 +31,7 @@ h1{font-size:2.2rem;font-weight:600;color:#1e293b;letter-spacing:-.5px;border-bo
 .remark-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}.remark-tag{display:inline-flex;align-items:center;gap:6px;max-width:100%;border:1px solid #c7d2fe;border-radius:999px;background:#eef2ff;color:#1e3a8a;padding:3px 10px;font-size:.9rem;font-weight:400}.remark-tag span{overflow-wrap:anywhere;min-width:0}
 .remark-remove{flex:0 0 auto;border:0;background:transparent;color:inherit;cursor:pointer;font:inherit;font-size:1.15rem;width:24px;min-height:24px;border-radius:50%}.remark-remove:hover{background:#c7d2fe}.remark-remove:focus-visible{outline:2px solid #1e40af}
 .remark-combo{position:relative;width:100%;min-width:0}.remark-combo>input{width:100%}
-.remark-dropdown{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:1300;max-height:260px;overflow-y:auto;padding:6px;border:1px solid #cbd5e1;border-radius:14px;background:#fff;box-shadow:0 14px 30px rgba(15,23,42,.16);overscroll-behavior:contain}.remark-dropdown.hidden{display:none!important}
+.remark-dropdown{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:1300;max-height:260px;overflow-y:auto;padding:6px;border:1px solid #cbd5e1;border-radius:14px;background:#fff;box-shadow:0 14px 30px rgba(15,23,42,.16);overscroll-behavior:contain;touch-action:pan-y;-webkit-overflow-scrolling:touch}.remark-dropdown.hidden{display:none!important}
 .remark-option{display:block;width:100%;min-width:0;padding:.58rem .72rem;border:0;border-radius:9px;background:#fff;color:#0f172a;font:inherit;font-size:.9rem;line-height:1.35;text-align:left;overflow-wrap:anywhere;cursor:pointer}.remark-option+.remark-option{margin-top:2px}.remark-option:hover,.remark-option.is-active{background:#eef2ff;color:#1e3a8a}
 .remark-option-row{display:flex;align-items:stretch;gap:6px;width:100%;min-width:0}.remark-option-row+.remark-option-row{margin-top:2px}.remark-option-row .remark-option{flex:1 1 auto;width:auto;min-width:0}
 .remark-option-actions{display:flex;flex:0 0 auto;align-items:center;gap:4px}.remark-manage-btn{min-width:32px;padding:.45rem .5rem;border:1px solid #d1d9e6;border-radius:8px;background:#fff;color:#475569;font:inherit;font-size:.78rem;line-height:1;cursor:pointer}
@@ -46,7 +46,7 @@ h1{font-size:2.2rem;font-weight:600;color:#1e293b;letter-spacing:-.5px;border-bo
 .page-table .col-title>a,.page-table .title-note,.page-table .title-remark{-webkit-user-select:text;user-select:text}.page-table .title-note,.page-table .title-remark{cursor:text}
 .page-table .col-title>a{-webkit-user-drag:none;cursor:default}.page-table .col-title a{color:#1E40AF;text-decoration:none;font-size:inherit;font-weight:inherit}.page-table .col-title a:hover{color:#1E3A8A;text-decoration:underline}
 .page-table .title-note,.page-table .title-remark{margin-top:.28rem;color:#000;font-size:1rem;font-weight:400;line-height:1.45;white-space:normal;overflow-wrap:anywhere}
-.page-table .title-note{width:calc(100% + var(--edit-reserve));max-width:calc(100% + var(--edit-reserve));text-align:justify;text-justify:inter-character;text-align-last:left}.page-table .title-remark .remark-line{display:block}
+.page-table .title-note{width:calc(100% + var(--edit-reserve));max-width:calc(100% + var(--edit-reserve));text-align:justify;text-justify:inter-character;text-align-last:left}.page-table .title-remark .remark-line{display:block;line-height:1.45}
 .page-table .row-edit-link{position:absolute;right:1.2rem;bottom:.8rem;border:none;background:transparent;color:#64748b;padding:0;font:inherit;font-size:1rem;font-weight:400;line-height:1.45;cursor:default;text-decoration:none}.page-table .row-edit-link:hover,.page-table .row-edit-link:focus-visible{color:#64748b;text-decoration:none;outline:none}
 .empty-row td{padding:2.5rem 1rem;text-align:center;color:#94a3b8;font-size:1rem;background:#fafcff}
 .list-header{display:flex;justify-content:space-between;align-items:baseline;margin:1.8rem 0 .8rem;flex-wrap:wrap;gap:10px}.list-header h2{font-size:1.4rem;font-weight:600;color:#0f172a}.list-header .badge{background:#e9edf4;padding:.2rem 1rem;border-radius:40px;font-size:.8rem;font-weight:500;color:#334155}
@@ -298,7 +298,7 @@ applySortAndRender();
 markLocalChange()
 }
 
-function createOptionButton(value,checked){const button=document.createElement('button');button.type='button';button.className='remark-option';button.textContent=(checked?'✓ ':'')+value;button.setAttribute('role','option');button.setAttribute('aria-selected',String(checked));button.addEventListener('pointerdown',event=>{event.preventDefault();event.stopPropagation();choose(value)});button.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();closeMenu()});return button}
+function createOptionButton(value,checked){const button=document.createElement('button');button.type='button';button.className='remark-option';button.textContent=(checked?'✓ ':'')+value;button.setAttribute('role','option');button.setAttribute('aria-selected',String(checked));button.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();choose(value)});return button}
 
 function renderMenu(forceOpen=false){
 const query=remarkHistoryKey(input.value);
@@ -321,16 +321,14 @@ editButton.type='button';
 editButton.className='remark-manage-btn edit';
 editButton.textContent='改';
 editButton.setAttribute('aria-label','修改备注选项：'+value);
-editButton.addEventListener('pointerdown',event=>{event.preventDefault();event.stopPropagation();renameHistoryOption(value)});
-editButton.addEventListener('click',event=>{event.preventDefault();event.stopPropagation()});
+editButton.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();renameHistoryOption(value)});
 
 const deleteButton=document.createElement('button');
 deleteButton.type='button';
 deleteButton.className='remark-manage-btn delete';
 deleteButton.textContent='删';
 deleteButton.setAttribute('aria-label','删除备注选项：'+value);
-deleteButton.addEventListener('pointerdown',event=>{event.preventDefault();event.stopPropagation();deleteHistoryOption(value)});
-deleteButton.addEventListener('click',event=>{event.preventDefault();event.stopPropagation()});
+deleteButton.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();deleteHistoryOption(value)});
 
 actions.append(editButton,deleteButton);
 row.append(optionButton,actions);
@@ -919,16 +917,13 @@ setCloudStatus('syncing','同步中...');
 let conflictPreference=null;
 for(let attempt=0;attempt<MAX_WRITE_CONFLICT_RETRIES;attempt++){
 const remote=await readRemoteState();
-
 if(!remote.exists){
 if(hasBaseline&&!interactive){
 setCloudStatus('offline','云端文件已删除');
 showToast('云端数据文件已删除，请点击“同步”确认是否重新创建','error');
 return{ok:false,conflict:true}
 }
-
 if(hasBaseline&&interactive&&!confirm('云端数据文件已删除。是否用当前本地数据重新创建？'))return{ok:false,conflict:true};
-
 try{
 const sha=await writeRemoteState(localAtStart);
 await finalizeSyncedState(localAtStart,sha,localAtStart,mutationAtStart,{applySynced:false});
@@ -940,39 +935,24 @@ if(error?.status===409&&attempt<MAX_WRITE_CONFLICT_RETRIES-1)continue;
 throw error
 }
 }
-
 const remoteFingerprint=getFingerprint(remote.state);
-
 if(localFingerprint===remoteFingerprint){
 let finalSha=remote.sha;
-
 if(remote.needsMigration){
-try{
-finalSha=await writeRemoteState(remote.state,remote.sha)
-}catch(error){
-if(error?.status===409&&attempt<MAX_WRITE_CONFLICT_RETRIES-1)continue;
-throw error
+try{finalSha=await writeRemoteState(remote.state,remote.sha)}catch(error){if(error?.status===409&&attempt<MAX_WRITE_CONFLICT_RETRIES-1)continue;throw error}
 }
-}
-
 await finalizeSyncedState(remote.state,finalSha,localAtStart,mutationAtStart,{applySynced:false});
 setCloudStatus(syncMeta.dirty?'offline':'online',syncMeta.dirty?'待同步':'已连接');
 if(showMessage)showToast(remote.needsMigration?'同步格式已升级，本地与云端已一致':'本地与云端已一致','success');
 return{ok:true,conflict:false}
 }
-
 if(!hadStoredState&&!hasBaseline){
 await finalizeSyncedState(remote.state,remote.sha,localAtStart,mutationAtStart,{applySynced:true});
 setCloudStatus(syncMeta.dirty?'offline':'online',syncMeta.dirty?'待同步':'已连接');
 if(showMessage)showToast(`已从云端更新 ${pages.length} 个条目`,'success');
 return{ok:true,conflict:false}
 }
-
-const base=hasBaseline?syncBase:{pages:[],tombstones:[]},
-baseFingerprint=hasBaseline?baselineFingerprint:getFingerprint(base),
-localChanged=localFingerprint!==baseFingerprint,
-remoteChanged=remoteFingerprint!==baseFingerprint;
-
+const base=hasBaseline?syncBase:{pages:[],tombstones:[]},baseFingerprint=hasBaseline?baselineFingerprint:getFingerprint(base),localChanged=localFingerprint!==baseFingerprint,remoteChanged=remoteFingerprint!==baseFingerprint;
 if(hasBaseline&&localChanged&&!remoteChanged){
 try{
 const sha=await writeRemoteState(localAtStart,remote.sha);
@@ -985,55 +965,35 @@ if(error?.status===409&&attempt<MAX_WRITE_CONFLICT_RETRIES-1)continue;
 throw error
 }
 }
-
 if(hasBaseline&&!localChanged&&remoteChanged){
 await finalizeSyncedState(remote.state,remote.sha,localAtStart,mutationAtStart,{applySynced:true});
 setCloudStatus(syncMeta.dirty?'offline':'online',syncMeta.dirty?'待同步':'已连接');
 if(showMessage)showToast(`已从云端更新 ${pages.length} 个条目`,'success');
 return{ok:true,conflict:false}
 }
-
 let mergedResult=mergeSnapshots(base,localAtStart,remote.state,conflictPreference);
-
 if(mergedResult.conflicts.length&&!conflictPreference){
 if(!interactive){
 setCloudStatus('offline','存在冲突');
 showToast(`检测到跨设备同字段冲突：${formatConflictSummary(mergedResult.conflicts)}。请点击“同步”处理。`,'error');
 return{ok:false,conflict:true}
 }
-
-const preferLocal=confirm(`检测到跨设备同字段冲突：${formatConflictSummary(mergedResult.conflicts)}。
-
-确定：冲突字段优先采用本机值；未冲突字段仍自动合并。
-取消：继续选择是否优先采用云端值。`);
-
-if(preferLocal){
-conflictPreference='local'
-}else{
+const preferLocal=confirm(`检测到跨设备同字段冲突：${formatConflictSummary(mergedResult.conflicts)}。\n\n确定：冲突字段优先采用本机值；未冲突字段仍自动合并。\n取消：继续选择是否优先采用云端值。`);
+if(preferLocal)conflictPreference='local';
+else{
 const preferRemote=confirm('是否让冲突字段优先采用云端值？未冲突字段仍自动合并。');
-
-if(!preferRemote){
-setCloudStatus('offline','存在冲突');
-showToast('已取消同步，数据未被覆盖','info');
-return{ok:false,conflict:true}
-}
-
+if(!preferRemote){setCloudStatus('offline','存在冲突');showToast('已取消同步，数据未被覆盖','info');return{ok:false,conflict:true}}
 conflictPreference='remote'
 }
-
 mergedResult=mergeSnapshots(base,localAtStart,remote.state,conflictPreference)
 }
-
-const merged=mergedResult.snapshot,
-mergedFingerprint=getFingerprint(merged);
-
+const merged=mergedResult.snapshot,mergedFingerprint=getFingerprint(merged);
 if(mergedFingerprint===remoteFingerprint){
 await finalizeSyncedState(merged,remote.sha,localAtStart,mutationAtStart,{applySynced:true});
 setCloudStatus(syncMeta.dirty?'offline':'online',syncMeta.dirty?'待同步':'已连接');
 if(showMessage)showToast('已合并并采用云端最新版','success');
 return{ok:true,conflict:false}
 }
-
 try{
 const sha=await writeRemoteState(merged,remote.sha);
 await finalizeSyncedState(merged,sha,localAtStart,mutationAtStart,{applySynced:true});
@@ -1045,7 +1005,6 @@ if(error?.status===409&&attempt<MAX_WRITE_CONFLICT_RETRIES-1)continue;
 throw error
 }
 }
-
 throw new Error('多次重试后仍无法完成同步')
 }
 
@@ -1054,114 +1013,55 @@ if(!isConfigValid()){
 if(showMessage)showToast('请先点击 "配置" 按钮设置 GitHub 连接','error');
 return Promise.resolve(false)
 }
-
-clearTimeout(autoSyncTimer);
-autoSyncTimer=null;
+clearTimeout(autoSyncTimer);autoSyncTimer=null;
 syncRequested=true;
-
 if(showMessage)syncShowResult=true;
 if(interactive)syncInteractive=true;
 if(syncInFlight)return syncInFlight;
-
 syncInFlight=(async()=>{
 let allOk=true;
-
 while(syncRequested){
-const announce=syncShowResult,
-allowInteraction=syncInteractive;
-
-syncRequested=false;
-syncShowResult=false;
-syncInteractive=false;
-isSyncing=true;
-syncBtn.disabled=true;
-
+const announce=syncShowResult,allowInteraction=syncInteractive;
+syncRequested=false;syncShowResult=false;syncInteractive=false;isSyncing=true;syncBtn.disabled=true;
 let result={ok:false,conflict:false};
-
-try{
-result=await performSync({showMessage:announce,interactive:allowInteraction})
-}catch(error){
-console.error('同步失败:',error);
-setCloudStatus('offline',error?.status===409?'存在冲突':'同步失败');
-
-if(announce||!document.hidden){
-showToast(`同步失败：${error?.message||error}`,'error')
-}
-
-result={ok:false,conflict:error?.status===409}
-}finally{
-isSyncing=false;
-syncBtn.disabled=false
-}
-
+try{result=await performSync({showMessage:announce,interactive:allowInteraction})}
+catch(error){console.error('同步失败:',error);setCloudStatus('offline',error?.status===409?'存在冲突':'同步失败');if(announce||!document.hidden)showToast(`同步失败：${error?.message||error}`,'error');result={ok:false,conflict:error?.status===409}}
+finally{isSyncing=false;syncBtn.disabled=false}
 allOk=allOk&&result.ok;
-
-if(!result.ok){
-syncRequested=false;
-break
+if(!result.ok){syncRequested=false;break}
 }
-}
-
 return allOk
-})().finally(()=>{
-syncInFlight=null
-});
-
+})().finally(()=>{syncInFlight=null});
 return syncInFlight
 }
 
 async function loadFromCloud(){
 await loadWorkingCopy();
 ensureSyncTarget();
-
 if(!isConfigValid()){
 setCloudStatus('offline','未配置');
 updateLastSyncDisplay();
 return
 }
-
 const ok=await syncToCloud(false,false);
-
-if(ok&&!syncMeta.dirty){
-setCloudStatus('online','已连接')
-}else if(!ok&&statusText.textContent==='同步中...'){
-setCloudStatus('offline','同步失败')
-}
+if(ok&&!syncMeta.dirty)setCloudStatus('online','已连接');
+else if(!ok&&statusText.textContent==='同步中...')setCloudStatus('offline','同步失败')
 }
 
 async function loadWorkingCopy(){
-const embedded=readEmbeddedBackup(),
-record=embedded?null:await readBestWorkingCopy();
-
+const embedded=readEmbeddedBackup(),record=embedded?null:await readBestWorkingCopy();
 let snapshot=null;
-
 if(embedded){
-snapshot=normalizeSnapshot({
-pages:embedded.pages,
-tombstones:embedded.tombstones
-});
-
+snapshot=normalizeSnapshot({pages:embedded.pages,tombstones:embedded.tombstones});
 hadStoredState=true;
-
-if(Array.isArray(embedded.remarkHistory)){
-remarkHistory=embedded.remarkHistory.map(normalizeRemarkValue).filter(Boolean)
-}
-
-if(Array.isArray(embedded.remarkHidden)){
-remarkHidden=new Set(embedded.remarkHidden.map(remarkHistoryKey).filter(Boolean))
-}
-
+if(Array.isArray(embedded.remarkHistory))remarkHistory=embedded.remarkHistory.map(normalizeRemarkValue).filter(Boolean);
+if(Array.isArray(embedded.remarkHidden))remarkHidden=new Set(embedded.remarkHidden.map(remarkHistoryKey).filter(Boolean));
 showToast(`已从 HTML 备份恢复 ${snapshot.pages.length} 个条目`,'success')
 }else if(record){
-snapshot=normalizeSnapshot({
-pages:record.pages,
-tombstones:record.tombstones
-});
-
+snapshot=normalizeSnapshot({pages:record.pages,tombstones:record.tombstones});
 hadStoredState=true
 }else{
-snapshot=normalizeSnapshot({
-pages:[
+snapshot=normalizeSnapshot({pages:[
 {title:'10个必知技巧',url:'https://example.com/10-tips',note:'数字开头示例'},
 {title:'2个方法',url:'https://example.com/2-methods',note:'数字开头示例'},
 {title:'Apple',url:'https://apple.com',note:'英文开头'},
@@ -1171,22 +1071,16 @@ pages:[
 {title:'东',url:'https://example.com/dong',note:'中文 - D'},
 {title:'访问',url:'https://example.com/visit',note:'中文 - F'},
 {title:'苹',url:'https://example.com/ping',note:'中文 - P'}
-],
-tombstones:[]
-});
-
+],tombstones:[]});
 hadStoredState=false
 }
-
-pages=snapshot.pages;
-tombstones=snapshot.tombstones;
+pages=snapshot.pages;tombstones=snapshot.tombstones;
 applySortAndRender()
 }
 
 function applySortAndRender(){
 const normalized=getLocalSnapshot();
-pages=normalized.pages;
-tombstones=normalized.tombstones;
+pages=normalized.pages;tombstones=normalized.tombstones;
 sortPages();
 rebuildRemarkHistory();
 renderTable();
@@ -1226,22 +1120,17 @@ link.addEventListener('dragstart',e=>e.preventDefault());
 link.addEventListener('click',function(e){
 const selection=window.getSelection(),
 hasSelected=selection&&!selection.isCollapsed&&(this.contains(selection.anchorNode)||this.contains(selection.focusNode));
-
 if(hasSelected)e.preventDefault()
 })
 });
 
 document.querySelectorAll('#tableBody .edit-btn').forEach(btn=>btn.addEventListener('click',function(e){
 e.stopPropagation();
-
 const index=this.getAttribute('data-index');
 
 if(index!==null){
 const idx=parseInt(index,10);
-
-if(!isNaN(idx)&&idx>=0&&idx<pages.length){
-openEditModal(idx)
-}
+if(!isNaN(idx)&&idx>=0&&idx<pages.length)openEditModal(idx)
 }
 }));
 
@@ -1318,11 +1207,7 @@ const item=pages[editingIndex];
 if(!confirm(`确定要删除 "${item.title}" 吗？`))return;
 
 const removed=pages.splice(editingIndex,1)[0];
-
-if(removed?.id){
-upsertTombstone(removed.id)
-}
-
+if(removed?.id)upsertTombstone(removed.id);
 closeEditModal();
 applySortAndRender();
 markLocalChange()
@@ -1373,7 +1258,6 @@ return raw.replace(/[\\/:*?"<>|\s]+/g,'')||'page'
 
 function createBackupSnapshot(){
 const snapshot=getLocalSnapshot();
-
 return{
 format:'pages-html-backup',
 version:2,
@@ -1387,15 +1271,12 @@ remarkHidden:[...remarkHidden]
 
 function readEmbeddedBackup(doc=document){
 const node=doc.getElementById('pagesBackupData');
-
 if(!node)return null;
 
 try{
 const backup=JSON.parse(node.textContent||'');
 
-if(!backup||backup.format!=='pages-html-backup'||![1,2].includes(backup.version)||!Array.isArray(backup.pages)){
-return null
-}
+if(!backup||backup.format!=='pages-html-backup'||![1,2].includes(backup.version)||!Array.isArray(backup.pages))return null;
 
 return backup
 }catch(error){
@@ -1411,13 +1292,10 @@ clone.querySelectorAll('.remark-tags').forEach(node=>node.remove());
 
 ['remarkOptions','editRemarkOptions'].forEach(id=>{
 const node=clone.querySelector('#'+id);
-
 if(node)node.replaceChildren()
 });
 
-['remarkDropdown','editRemarkDropdown','editModal','configModal'].forEach(id=>{
-clone.querySelector('#'+id)?.classList.add('hidden')
-});
+['remarkDropdown','editRemarkDropdown','editModal','configModal'].forEach(id=>clone.querySelector('#'+id)?.classList.add('hidden'));
 
 const tokenInput=clone.querySelector('#cfgToken');
 
@@ -1427,7 +1305,6 @@ tokenInput.removeAttribute('value')
 }
 
 const file=clone.querySelector('#fileInput');
-
 if(file)file.value='';
 
 clone.querySelector('#pagesBackupData')?.remove();
@@ -1494,16 +1371,12 @@ source:'JSON'
 
 const looksLikeHtml=/\.html?$/i.test(fileName)||/^<!doctype\s+html/i.test(trimmed)||/<html[\s>]/i.test(trimmed);
 
-if(!looksLikeHtml){
-throw new Error('不是有效的 JSON 或 HTML 备份文件')
-}
+if(!looksLikeHtml)throw new Error('不是有效的 JSON 或 HTML 备份文件');
 
 const doc=new DOMParser().parseFromString(trimmed,'text/html'),
 backup=readEmbeddedBackup(doc);
 
-if(!backup){
-throw new Error('HTML 文件中未找到有效的 Pages 备份数据')
-}
+if(!backup)throw new Error('HTML 文件中未找到有效的 Pages 备份数据');
 
 return{
 pages:backup.pages,
@@ -1527,23 +1400,12 @@ alert('文件中没有找到有效的条目。');
 return
 }
 
-if(pages.length>0&&!confirm(`当前有 ${pages.length} 个条目，导入将完全替换当前列表。确定继续吗？`)){
-return
-}
+if(pages.length>0&&!confirm(`当前有 ${pages.length} 个条目，导入将完全替换当前列表。确定继续吗？`))return;
 
 const importedIds=new Set(valid.map(item=>item.id));
-
-pages.forEach(item=>{
-if(item?.id&&!importedIds.has(item.id)){
-upsertTombstone(item.id)
-}
-});
-
+pages.forEach(item=>{if(item?.id&&!importedIds.has(item.id))upsertTombstone(item.id)});
 pages=valid;
-
-if(Array.isArray(imported.tombstones)){
-tombstones=normalizeTombstones([...tombstones,...imported.tombstones])
-}
+if(Array.isArray(imported.tombstones))tombstones=normalizeTombstones([...tombstones,...imported.tombstones]);
 
 if(Array.isArray(imported.remarkHistory)){
 remarkHistory=imported.remarkHistory.map(normalizeRemarkValue).filter(Boolean)
@@ -1710,7 +1572,6 @@ if(pages.length===0&&tombstones.length===0&&!syncMeta.dirty){
 showToast('没有数据需要同步','info');
 return
 }
-
 syncToCloud(true,true)
 });
 
@@ -1785,10 +1646,7 @@ editOverlayPointerDown=e.target===this
 editModal.addEventListener('pointerup',function(e){
 const shouldClose=editOverlayPointerDown&&e.target===this;
 editOverlayPointerDown=false;
-
-if(shouldClose){
-closeEditModal()
-}
+if(shouldClose)closeEditModal()
 });
 
 editModal.addEventListener('pointercancel',()=>{
@@ -1839,26 +1697,14 @@ window.addEventListener('focus',wakePassiveSync);
 window.addEventListener('pageshow',wakePassiveSync);
 
 document.addEventListener('visibilitychange',()=>{
-if(localStateReady&&document.visibilityState==='hidden'){
-void saveWorkingCopy()
-}
-
-if(localStateReady&&document.visibilityState==='visible'){
-wakePassiveSync()
-}
+if(localStateReady&&document.visibilityState==='hidden')void saveWorkingCopy();
+if(localStateReady&&document.visibilityState==='visible')wakePassiveSync()
 });
 
 (async function initialize(){
 void requestPersistentStorage();
-
-await Promise.all([
-loadRemarkState(),
-loadConfig(),
-loadSyncState()
-]);
-
+await Promise.all([loadRemarkState(),loadConfig(),loadSyncState()]);
 await loadFromCloud();
-
 localStateReady=true;
 updateLastSyncDisplay()
 })().catch(error=>{

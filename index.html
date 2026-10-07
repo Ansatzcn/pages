@@ -58,38 +58,10 @@ h1{font-size:2.2rem;font-weight:600;color:#1e293b;letter-spacing:-.5px;border-bo
 .page-table .col-title>a{-webkit-user-drag:none;cursor:default}
 .page-table .col-title a{color:#1E40AF;text-decoration:none;font-size:inherit;font-weight:inherit}
 .page-table .col-title a:hover{color:#1E3A8A;text-decoration:underline}
-
-/* 提要与所有标签统一放在同一详情行组中。
-   有无提要都只使用这一套行距，不给第一个标签额外增加 margin。 */
-.page-table .title-details{
-margin-top:.28rem;
-color:#000;
-font-size:1rem;
-font-weight:400;
-line-height:1.45;
-white-space:normal;
-overflow-wrap:anywhere
-}
-.page-table .title-note,
-.page-table .title-remark,
-.page-table .title-remark .remark-line{
-margin:0;
-padding:0;
-font-size:inherit;
-font-weight:inherit;
-line-height:inherit;
-white-space:normal;
-overflow-wrap:anywhere
-}
-.page-table .title-note{
-width:calc(100% + var(--edit-reserve));
-max-width:calc(100% + var(--edit-reserve));
-text-align:justify;
-text-justify:inter-character;
-text-align-last:left
-}
+.page-table .title-details{margin-top:.28rem;color:#000;font-size:1rem;font-weight:400;line-height:1.45;white-space:normal;overflow-wrap:anywhere}
+.page-table .title-note,.page-table .title-remark,.page-table .title-remark .remark-line{margin:0;padding:0;font-size:inherit;font-weight:inherit;line-height:inherit;white-space:normal;overflow-wrap:anywhere}
+.page-table .title-note{width:calc(100% + var(--edit-reserve));max-width:calc(100% + var(--edit-reserve));text-align:justify;text-justify:inter-character;text-align-last:left}
 .page-table .title-remark .remark-line{display:block}
-
 .page-table .row-edit-link{position:absolute;right:1.2rem;bottom:.8rem;border:none;background:transparent;color:#64748b;padding:0;font:inherit;font-size:1rem;font-weight:400;line-height:1.45;cursor:default;text-decoration:none}
 .page-table .row-edit-link:hover,.page-table .row-edit-link:focus-visible{color:#64748b;text-decoration:none;outline:none}
 .empty-row td{padding:2.5rem 1rem;text-align:center;color:#94a3b8;font-size:1rem;background:#fafcff}
@@ -101,7 +73,7 @@ text-align-last:left
 .modal-box{background:white;border-radius:28px;padding:2rem 2rem 1.8rem;max-width:520px;width:92%;box-shadow:0 30px 60px rgba(0,0,0,.25);animation:slideUp .25s ease}
 .modal-box h3{font-size:1.3rem;font-weight:600;color:#0f172a;margin-bottom:.2rem}
 .modal-box .modal-sub{color:#64748b;font-size:.9rem;margin-bottom:1.2rem;border-bottom:1px solid #e9edf4;padding-bottom:.8rem}
-.modal-box .form-group{margin-bottom:.95rem}
+.modal-box .form-group{margin-bottom:1rem}
 .modal-box .form-group label{font-size:.75rem;font-weight:600;text-transform:uppercase;color:#475569}
 .modal-box .form-group input,.modal-box .form-group textarea{width:100%;background:white;border:1px solid #d1d9e6;border-radius:14px;padding:.6rem 1rem;font-size:.95rem;font-family:inherit;transition:.2s}
 .modal-box .form-group input:focus,.modal-box .form-group textarea:focus{outline:2px solid #1E40AF;border-color:transparent}
@@ -138,6 +110,7 @@ text-align-last:left
 .config-actions .btn-config.secondary{background:#f1f5f9;color:#334155}.config-actions .btn-config.secondary:hover{background:#e2e8f0}
 .back-to-top{position:fixed;left:auto;right:16px;top:70%;transform:translateY(-50%);z-index:900;display:block;width:30px;height:26px;padding:0;border:0;border-radius:0;background:#1E40AF;clip-path:polygon(50% 0,100% 100%,0 100%);cursor:pointer;opacity:1;filter:drop-shadow(0 4px 7px rgba(30,64,175,.24));transition:opacity .2s,background .2s,transform .2s}
 .back-to-top:hover,.back-to-top:focus-visible{opacity:1;background:#1E3A8A;transform:translateY(calc(-50% - 2px));outline:none}
+
 @media(max-width:700px){
 body{width:100%;max-width:100%;padding:.75rem .5rem;overflow-x:hidden}
 .container{width:100%;max-width:100%;min-width:0;padding:1.2rem}
@@ -161,10 +134,12 @@ body{width:100%;max-width:100%;padding:.75rem .5rem;overflow-x:hidden}
 .config-actions .btn-config{flex:1 1 0;min-width:0;padding-left:.75rem;padding-right:.75rem}
 .back-to-top{right:3px;top:70%;width:24px;height:21px;padding:0}
 }
+
 .config-box{padding:0;display:grid;grid-template-rows:minmax(0,1fr) auto;overflow:hidden}
 .config-scroll{min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-width:auto;scrollbar-color:#94a3b8 #eef2f7;scrollbar-gutter:stable;padding:2rem 2rem 1rem;touch-action:pan-y}
 .config-scroll::-webkit-scrollbar{width:10px}.config-scroll::-webkit-scrollbar-track{background:#eef2f7}.config-scroll::-webkit-scrollbar-thumb{background:#94a3b8;border:2px solid #eef2f7;border-radius:999px}
 .config-actions{position:static;bottom:auto;flex:0 0 auto;margin-top:0;padding:.9rem 2rem max(1.2rem,env(safe-area-inset-bottom));border-top:1px solid #e9edf4;background:#fff;box-shadow:0 -8px 20px rgba(15,23,42,.06)}
+
 @media(max-width:700px){
 .config-overlay{top:var(--config-vv-top,0px);bottom:auto;height:var(--config-vv-height,100dvh);min-height:0;padding:max(8px,env(safe-area-inset-top)) 8px max(8px,env(safe-area-inset-bottom));align-items:stretch;overflow:hidden}
 .config-box{width:100%;max-width:none;height:100%;max-height:none;min-height:0;margin:0;border-radius:22px}
@@ -174,6 +149,7 @@ body{width:100%;max-width:100%;padding:.75rem .5rem;overflow-x:hidden}
 </style>
 </head>
 <body>
+
 <div class="container">
 <h1>Pages <span class="cloud-status" id="cloudStatus"><span class="dot" id="statusDot"></span><span id="statusText">未配置</span></span></h1>
 
@@ -185,30 +161,51 @@ body{width:100%;max-width:100%;padding:.75rem .5rem;overflow-x:hidden}
 <button class="btn-outline" id="importBtn">导入</button>
 <input type="file" id="fileInput" accept=".html,.htm,.json,text/html,application/json" style="display:none">
 </div>
-<div class="right-group"><span style="font-size:0.8rem;color:#94a3b8" id="lastSyncTime">未同步</span></div>
+<div class="right-group">
+<span style="font-size:.8rem;color:#94a3b8" id="lastSyncTime">未同步</span>
+</div>
 </div>
 
 <div class="add-section">
 <h2>添加</h2>
 <div class="form-grid">
-<div class="form-group full-width"><label for="pageInput">标题</label><input type="text" id="pageInput" autofocus></div>
-<div class="form-group full-width"><label for="noteInput">提要</label><input type="text" id="noteInput"></div>
+<div class="form-group full-width">
+<label for="pageInput">标题</label>
+<input type="text" id="pageInput" autofocus>
+</div>
+
+<div class="form-group full-width">
+<label for="noteInput">提要</label>
+<input type="text" id="noteInput">
+</div>
+
 <div class="form-group full-width">
 <label for="remarkInput">备注</label>
 <div class="remark-combo" id="remarkCombo">
 <input type="text" id="remarkInput" autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-controls="remarkOptions">
-<div class="remark-dropdown hidden" id="remarkDropdown"><div id="remarkOptions"></div></div>
+<div class="remark-dropdown hidden" id="remarkDropdown">
+<div id="remarkOptions"></div>
 </div>
 </div>
+</div>
+
 <button class="btn-primary" id="addBtn">添加</button>
 </div>
 </div>
 
-<div class="list-header"><h2>总表</h2><span class="badge" id="countDisplay">0/0</span></div>
+<div class="list-header">
+<h2>总表</h2>
+<span class="badge" id="countDisplay">0/0</span>
+</div>
+
 <div class="table-wrapper">
 <table class="page-table" id="pageTable">
-<thead><tr><th>标题</th></tr></thead>
-<tbody id="tableBody"><tr class="empty-row"><td>加载中...</td></tr></tbody>
+<thead>
+<tr><th>标题</th></tr>
+</thead>
+<tbody id="tableBody">
+<tr class="empty-row"><td>加载中...</td></tr>
+</tbody>
 </table>
 </div>
 </div>
@@ -217,15 +214,28 @@ body{width:100%;max-width:100%;padding:.75rem .5rem;overflow-x:hidden}
 <div class="modal-box">
 <h3>编辑条目</h3>
 <div class="modal-sub" id="editModalTitle">标题：<span id="editTitleDisplay"></span></div>
-<div class="form-group"><label for="editPageInput">标题</label><input type="text" id="editPageInput"><div class="hint">格式：[标题](链接)</div></div>
-<div class="form-group"><label for="editNoteInput">提要</label><input type="text" id="editNoteInput"></div>
+
+<div class="form-group">
+<label for="editPageInput">标题</label>
+<input type="text" id="editPageInput">
+<div class="hint">格式：[标题](链接)</div>
+</div>
+
+<div class="form-group">
+<label for="editNoteInput">提要</label>
+<input type="text" id="editNoteInput">
+</div>
+
 <div class="form-group">
 <label for="editRemarkInput">备注</label>
 <div class="remark-combo" id="editRemarkCombo">
 <input type="text" id="editRemarkInput" autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-controls="editRemarkOptions">
-<div class="remark-dropdown hidden" id="editRemarkDropdown"><div id="editRemarkOptions"></div></div>
+<div class="remark-dropdown hidden" id="editRemarkDropdown">
+<div id="editRemarkOptions"></div>
 </div>
 </div>
+</div>
+
 <div class="modal-actions">
 <button class="btn-modal delete" id="editDeleteBtn">删除</button>
 <div class="modal-actions-right">
@@ -252,9 +262,21 @@ body{width:100%;max-width:100%;padding:.75rem .5rem;overflow-x:hidden}
 <div class="hint"><a href="https://github.com/settings/tokens" target="_blank" rel="noopener noreferrer">创建 Token</a>（需要勾选 <strong>repo</strong> 权限，有效期建议选择 <strong>No expiration</strong>）</div>
 </div>
 
-<div class="form-group"><label for="cfgOwner">仓库所有者 *</label><input type="text" id="cfgOwner" placeholder="你的GitHub用户名"></div>
-<div class="form-group"><label for="cfgRepo">仓库名称 *</label><input type="text" id="cfgRepo" placeholder="仓库名"><div class="hint">数据将保存在此仓库的 pages_data.json 文件中</div></div>
-<div class="form-group"><label for="cfgFile">数据文件名</label><input type="text" id="cfgFile" placeholder="pages_data.json" value="pages_data.json"></div>
+<div class="form-group">
+<label for="cfgOwner">仓库所有者 *</label>
+<input type="text" id="cfgOwner" placeholder="你的GitHub用户名">
+</div>
+
+<div class="form-group">
+<label for="cfgRepo">仓库名称 *</label>
+<input type="text" id="cfgRepo" placeholder="仓库名">
+<div class="hint">数据将保存在此仓库的 pages_data.json 文件中</div>
+</div>
+
+<div class="form-group">
+<label for="cfgFile">数据文件名</label>
+<input type="text" id="cfgFile" placeholder="pages_data.json" value="pages_data.json">
+</div>
 </div>
 
 <div class="config-actions">
@@ -367,30 +389,24 @@ const strokeCollator=new Intl.Collator('zh-CN-u-co-stroke',{usage:'sort',sensiti
 
 function openDb(){
 if(dbPromise)return dbPromise;
-
 dbPromise=new Promise((resolve,reject)=>{
 const request=indexedDB.open(DB_NAME,DB_VERSION);
-
 request.onupgradeneeded=()=>{
 const db=request.result;
 if(!db.objectStoreNames.contains(DB_STORE))db.createObjectStore(DB_STORE)
 };
-
 request.onsuccess=()=>resolve(request.result);
 request.onerror=()=>reject(request.error||new Error('IndexedDB 打开失败'));
 request.onblocked=()=>console.warn('IndexedDB 升级被其他页面阻塞')
 });
-
 return dbPromise
 }
 
 async function idbGet(key){
 const db=await openDb();
-
 return new Promise((resolve,reject)=>{
 const tx=db.transaction(DB_STORE,'readonly'),
 req=tx.objectStore(DB_STORE).get(key);
-
 req.onsuccess=()=>resolve(req.result);
 req.onerror=()=>reject(req.error||new Error('IndexedDB 读取失败'))
 })
@@ -398,10 +414,8 @@ req.onerror=()=>reject(req.error||new Error('IndexedDB 读取失败'))
 
 async function idbSet(key,value){
 const db=await openDb();
-
 return new Promise((resolve,reject)=>{
 const tx=db.transaction(DB_STORE,'readwrite');
-
 tx.objectStore(DB_STORE).put(value,key);
 tx.oncomplete=()=>resolve();
 tx.onerror=()=>reject(tx.error||new Error('IndexedDB 写入失败'));
@@ -411,10 +425,8 @@ tx.onabort=()=>reject(tx.error||new Error('IndexedDB 写入中止'))
 
 async function idbDelete(key){
 const db=await openDb();
-
 return new Promise((resolve,reject)=>{
 const tx=db.transaction(DB_STORE,'readwrite');
-
 tx.objectStore(DB_STORE).delete(key);
 tx.oncomplete=()=>resolve();
 tx.onerror=()=>reject(tx.error||new Error('IndexedDB 删除失败'));
@@ -424,30 +436,26 @@ tx.onabort=()=>reject(tx.error||new Error('IndexedDB 写入中止'))
 
 function isValidWorkingCopy(record){
 return Boolean(
-record &&
-(record.version===1||record.version===2) &&
-Array.isArray(record.pages) &&
+record&&
+(record.version===1||record.version===2)&&
+Array.isArray(record.pages)&&
 Number.isFinite(Number(record.savedAt))
 )
 }
 
 async function readOpfsWorkingCopy(){
 if(!navigator.storage?.getDirectory)throw new Error('OPFS 不可用');
-
 const root=await navigator.storage.getDirectory(),
 handle=await root.getFileHandle(OPFS_WORKING_COPY_FILE),
 file=await handle.getFile();
-
 return JSON.parse(await file.text())
 }
 
 async function writeOpfsWorkingCopy(record){
 if(!navigator.storage?.getDirectory)throw new Error('OPFS 不可用');
-
 const root=await navigator.storage.getDirectory(),
 handle=await root.getFileHandle(OPFS_WORKING_COPY_FILE,{create:true}),
 writer=await handle.createWritable();
-
 try{
 await writer.write(JSON.stringify(record));
 await writer.close()
@@ -462,7 +470,6 @@ const results=await Promise.allSettled([
 idbSet(WORKING_COPY_KEY,record),
 writeOpfsWorkingCopy(record)
 ]);
-
 if(!results.some(result=>result.status==='fulfilled')){
 throw new Error('IndexedDB 与 OPFS 均保存失败')
 }
@@ -477,50 +484,38 @@ revision:++workingCopyRevision,
 pages:structuredClone(snapshot.pages),
 tombstones:structuredClone(snapshot.tombstones)
 };
-
 workingCopyQueue=workingCopyQueue
 .catch(()=>{})
 .then(()=>persistWorkingCopy(record))
 .catch(error=>console.error('保存 Pages 工作副本失败:',error));
-
 return workingCopyQueue
 }
 
 async function readBestWorkingCopy(){
-let idbRecord=null,
-opfsRecord=null;
-
+let idbRecord=null,opfsRecord=null;
 try{
 idbRecord=await idbGet(WORKING_COPY_KEY)
 }catch(error){
 console.warn('读取 IndexedDB 工作副本失败:',error)
 }
-
 try{
 opfsRecord=await readOpfsWorkingCopy()
 }catch(error){
-if(error?.name!=='NotFoundError'){
-console.warn('读取 OPFS 工作副本失败:',error)
+if(error?.name!=='NotFoundError')console.warn('读取 OPFS 工作副本失败:',error)
 }
-}
-
 const valid=[idbRecord,opfsRecord]
 .filter(isValidWorkingCopy)
 .sort((a,b)=>Number(b.savedAt)-Number(a.savedAt));
-
 const best=valid[0]||null;
-
 if(best){
 const repairs=await Promise.allSettled([
 idbSet(WORKING_COPY_KEY,best),
 writeOpfsWorkingCopy(best)
 ]);
-
 if(repairs.every(result=>result.status==='rejected')){
 console.warn('工作副本恢复后无法重新建立本地双副本')
 }
 }
-
 return best
 }
 
@@ -548,11 +543,9 @@ const [storedHistory,storedHidden]=await Promise.all([
 idbGet(REMARK_HISTORY_KEY),
 idbGet(REMARK_HIDDEN_KEY)
 ]);
-
 remarkHistory=Array.isArray(storedHistory)
 ?storedHistory.map(normalizeRemarkValue).filter(Boolean)
 :[];
-
 remarkHidden=new Set(
 (Array.isArray(storedHidden)?storedHidden:[])
 .map(remarkHistoryKey)
@@ -566,37 +559,23 @@ remarkHidden=new Set()
 }
 
 function normalizeSortText(v){
-return typeof v==='string'
-?v.normalize('NFKC').trim()
-:''
+return typeof v==='string'?v.normalize('NFKC').trim():''
 }
 
 function getStructuredSortInfo(v){
 const text=normalizeSortText(v);
-
-if(!text){
-return{type:99,text:'',dateKey:null,numberKey:null}
-}
+if(!text)return{type:99,text:'',dateKey:null,numberKey:null};
 
 const dm=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-
 if(dm){
-const y=Number(dm[1]),
-m=Number(dm[2]),
-d=Number(dm[3]),
+const y=Number(dm[1]),m=Number(dm[2]),d=Number(dm[3]),
 date=new Date(Date.UTC(y,m-1,d));
-
 if(
-date.getUTCFullYear()===y &&
-date.getUTCMonth()===m-1 &&
+date.getUTCFullYear()===y&&
+date.getUTCMonth()===m-1&&
 date.getUTCDate()===d
 ){
-return{
-type:0,
-text,
-dateKey:y*10000+m*100+d,
-numberKey:null
-}
+return{type:0,text,dateKey:y*10000+m*100+d,numberKey:null}
 }
 }
 
@@ -615,14 +594,8 @@ return{type:2,text,dateKey:null,numberKey:null}
 }
 
 const nm=text.match(/^[+-]?(?:\d+(?:\.\d+)?|\.\d+)/);
-
 if(nm){
-return{
-type:3,
-text,
-dateKey:null,
-numberKey:Number(nm[0])
-}
+return{type:3,text,dateKey:null,numberKey:Number(nm[0])}
 }
 
 return{type:4,text,dateKey:null,numberKey:null}
@@ -641,7 +614,6 @@ return a.dateKey-b.dateKey
 if(a.type===1){
 let r=pinyinCollator.compare(a.text,b.text);
 if(r!==0)return r;
-
 r=strokeCollator.compare(a.text,b.text);
 if(r!==0)return r
 }
@@ -652,7 +624,6 @@ b.text,
 'en',
 {sensitivity:'base',numeric:true}
 );
-
 if(r!==0)return r
 }
 
@@ -661,34 +632,26 @@ return a.numberKey-b.numberKey
 }
 
 const r=generalCollator.compare(a.text,b.text);
-
 if(r!==0)return r;
-
 return a.text<b.text?-1:a.text>b.text?1:0
 }
 
 function normalizeRemarkValue(v){
-return typeof v==='string'
-?v.normalize('NFC').trim()
-:''
+return typeof v==='string'?v.normalize('NFC').trim():''
 }
 
 function remarkHistoryKey(v){
-return normalizeRemarkValue(v)
-.toLocaleLowerCase('zh-CN')
+return normalizeRemarkValue(v).toLocaleLowerCase('zh-CN')
 }
 
 function normalizeRemarks(v){
 const seen=new Set();
-
 return(Array.isArray(v)?v:[v])
 .map(normalizeRemarkValue)
 .filter(item=>{
-const k=remarkHistoryKey(item);
-
-if(!item||seen.has(k))return false;
-
-seen.add(k);
+const key=remarkHistoryKey(item);
+if(!item||seen.has(key))return false;
+seen.add(key);
 return true
 })
 }
@@ -706,46 +669,31 @@ return{type:1,text,dateKey:null,numberKey:null}
 }
 
 const dm=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-
 if(dm){
-const y=Number(dm[1]),
-m=Number(dm[2]),
-d=Number(dm[3]),
+const y=Number(dm[1]),m=Number(dm[2]),d=Number(dm[3]),
 date=new Date(Date.UTC(y,m-1,d));
-
 if(
-date.getUTCFullYear()===y &&
-date.getUTCMonth()===m-1 &&
+date.getUTCFullYear()===y&&
+date.getUTCMonth()===m-1&&
 date.getUTCDate()===d
 ){
-return{
-type:3,
-text,
-dateKey:y*10000+m*100+d,
-numberKey:null
-}
+return{type:3,text,dateKey:y*10000+m*100+d,numberKey:null}
 }
 }
 
 const nm=text.match(/^(\d+(?:\.\d+)?)/);
-
 if(nm){
-return{
-type:2,
-text,
-dateKey:null,
-numberKey:Number(nm[1])
-}
+return{type:2,text,dateKey:null,numberKey:Number(nm[1])}
 }
 
 return{type:4,text,dateKey:null,numberKey:null}
 }
 
 function getBracketedNumberInfo(value){
-const text=normalizeRemarkValue(value),
-numberPattern=/【\s*([+-]?(?:\d+(?:\.\d+)?|\.\d+))\s*】/,
-match=text.match(numberPattern),
-withoutNumber=text
+const text=normalizeRemarkValue(value);
+const numberPattern=/【\s*([+-]?(?:\d+(?:\.\d+)?|\.\d+))\s*】/;
+const match=text.match(numberPattern);
+const withoutNumber=text
 .replace(/【\s*[+-]?(?:\d+(?:\.\d+)?|\.\d+)\s*】/g,' ')
 .replace(/\s+/g,' ')
 .trim();
@@ -767,7 +715,6 @@ if(a.type!==b.type)return a.type-b.type;
 if(a.type===0){
 let r=pinyinCollator.compare(a.text,b.text);
 if(r!==0)return r;
-
 r=strokeCollator.compare(a.text,b.text);
 if(r!==0)return r
 }else if(a.type===1){
@@ -776,28 +723,21 @@ b.text,
 'en',
 {sensitivity:'base',numeric:true}
 );
-
 if(r!==0)return r
 }else if(a.type===2){
-if(a.numberKey!==b.numberKey){
-return a.numberKey-b.numberKey
-}
-
+if(a.numberKey!==b.numberKey)return a.numberKey-b.numberKey;
 const r=a.text.localeCompare(
 b.text,
 'zh-CN',
 {sensitivity:'base',numeric:true}
 );
-
 if(r!==0)return r
 }else if(a.type===3&&a.dateKey!==b.dateKey){
 return a.dateKey-b.dateKey
 }
 
 const r=generalCollator.compare(a.text,b.text);
-
 if(r!==0)return r;
-
 return a.text<b.text?-1:a.text>b.text?1:0
 }
 
@@ -821,16 +761,10 @@ b.withoutNumber
 
 if(r!==0)return r;
 
-return baseComparator(
-a.text,
-b.text
-)
+return baseComparator(a.text,b.text)
 }
 
-return baseComparator(
-a.text,
-b.text
-)
+return baseComparator(a.text,b.text)
 }
 
 function compareRemarkOptions(a0,b0){
@@ -859,14 +793,14 @@ candidates.push(...normalizeRemarks(item&&item.remark))
 
 candidates.forEach(raw=>{
 const value=normalizeRemarkValue(raw),
-k=remarkHistoryKey(value);
+key=remarkHistoryKey(value);
 
 if(
-value &&
-!remarkHidden.has(k) &&
-!seen.has(k)
+value&&
+!remarkHidden.has(key)&&
+!seen.has(key)
 ){
-seen.set(k,value)
+seen.set(key,value)
 }
 });
 
@@ -886,17 +820,13 @@ const n=normalizeRemarkValue(v);
 
 if(!n)return;
 
-const k=remarkHistoryKey(n);
+const key=remarkHistoryKey(n);
 
-if(remarkHidden.delete(k)){
+if(remarkHidden.delete(key)){
 saveRemarkHidden()
 }
 
-if(
-!remarkHistory.some(
-item=>remarkHistoryKey(item)===k
-)
-){
+if(!remarkHistory.some(item=>remarkHistoryKey(item)===key)){
 remarkHistory.push(n);
 remarkHistory.sort(compareRemarkOptions);
 saveRemarkHistory()
@@ -959,20 +889,14 @@ tags.append(tag)
 }
 
 function add(value){
-selected=normalizeRemarks([
-...selected,
-value
-]);
-
+selected=normalizeRemarks([...selected,value]);
 input.value='';
 renderTags()
 }
 
 function choose(value){
 const index=selected.findIndex(
-item=>
-remarkHistoryKey(item)===
-remarkHistoryKey(value)
+item=>remarkHistoryKey(item)===remarkHistoryKey(value)
 );
 
 if(index>=0){
@@ -1014,10 +938,7 @@ i===activeIndex
 
 if(activeIndex>=0){
 const node=options.children[activeIndex];
-
-if(node){
-node.scrollIntoView({block:'nearest'})
-}
+if(node)node.scrollIntoView({block:'nearest'})
 }
 }
 
@@ -1044,10 +965,8 @@ const oldKey=remarkHistoryKey(oldNormalized),
 newKey=remarkHistoryKey(newNormalized);
 
 if(
-newKey!==oldKey &&
-remarkHistory.some(
-item=>remarkHistoryKey(item)===newKey
-)
+newKey!==oldKey&&
+remarkHistory.some(item=>remarkHistoryKey(item)===newKey)
 ){
 alert('该备注选项已经存在。');
 return
@@ -1057,8 +976,7 @@ pages.forEach(item=>{
 if(!item)return;
 
 item.remark=normalizeRemarks(item.remark)
-.map(
-remark=>
+.map(remark=>
 remarkHistoryKey(remark)===oldKey
 ?newNormalized
 :remark
@@ -1072,7 +990,7 @@ remarkHidden.delete(newKey);
 
 remarkHistory=remarkHistory.filter(
 item=>
-remarkHistoryKey(item)!==oldKey &&
+remarkHistoryKey(item)!==oldKey&&
 remarkHistoryKey(item)!==newKey
 );
 
@@ -1080,8 +998,7 @@ remarkHistory.push(newNormalized);
 remarkHistory.sort(compareRemarkOptions);
 
 selected=normalizeRemarks(
-selected.map(
-item=>
+selected.map(item=>
 remarkHistoryKey(item)===oldKey
 ?newNormalized
 :item
@@ -1103,36 +1020,27 @@ const normalized=normalizeRemarkValue(value);
 
 if(!normalized)return;
 
-if(
-!confirm(
-`确定删除备注“${normalized}”吗？\n该备注会同时从总表中所有已保存条目里移除。`
-)
-){
+if(!confirm(`确定删除备注“${normalized}”吗？\n该备注会同时从总表中所有已保存条目里移除。`)){
 return
 }
 
-const k=remarkHistoryKey(normalized);
+const key=remarkHistoryKey(normalized);
 
 pages.forEach(item=>{
 if(!item)return;
 
 item.remark=normalizeRemarks(item.remark)
-.filter(
-remark=>
-remarkHistoryKey(remark)!==k
-)
+.filter(remark=>remarkHistoryKey(remark)!==key)
 });
 
-remarkHidden.add(k);
+remarkHidden.add(key);
 
 remarkHistory=remarkHistory.filter(
-item=>
-remarkHistoryKey(item)!==k
+item=>remarkHistoryKey(item)!==key
 );
 
 selected=selected.filter(
-item=>
-remarkHistoryKey(item)!==k
+item=>remarkHistoryKey(item)!==key
 );
 
 saveRemarkHidden();
@@ -1167,34 +1075,24 @@ function renderMenu(forceOpen=false){
 const query=remarkHistoryKey(input.value);
 
 filtered=remarkHistory.filter(
-item=>
-remarkHistoryKey(item).includes(query)
+item=>remarkHistoryKey(item).includes(query)
 );
 
 if(
-query &&
-!filtered.some(
-item=>remarkHistoryKey(item)===query
-)
+query&&
+!filtered.some(item=>remarkHistoryKey(item)===query)
 ){
-filtered.unshift(
-normalizeRemarkValue(input.value)
-)
+filtered.unshift(normalizeRemarkValue(input.value))
 }
 
 options.replaceChildren();
 
 filtered.forEach(value=>{
 const checked=selected.some(
-item=>
-remarkHistoryKey(item)===
-remarkHistoryKey(value)
+item=>remarkHistoryKey(item)===remarkHistoryKey(value)
 );
 
-const optionButton=createOptionButton(
-value,
-checked
-);
+const optionButton=createOptionButton(value,checked);
 
 if(!manageOptions){
 options.append(optionButton);
@@ -1211,10 +1109,7 @@ const editButton=document.createElement('button');
 editButton.type='button';
 editButton.className='remark-manage-btn edit';
 editButton.textContent='改';
-editButton.setAttribute(
-'aria-label',
-'修改备注选项：'+value
-);
+editButton.setAttribute('aria-label','修改备注选项：'+value);
 
 editButton.addEventListener('click',event=>{
 event.preventDefault();
@@ -1226,10 +1121,7 @@ const deleteButton=document.createElement('button');
 deleteButton.type='button';
 deleteButton.className='remark-manage-btn delete';
 deleteButton.textContent='删';
-deleteButton.setAttribute(
-'aria-label',
-'删除备注选项：'+value
-);
+deleteButton.setAttribute('aria-label','删除备注选项：'+value);
 
 deleteButton.addEventListener('click',event=>{
 event.preventDefault();
@@ -1259,7 +1151,6 @@ if(suppressMenuOpen){
 closeMenu();
 return
 }
-
 renderMenu(true)
 });
 
@@ -1268,42 +1159,26 @@ if(suppressMenuOpen){
 closeMenu();
 return
 }
-
 renderMenu(true)
 });
 
 input.addEventListener('keydown',event=>{
 if(event.isComposing||event.keyCode===229)return;
 
-if(
-['ArrowDown','ArrowUp','Enter','Escape']
-.includes(event.key)
-){
+if(['ArrowDown','ArrowUp','Enter','Escape'].includes(event.key)){
 event.preventDefault();
 event.stopImmediatePropagation()
 }
 
-if(
-event.key==='ArrowDown' ||
-event.key==='ArrowUp'
-){
+if(event.key==='ArrowDown'||event.key==='ArrowUp'){
 if(dropdown.classList.contains('hidden')){
 renderMenu(true)
 }
 
 setActive(
 activeIndex<0
-?(
-event.key==='ArrowDown'
-?0
-:filtered.length-1
-)
-:activeIndex+
-(
-event.key==='ArrowDown'
-?1
-:-1
-)
+?(event.key==='ArrowDown'?0:filtered.length-1)
+:activeIndex+(event.key==='ArrowDown'?1:-1)
 )
 }else if(event.key==='Escape'){
 closeMenu()
@@ -1334,10 +1209,7 @@ renderTags();
 closeMenu()
 },
 getValues(){
-if(input.value.trim()){
-add(input.value)
-}
-
+if(input.value.trim())add(input.value);
 return[...selected]
 },
 closeMenu
@@ -1356,8 +1228,8 @@ d=Number(match[3]),
 date=new Date(Date.UTC(y,m-1,d));
 
 if(
-date.getUTCFullYear()!==y ||
-date.getUTCMonth()!==m-1 ||
+date.getUTCFullYear()!==y||
+date.getUTCMonth()!==m-1||
 date.getUTCDate()!==d
 ){
 return Number.POSITIVE_INFINITY
@@ -1370,9 +1242,7 @@ function compareFirstRemarkTextBase(a0,b0){
 function info(value){
 const text=normalizeSortText(value);
 
-if(!text){
-return{type:99,text:'',numberKey:null}
-}
+if(!text)return{type:99,text:'',numberKey:null};
 
 if(/^https?:\/\//i.test(text)){
 return{type:5,text,numberKey:null}
@@ -1388,9 +1258,7 @@ if(/^[A-Za-z]$/.test(first)){
 return{type:2,text,numberKey:null}
 }
 
-const nm=text.match(
-/^[+-]?(?:\d+(?:\.\d+)?|\.\d+)/
-);
+const nm=text.match(/^[+-]?(?:\d+(?:\.\d+)?|\.\d+)/);
 
 if(nm){
 return{
@@ -1410,11 +1278,8 @@ if(a.type!==b.type)return a.type-b.type;
 
 if(a.type===1){
 let r=pinyinCollator.compare(a.text,b.text);
-
 if(r!==0)return r;
-
 r=strokeCollator.compare(a.text,b.text);
-
 if(r!==0)return r
 }
 
@@ -1424,7 +1289,6 @@ b.text,
 'en',
 {sensitivity:'base',numeric:true}
 );
-
 if(r!==0)return r
 }
 
@@ -1432,13 +1296,8 @@ if(a.type===3&&a.numberKey!==b.numberKey){
 return a.numberKey-b.numberKey
 }
 
-const r=generalCollator.compare(
-a.text,
-b.text
-);
-
+const r=generalCollator.compare(a.text,b.text);
 if(r!==0)return r;
-
 return a.text<b.text?-1:a.text>b.text?1:0
 }
 
@@ -1470,9 +1329,7 @@ hb2=Boolean(b2),
 ha1=Boolean(a1),
 hb1=Boolean(b1);
 
-if(ha2!==hb2){
-return ha2?-1:1
-}
+if(ha2!==hb2)return ha2?-1:1;
 
 if(ha2&&hb2){
 const ad=getRemarkDateSortKey(a2),
@@ -1495,9 +1352,7 @@ b&&b.title
 )
 }
 
-if(ha1!==hb1){
-return ha1?-1:1
-}
+if(ha1!==hb1)return ha1?-1:1;
 
 if(ha1&&hb1){
 const r=compareFirstRemarkText(a1,b1);
@@ -1516,6 +1371,9 @@ b&&b.title
 )
 }
 
+/* 第一、第二标签共用完全相同的排序规则：
+   日期 → 【】内数字降序 → 汉字拼音/笔画 → 英文 A-Z
+   → 普通数字升序 → https A-Z → 其它 → 空白 */
 function compareRemarkLabelText(a0,b0){
 const aText=normalizeRemarkValue(a0),
 bText=normalizeRemarkValue(b0);
@@ -1524,35 +1382,143 @@ if(!aText&&!bText)return 0;
 if(!aText)return 1;
 if(!bText)return -1;
 
-const a=getStructuredSortInfo(aText),
-b=getStructuredSortInfo(bText);
+function info(text){
+const structured=getStructuredSortInfo(text),
+bracketed=getBracketedNumberInfo(text);
 
-const rank=info=>
-info.type===0?0:
-info.type===1?1:
-info.type===2?2:
-info.type===3?3:
-info.type===5?4:
-5;
-
-const aRank=rank(a),
-bRank=rank(b);
-
-if(aRank!==bRank){
-return aRank-bRank
+if(structured.type===0){
+return{rank:0,text,structured,bracketed}
 }
 
+if(bracketed.hasNumber){
+return{rank:1,text,structured,bracketed}
+}
+
+if(structured.type===1){
+return{rank:2,text,structured,bracketed}
+}
+
+if(structured.type===2){
+return{rank:3,text,structured,bracketed}
+}
+
+if(structured.type===3){
+return{rank:4,text,structured,bracketed}
+}
+
+if(structured.type===5){
+return{rank:5,text,structured,bracketed}
+}
+
+return{rank:6,text,structured,bracketed}
+}
+
+const a=info(aText),
+b=info(bText);
+
+if(a.rank!==b.rank){
+return a.rank-b.rank
+}
+
+/* 日期：沿用现有规定，日期从早到晚 */
+if(a.rank===0){
+if(a.structured.dateKey!==b.structured.dateKey){
+return a.structured.dateKey-b.structured.dateKey
+}
+
+return a.text.localeCompare(
+b.text,
+'en',
+{sensitivity:'base',numeric:true}
+)
+}
+
+/* 【】内数字：数值从大到小 */
+if(a.rank===1){
+if(a.bracketed.number!==b.bracketed.number){
+return b.bracketed.number-a.bracketed.number
+}
+
+/* 数字相同后，去掉【数字】再按既有文字规则比较 */
+const stripped=compareStructuredText(
+a.bracketed.withoutNumber,
+b.bracketed.withoutNumber
+);
+
+if(stripped!==0)return stripped;
+
+return compareStructuredText(
+a.text,
+b.text
+)
+}
+
+/* 汉字：拼音优先，拼音相同时按笔画兜底 */
+if(a.rank===2){
+let r=pinyinCollator.compare(
+a.text,
+b.text
+);
+
+if(r!==0)return r;
+
+r=strokeCollator.compare(
+a.text,
+b.text
+);
+
+if(r!==0)return r;
+
+return a.text<b.text?-1:a.text>b.text?1:0
+}
+
+/* 英文：A-Z */
+if(a.rank===3){
+const r=a.text.localeCompare(
+b.text,
+'en',
+{sensitivity:'base',numeric:true}
+);
+
+if(r!==0)return r;
+
+return a.text<b.text?-1:a.text>b.text?1:0
+}
+
+/* 普通数字：从小到大 */
+if(a.rank===4){
 if(
-a.type===0 &&
-a.dateKey!==b.dateKey
+a.structured.numberKey!==
+b.structured.numberKey
 ){
-return a.dateKey-b.dateKey
+return a.structured.numberKey-
+b.structured.numberKey
 }
 
-return compareLabelByBracketedNumber(
-aText,
-bText,
-compareStructuredText
+return a.text.localeCompare(
+b.text,
+'zh-CN',
+{sensitivity:'base',numeric:true}
+)
+}
+
+/* https：按网址字母 A-Z */
+if(a.rank===5){
+const r=a.text.localeCompare(
+b.text,
+'en',
+{sensitivity:'base',numeric:true}
+);
+
+if(r!==0)return r;
+
+return a.text<b.text?-1:a.text>b.text?1:0
+}
+
+/* 其它 */
+return compareStructuredText(
+a.text,
+b.text
 )
 }
 
@@ -1565,6 +1531,7 @@ b1=br[0]||'',
 a2=ar[1]||'',
 b2=br[1]||'';
 
+/* 第一标签是第一排序键 */
 const r1=compareRemarkLabelText(
 a1,
 b1
@@ -1572,6 +1539,7 @@ b1
 
 if(r1!==0)return r1;
 
+/* 第一标签完全相同后，第二标签使用同一规则 */
 const r2=compareRemarkLabelText(
 a2,
 b2
@@ -1579,6 +1547,7 @@ b2
 
 if(r2!==0)return r2;
 
+/* 两个标签均相同时，才按标题兜底 */
 return compareStructuredText(
 a&&a.title,
 b&&b.title
@@ -1588,9 +1557,7 @@ b&&b.title
 
 function parsePageInput(input){
 const raw=String(input||'').trim(),
-match=raw.match(
-/^\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)$/i
-);
+match=raw.match(/^\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)$/i);
 
 if(match){
 return{
@@ -1625,9 +1592,7 @@ return div.innerHTML
 }
 
 function cloneValue(value){
-return value==null
-?value
-:structuredClone(value)
+return value==null?value:structuredClone(value)
 }
 
 function hashString(value){
@@ -1664,9 +1629,7 @@ const title=String(item?.title||'')
 .trim(),
 url=String(item?.url||'').trim();
 
-return url
-?`url:${url}`
-:`title:${title}`
+return url?`url:${url}`:`title:${title}`
 }
 
 function normalizePageArray(items){
@@ -1677,8 +1640,8 @@ result=[];
 
 source.forEach(raw=>{
 if(
-!raw ||
-raw.__pagesDeleted===true ||
+!raw||
+raw.__pagesDeleted===true||
 raw.deleted===true
 ){
 return
@@ -1696,7 +1659,7 @@ occurrence=(counts.get(identity)||0)+1;
 counts.set(identity,occurrence);
 
 let id=
-typeof raw.id==='string' &&
+typeof raw.id==='string'&&
 raw.id.trim()
 ?raw.id.trim()
 :`legacy-${hashString(identity)}-${occurrence}`;
@@ -1713,8 +1676,7 @@ used.add(id);
 
 const url=String(raw.url||'').trim(),
 titleMode=
-['markdown','url','text']
-.includes(raw.titleMode)
+['markdown','url','text'].includes(raw.titleMode)
 ?raw.titleMode
 :(
 url
@@ -1758,7 +1720,7 @@ Number.isFinite(Number(raw.deletedAt))
 const previous=map.get(id);
 
 if(
-!previous ||
+!previous||
 deletedAt>previous.deletedAt
 ){
 map.set(id,{id,deletedAt})
@@ -1775,23 +1737,20 @@ rawTombstones=[];
 if(Array.isArray(payload)){
 rawPages=payload.filter(
 item=>
-item &&
-item.__pagesDeleted!==true &&
+item&&
+item.__pagesDeleted!==true&&
 item.deleted!==true
 );
 
 rawTombstones=payload.filter(
 item=>
-item &&
+item&&
 (
-item.__pagesDeleted===true ||
+item.__pagesDeleted===true||
 item.deleted===true
 )
 )
-}else if(
-payload &&
-typeof payload==='object'
-){
+}else if(payload&&typeof payload==='object'){
 rawPages=Array.isArray(payload.pages)
 ?payload.pages
 :[];
@@ -1822,10 +1781,7 @@ tombstones
 })
 }
 
-function applySnapshot(
-snapshot,
-{render=true}={}
-){
+function applySnapshot(snapshot,{render=true}={}){
 const normalized=normalizeSnapshot(snapshot);
 
 pages=normalized.pages;
@@ -1858,6 +1814,7 @@ return{
 pages:normalized.pages
 .map(pageComparable)
 .sort((a,b)=>a.id.localeCompare(b.id)),
+
 tombstones:normalized.tombstones
 .map(item=>({
 id:item.id,
@@ -1898,7 +1855,7 @@ null,
 if(
 new TextEncoder()
 .encode(raw)
-.length >
+.length>
 MAX_SYNC_BYTES
 ){
 throw new Error(
@@ -1961,10 +1918,7 @@ idbGet(SYNC_BASE_KEY)
 console.warn('读取同步基线失败:',error)
 }
 
-if(
-storedMeta &&
-typeof storedMeta==='object'
-){
+if(storedMeta&&typeof storedMeta==='object'){
 syncMeta={
 target:
 typeof storedMeta.target==='string'
@@ -2039,7 +1993,7 @@ return true
 
 function updateLastSyncDisplay(){
 if(
-!syncMeta.lastSyncAt ||
+!syncMeta.lastSyncAt||
 syncMeta.target!==getSyncTarget()
 ){
 lastSyncTime.textContent=
@@ -2059,15 +2013,10 @@ Number.isNaN(date.getTime())
 }
 
 function valuesEqual(a,b){
-return JSON.stringify(a)===
-JSON.stringify(b)
+return JSON.stringify(a)===JSON.stringify(b)
 }
 
-function mergeRemarkValues(
-baseValue,
-localValue,
-remoteValue
-){
+function mergeRemarkValues(baseValue,localValue,remoteValue){
 const base=normalizeRemarks(baseValue),
 local=normalizeRemarks(localValue),
 remote=normalizeRemarks(remoteValue),
@@ -2082,7 +2031,7 @@ base.forEach(value=>{
 const k=key(value);
 
 if(
-!localKeys.has(k) ||
+!localKeys.has(k)||
 !remoteKeys.has(k)
 ){
 removed.add(k)
@@ -2095,18 +2044,13 @@ result.push(value)
 }
 });
 
-[
-...local,
-...remote
-]
+[...local,...remote]
 .forEach(value=>{
 const k=key(value);
 
 if(
-!baseKeys.has(k) &&
-!result.some(
-item=>key(item)===k
-)
+!baseKeys.has(k)&&
+!result.some(item=>key(item)===k)
 ){
 result.push(value)
 }
@@ -2140,8 +2084,8 @@ function entityEqual(a,b){
 if(!a&&!b)return true;
 
 if(
-!a ||
-!b ||
+!a||
+!b||
 a.kind!==b.kind
 ){
 return false
@@ -2181,12 +2125,12 @@ r=remote?.[field];
 if(valuesEqual(l,r)){
 merged[field]=cloneValue(l)
 }else if(
-base &&
+base&&
 valuesEqual(l,b)
 ){
 merged[field]=cloneValue(r)
 }else if(
-base &&
+base&&
 valuesEqual(r,b)
 ){
 merged[field]=cloneValue(l)
@@ -2199,9 +2143,7 @@ remote:cloneValue(r)
 });
 
 merged[field]=cloneValue(
-preference==='remote'
-?r
-:l
+preference==='remote'?r:l
 )
 }
 });
@@ -2213,12 +2155,12 @@ rRemarks=remote?.remark||[];
 if(valuesEqual(lRemarks,rRemarks)){
 merged.remark=normalizeRemarks(lRemarks)
 }else if(
-base &&
+base&&
 valuesEqual(lRemarks,bRemarks)
 ){
 merged.remark=normalizeRemarks(rRemarks)
 }else if(
-base &&
+base&&
 valuesEqual(rRemarks,bRemarks)
 ){
 merged.remark=normalizeRemarks(lRemarks)
@@ -2261,9 +2203,7 @@ const deletedEntity=(id,source=null)=>({
 kind:'deleted',
 value:{
 id,
-deletedAt:
-Number(source?.value?.deletedAt)||
-now
+deletedAt:Number(source?.value?.deletedAt)||now
 }
 });
 
@@ -2275,9 +2215,7 @@ local:l,
 remote:r
 });
 
-return preference==='remote'
-?r
-:l
+return preference==='remote'?r:l
 };
 
 for(const id of ids){
@@ -2297,7 +2235,7 @@ let chosen=null;
 
 if(entityEqual(l,r)){
 if(
-l?.kind==='deleted' &&
+l?.kind==='deleted'&&
 r?.kind==='deleted'
 ){
 chosen=deletedEntity(id,{
@@ -2321,7 +2259,7 @@ chosen=r
 }else if(!r){
 chosen=l
 }else if(
-l.kind==='page' &&
+l.kind==='page'&&
 r.kind==='page'
 ){
 chosen={
@@ -2344,7 +2282,7 @@ r
 )
 }
 }else if(
-l?.kind==='deleted' &&
+l?.kind==='deleted'&&
 r?.kind==='deleted'
 ){
 chosen=deletedEntity(id,{
@@ -2356,16 +2294,14 @@ Number(r.value.deletedAt)||0
 }
 })
 }else if(
-l?.kind==='page' &&
+l?.kind==='page'&&
 r?.kind==='page'
 ){
 chosen={
 kind:'page',
 value:mergePageRecord(
 id,
-b.kind==='page'
-?b.value
-:null,
+b.kind==='page'?b.value:null,
 l.value,
 r.value,
 preference,
@@ -2386,9 +2322,7 @@ if(!chosen)continue;
 if(chosen.kind==='deleted'){
 tombstonesOut.push({
 id,
-deletedAt:
-Number(chosen.value.deletedAt)||
-now
+deletedAt:Number(chosen.value.deletedAt)||now
 })
 }else if(chosen.value){
 pagesOut.push(chosen.value)
@@ -2405,9 +2339,7 @@ conflicts
 }
 
 function formatConflictSummary(conflicts){
-const ids=new Set(
-conflicts.map(item=>item.id)
-);
+const ids=new Set(conflicts.map(item=>item.id));
 
 return`${conflicts.length} 个字段 / ${ids.size} 个条目`
 }
@@ -2417,22 +2349,11 @@ localMutationVersion++;
 syncMeta.dirty=true;
 
 void persistSyncMeta()
-.catch(
-error=>
-console.warn(
-'保存同步状态失败:',
-error
-)
-);
+.catch(error=>console.warn('保存同步状态失败:',error));
 
 if(isConfigValid()){
-setCloudStatus(
-'offline',
-'待同步'
-);
-
-lastSyncTime.textContent=
-'有未同步修改'
+setCloudStatus('offline','待同步');
+lastSyncTime.textContent='有未同步修改'
 }
 
 if(syncInFlight){
@@ -2462,10 +2383,10 @@ passiveSyncTimer=null
 
 function wakePassiveSync(){
 if(
-!localStateReady ||
-!isConfigValid() ||
-document.hidden ||
-!editModal.classList.contains('hidden') ||
+!localStateReady||
+!isConfigValid()||
+document.hidden||
+!editModal.classList.contains('hidden')||
 !configModal.classList.contains('hidden')
 ){
 return
@@ -2477,7 +2398,7 @@ passiveSyncTimer=setTimeout(()=>{
 passiveSyncTimer=null;
 
 if(
-Date.now()-lastPassiveSyncAt <
+Date.now()-lastPassiveSyncAt<
 PASSIVE_SYNC_MIN_INTERVAL
 ){
 return
@@ -2491,7 +2412,6 @@ syncToCloud(false,false)
 
 function utf8ToBase64(text){
 const bytes=new TextEncoder().encode(text);
-
 let binary='';
 
 for(
@@ -2512,8 +2432,7 @@ return btoa(binary)
 
 function base64ToUtf8(base64){
 const binary=atob(
-String(base64||'')
-.replace(/\s/g,'')
+String(base64||'').replace(/\s/g,'')
 ),
 bytes=new Uint8Array(binary.length);
 
@@ -2524,8 +2443,7 @@ bytes[i]=binary.charCodeAt(i)
 return new TextDecoder(
 'utf-8',
 {fatal:true}
-)
-.decode(bytes)
+).decode(bytes)
 }
 
 async function loadConfig(){
@@ -2534,16 +2452,11 @@ persistedToken='';
 
 try{
 parsed=await idbGet(CONFIG_KEY)||{};
-
 persistedToken=String(
-await idbGet(TOKEN_PERSISTED_KEY)||
-''
+await idbGet(TOKEN_PERSISTED_KEY)||''
 )
 }catch(error){
-console.error(
-'读取 Pages 配置失败:',
-error
-)
+console.error('读取 Pages 配置失败:',error)
 }
 
 const rememberToken=
@@ -2568,8 +2481,7 @@ typeof parsed.repo==='string'
 ?parsed.repo
 :'',
 file:
-typeof parsed.file==='string' &&
-parsed.file.trim()
+typeof parsed.file==='string'&&parsed.file.trim()
 ?parsed.file.trim()
 :'pages_data.json'
 };
@@ -2581,8 +2493,8 @@ cfgRepo.value=config.repo;
 cfgFile.value=config.file;
 
 return Boolean(
-config.owner ||
-config.repo ||
+config.owner||
+config.repo||
 config.token
 )
 }
@@ -2616,9 +2528,9 @@ TOKEN_PERSISTED_KEY
 
 function isConfigValid(){
 return Boolean(
-config.token &&
-config.owner &&
-config.repo &&
+config.token&&
+config.owner&&
+config.repo&&
 config.file
 )
 }
@@ -2642,12 +2554,8 @@ headers['Content-Type']='application/json';
 options.body=JSON.stringify(body)
 }
 
-const response=await fetch(
-url,
-options
-);
-
-const raw=await response.text();
+const response=await fetch(url,options),
+raw=await response.text();
 
 let payload=null;
 
@@ -2661,8 +2569,7 @@ payload={message:raw}
 
 if(!response.ok){
 const error=new Error(
-payload?.message||
-`HTTP ${response.status}`
+payload?.message||`HTTP ${response.status}`
 );
 
 error.status=response.status;
@@ -2675,9 +2582,7 @@ return payload
 
 async function readRemoteState(){
 if(!isConfigValid()){
-throw new Error(
-'请先配置 GitHub 连接'
-)
+throw new Error('请先配置 GitHub 连接')
 }
 
 try{
@@ -2687,48 +2592,41 @@ const data=await githubApi(
 );
 
 if(
-!data ||
-data.type!=='file' ||
-!data.sha ||
+!data||
+data.type!=='file'||
+!data.sha||
 !data.content
 ){
-throw new Error(
-'云端文件无法安全读取'
-)
+throw new Error('云端文件无法安全读取')
 }
 
 if(
-Number.isFinite(Number(data.size)) &&
+Number.isFinite(Number(data.size))&&
 Number(data.size)>MAX_SYNC_BYTES
 ){
-throw new Error(
-'云端文件超过 750 KB 同步上限'
-)
+throw new Error('云端文件超过 750 KB 同步上限')
 }
 
 const parsed=JSON.parse(
 base64ToUtf8(data.content)
-);
-
-const state=normalizeSnapshot(parsed);
-
-const rawItems=Array.isArray(parsed)
+),
+state=normalizeSnapshot(parsed),
+rawItems=Array.isArray(parsed)
 ?parsed
 :(
 Array.isArray(parsed?.pages)
 ?parsed.pages
 :[]
-);
-
-const needsMigration=
-!Array.isArray(parsed) ||
+),
+needsMigration=
+!Array.isArray(parsed)||
 rawItems.some(
 item=>
-item &&
-item.__pagesDeleted!==true &&
-item.deleted!==true &&
+item&&
+item.__pagesDeleted!==true&&
+item.deleted!==true&&
 !(
-typeof item.id==='string' &&
+typeof item.id==='string'&&
 item.id.trim()
 )
 );
@@ -2757,21 +2655,14 @@ throw error
 }
 }
 
-async function writeRemoteState(
-snapshot,
-sha=null
-){
-const raw=assertSyncSize(snapshot);
-
-const body={
-message:
-`更新 Pages 数据 - ${new Date().toLocaleString()}`,
+async function writeRemoteState(snapshot,sha=null){
+const raw=assertSyncSize(snapshot),
+body={
+message:`更新 Pages 数据 - ${new Date().toLocaleString()}`,
 content:utf8ToBase64(raw)
 };
 
-if(sha){
-body.sha=sha
-}
+if(sha)body.sha=sha;
 
 const result=await githubApi(
 'PUT',
@@ -2782,15 +2673,10 @@ body
 return result?.content?.sha||null
 }
 
-async function persistSyncedBase(
-snapshot,
-sha
-){
+async function persistSyncedBase(snapshot,sha){
 const normalized=normalizeSnapshot(snapshot),
 baseFingerprint=getFingerprint(normalized),
-currentFingerprint=getFingerprint(
-getLocalSnapshot()
-);
+currentFingerprint=getFingerprint(getLocalSnapshot());
 
 syncBase=normalized;
 
@@ -2798,10 +2684,8 @@ syncMeta={
 target:getSyncTarget(),
 sha:sha||null,
 fingerprint:baseFingerprint,
-dirty:
-currentFingerprint!==baseFingerprint,
-lastSyncAt:
-new Date().toISOString()
+dirty:currentFingerprint!==baseFingerprint,
+lastSyncAt:new Date().toISOString()
 };
 
 await persistSyncState();
@@ -2815,13 +2699,9 @@ localAtStart,
 mutationAtStart,
 {applySynced=true}={}
 ){
-const normalizedSynced=
-normalizeSnapshot(syncedSnapshot);
+const normalizedSynced=normalizeSnapshot(syncedSnapshot);
 
-if(
-localMutationVersion===
-mutationAtStart
-){
+if(localMutationVersion===mutationAtStart){
 if(applySynced){
 applySnapshot(normalizedSynced)
 }
@@ -2834,9 +2714,8 @@ sha
 return
 }
 
-const current=getLocalSnapshot();
-
-const rebased=mergeSnapshots(
+const current=getLocalSnapshot(),
+rebased=mergeSnapshots(
 localAtStart,
 current,
 normalizedSynced,
@@ -2876,7 +2755,7 @@ mutationAtStart=localMutationVersion,
 localFingerprint=getFingerprint(localAtStart),
 baselineFingerprint=syncMeta.fingerprint,
 hasBaseline=Boolean(
-syncBase &&
+syncBase&&
 typeof baselineFingerprint==='string'
 );
 
@@ -2892,14 +2771,10 @@ let attempt=0;
 attempt<MAX_WRITE_CONFLICT_RETRIES;
 attempt++
 ){
-const remote=
-await readRemoteState();
+const remote=await readRemoteState();
 
 if(!remote.exists){
-if(
-hasBaseline &&
-!interactive
-){
+if(hasBaseline&&!interactive){
 setCloudStatus(
 'offline',
 '云端文件已删除'
@@ -2917,8 +2792,8 @@ conflict:true
 }
 
 if(
-hasBaseline &&
-interactive &&
+hasBaseline&&
+interactive&&
 !confirm(
 '云端数据文件已删除。是否用当前本地数据重新创建？'
 )
@@ -2930,10 +2805,7 @@ conflict:true
 }
 
 try{
-const sha=
-await writeRemoteState(
-localAtStart
-);
+const sha=await writeRemoteState(localAtStart);
 
 await finalizeSyncedState(
 localAtStart,
@@ -2944,12 +2816,8 @@ mutationAtStart,
 );
 
 setCloudStatus(
-syncMeta.dirty
-?'offline'
-:'online',
-syncMeta.dirty
-?'待同步'
-:'已连接'
+syncMeta.dirty?'offline':'online',
+syncMeta.dirty?'待同步':'已连接'
 );
 
 if(showMessage){
@@ -2965,9 +2833,8 @@ conflict:false
 }
 }catch(error){
 if(
-error?.status===409 &&
-attempt<
-MAX_WRITE_CONFLICT_RETRIES-1
+error?.status===409&&
+attempt<MAX_WRITE_CONFLICT_RETRIES-1
 ){
 continue
 }
@@ -2976,13 +2843,9 @@ throw error
 }
 }
 
-const remoteFingerprint=
-getFingerprint(remote.state);
+const remoteFingerprint=getFingerprint(remote.state);
 
-if(
-localFingerprint===
-remoteFingerprint
-){
+if(localFingerprint===remoteFingerprint){
 let finalSha=remote.sha;
 
 if(remote.needsMigration){
@@ -2993,9 +2856,8 @@ remote.sha
 )
 }catch(error){
 if(
-error?.status===409 &&
-attempt<
-MAX_WRITE_CONFLICT_RETRIES-1
+error?.status===409&&
+attempt<MAX_WRITE_CONFLICT_RETRIES-1
 ){
 continue
 }
@@ -3013,12 +2875,8 @@ mutationAtStart,
 );
 
 setCloudStatus(
-syncMeta.dirty
-?'offline'
-:'online',
-syncMeta.dirty
-?'待同步'
-:'已连接'
+syncMeta.dirty?'offline':'online',
+syncMeta.dirty?'待同步':'已连接'
 );
 
 if(showMessage){
@@ -3036,10 +2894,7 @@ conflict:false
 }
 }
 
-if(
-!hadStoredState &&
-!hasBaseline
-){
+if(!hadStoredState&&!hasBaseline){
 await finalizeSyncedState(
 remote.state,
 remote.sha,
@@ -3049,12 +2904,8 @@ mutationAtStart,
 );
 
 setCloudStatus(
-syncMeta.dirty
-?'offline'
-:'online',
-syncMeta.dirty
-?'待同步'
-:'已连接'
+syncMeta.dirty?'offline':'online',
+syncMeta.dirty?'待同步':'已连接'
 );
 
 if(showMessage){
@@ -3076,22 +2927,22 @@ hasBaseline
 :{
 pages:[],
 tombstones:[]
-};
+},
 
-const baseFingerprint=
+baseFingerprint=
 hasBaseline
 ?baselineFingerprint
-:getFingerprint(base);
+:getFingerprint(base),
 
-const localChanged=
-localFingerprint!==baseFingerprint;
+localChanged=
+localFingerprint!==baseFingerprint,
 
-const remoteChanged=
+remoteChanged=
 remoteFingerprint!==baseFingerprint;
 
 if(
-hasBaseline &&
-localChanged &&
+hasBaseline&&
+localChanged&&
 !remoteChanged
 ){
 try{
@@ -3109,12 +2960,8 @@ mutationAtStart,
 );
 
 setCloudStatus(
-syncMeta.dirty
-?'offline'
-:'online',
-syncMeta.dirty
-?'待同步'
-:'已连接'
+syncMeta.dirty?'offline':'online',
+syncMeta.dirty?'待同步':'已连接'
 );
 
 if(showMessage){
@@ -3130,9 +2977,8 @@ conflict:false
 }
 }catch(error){
 if(
-error?.status===409 &&
-attempt<
-MAX_WRITE_CONFLICT_RETRIES-1
+error?.status===409&&
+attempt<MAX_WRITE_CONFLICT_RETRIES-1
 ){
 continue
 }
@@ -3142,8 +2988,8 @@ throw error
 }
 
 if(
-hasBaseline &&
-!localChanged &&
+hasBaseline&&
+!localChanged&&
 remoteChanged
 ){
 await finalizeSyncedState(
@@ -3155,12 +3001,8 @@ mutationAtStart,
 );
 
 setCloudStatus(
-syncMeta.dirty
-?'offline'
-:'online',
-syncMeta.dirty
-?'待同步'
-:'已连接'
+syncMeta.dirty?'offline':'online',
+syncMeta.dirty?'待同步':'已连接'
 );
 
 if(showMessage){
@@ -3176,8 +3018,7 @@ conflict:false
 }
 }
 
-let mergedResult=
-mergeSnapshots(
+let mergedResult=mergeSnapshots(
 base,
 localAtStart,
 remote.state,
@@ -3185,7 +3026,7 @@ conflictPreference
 );
 
 if(
-mergedResult.conflicts.length &&
+mergedResult.conflicts.length&&
 !conflictPreference
 ){
 if(!interactive){
@@ -3247,16 +3088,10 @@ conflictPreference
 )
 }
 
-const merged=
-mergedResult.snapshot;
+const merged=mergedResult.snapshot,
+mergedFingerprint=getFingerprint(merged);
 
-const mergedFingerprint=
-getFingerprint(merged);
-
-if(
-mergedFingerprint===
-remoteFingerprint
-){
+if(mergedFingerprint===remoteFingerprint){
 await finalizeSyncedState(
 merged,
 remote.sha,
@@ -3266,12 +3101,8 @@ mutationAtStart,
 );
 
 setCloudStatus(
-syncMeta.dirty
-?'offline'
-:'online',
-syncMeta.dirty
-?'待同步'
-:'已连接'
+syncMeta.dirty?'offline':'online',
+syncMeta.dirty?'待同步':'已连接'
 );
 
 if(showMessage){
@@ -3302,12 +3133,8 @@ mutationAtStart,
 );
 
 setCloudStatus(
-syncMeta.dirty
-?'offline'
-:'online',
-syncMeta.dirty
-?'待同步'
-:'已连接'
+syncMeta.dirty?'offline':'online',
+syncMeta.dirty?'待同步':'已连接'
 );
 
 if(showMessage){
@@ -3325,9 +3152,8 @@ conflict:false
 }
 }catch(error){
 if(
-error?.status===409 &&
-attempt<
-MAX_WRITE_CONFLICT_RETRIES-1
+error?.status===409&&
+attempt<MAX_WRITE_CONFLICT_RETRIES-1
 ){
 continue
 }
@@ -3410,7 +3236,7 @@ error?.status===409
 );
 
 if(
-announce ||
+announce||
 !document.hidden
 ){
 showToast(
@@ -3430,7 +3256,7 @@ syncBtn.disabled=false
 }
 
 allOk=
-allOk &&
+allOk&&
 result.ok;
 
 if(!result.ok){
@@ -3449,7 +3275,6 @@ return syncInFlight
 
 async function loadFromCloud(){
 await loadWorkingCopy();
-
 ensureSyncTarget();
 
 if(!isConfigValid()){
@@ -3463,22 +3288,18 @@ updateLastSyncDisplay();
 return
 }
 
-const ok=
-await syncToCloud(
+const ok=await syncToCloud(
 false,
 false
 );
 
-if(
-ok &&
-!syncMeta.dirty
-){
+if(ok&&!syncMeta.dirty){
 setCloudStatus(
 'online',
 '已连接'
 )
 }else if(
-!ok &&
+!ok&&
 statusText.textContent==='同步中...'
 ){
 setCloudStatus(
@@ -3489,11 +3310,8 @@ setCloudStatus(
 }
 
 async function loadWorkingCopy(){
-const embedded=
-readEmbeddedBackup();
-
-const record=
-embedded
+const embedded=readEmbeddedBackup(),
+record=embedded
 ?null
 :await readBestWorkingCopy();
 
@@ -3507,22 +3325,14 @@ tombstones:embedded.tombstones
 
 hadStoredState=true;
 
-if(
-Array.isArray(
-embedded.remarkHistory
-)
-){
+if(Array.isArray(embedded.remarkHistory)){
 remarkHistory=
 embedded.remarkHistory
 .map(normalizeRemarkValue)
 .filter(Boolean)
 }
 
-if(
-Array.isArray(
-embedded.remarkHidden
-)
-){
+if(Array.isArray(embedded.remarkHidden)){
 remarkHidden=new Set(
 embedded.remarkHidden
 .map(remarkHistoryKey)
@@ -3603,8 +3413,7 @@ applySortAndRender()
 }
 
 function applySortAndRender(){
-const normalized=
-getLocalSnapshot();
+const normalized=getLocalSnapshot();
 
 pages=normalized.pages;
 tombstones=normalized.tombstones;
@@ -3616,14 +3425,11 @@ saveWorkingCopy()
 }
 
 function renderTable(){
-const remarkedCount=
-pages.reduce(
+const remarkedCount=pages.reduce(
 (count,item)=>
 count+
 (
-normalizeRemarks(
-item&&item.remark
-).length
+normalizeRemarks(item&&item.remark).length
 ?1
 :0
 ),
@@ -3674,11 +3480,9 @@ html+=
 
 tableBody.innerHTML=html;
 
-document
-.querySelectorAll(
+document.querySelectorAll(
 '#tableBody .col-title > a'
-)
-.forEach(link=>{
+).forEach(link=>{
 link.addEventListener(
 'dragstart',
 e=>e.preventDefault()
@@ -3687,49 +3491,38 @@ e=>e.preventDefault()
 link.addEventListener(
 'click',
 function(e){
-const selection=
-window.getSelection();
-
-const hasSelected=
-selection &&
-!selection.isCollapsed &&
+const selection=window.getSelection(),
+hasSelected=
+selection&&
+!selection.isCollapsed&&
 (
-this.contains(selection.anchorNode) ||
+this.contains(selection.anchorNode)||
 this.contains(selection.focusNode)
 );
 
-if(hasSelected){
-e.preventDefault()
-}
+if(hasSelected)e.preventDefault()
 }
 )
 });
 
-document
-.querySelectorAll(
+document.querySelectorAll(
 '#tableBody .edit-btn'
-)
-.forEach(btn=>{
+).forEach(btn=>{
 btn.addEventListener(
 'click',
 function(e){
 e.stopPropagation();
 
-const index=
-this.getAttribute(
+const index=this.getAttribute(
 'data-index'
 );
 
 if(index!==null){
-const idx=
-parseInt(
-index,
-10
-);
+const idx=parseInt(index,10);
 
 if(
-!isNaN(idx) &&
-idx>=0 &&
+!isNaN(idx)&&
+idx>=0&&
 idx<pages.length
 ){
 openEditModal(idx)
@@ -3754,7 +3547,7 @@ item.title;
 
 if(item.url){
 const mode=
-item.titleMode ||
+item.titleMode||
 (
 item.title===item.url
 ?'url'
@@ -3766,8 +3559,7 @@ mode==='url'
 ?item.url
 :`[${item.title}](${item.url})`
 }else{
-editPageInput.value=
-item.title
+editPageInput.value=item.title
 }
 
 editNoteInput.value=
@@ -3797,59 +3589,36 @@ editingIndex=null
 
 function saveEdit(){
 if(
-editingIndex===null ||
-editingIndex<0 ||
+editingIndex===null||
+editingIndex<0||
 editingIndex>=pages.length
 ){
-alert(
-'编辑出错，请重试。'
-);
-
+alert('编辑出错，请重试。');
 closeEditModal();
-
 return
 }
 
-const raw=
-editPageInput.value.trim();
+const raw=editPageInput.value.trim();
 
 if(!raw){
-alert(
-'请填写 Page 字段。'
-);
-
+alert('请填写 Page 字段。');
 editPageInput.focus();
-
 return
 }
 
-const parsed=
-parsePageInput(raw);
+const parsed=parsePageInput(raw);
 
 if(!parsed.title){
-alert(
-'请正确填写格式：[标题](链接)'
-);
-
+alert('请正确填写格式：[标题](链接)');
 editPageInput.focus();
-
 return
 }
 
-pages[editingIndex].title=
-parsed.title;
-
-pages[editingIndex].url=
-parsed.url;
-
-pages[editingIndex].titleMode=
-parsed.titleMode;
-
-pages[editingIndex].note=
-editNoteInput.value.trim();
-
-pages[editingIndex].remark=
-editRemarkPicker.getValues();
+pages[editingIndex].title=parsed.title;
+pages[editingIndex].url=parsed.url;
+pages[editingIndex].titleMode=parsed.titleMode;
+pages[editingIndex].note=editNoteInput.value.trim();
+pages[editingIndex].remark=editRemarkPicker.getValues();
 
 rememberRemark(
 pages[editingIndex].remark
@@ -3862,40 +3631,30 @@ markLocalChange()
 
 function deleteEditingEntry(){
 if(
-editingIndex===null ||
-editingIndex<0 ||
+editingIndex===null||
+editingIndex<0||
 editingIndex>=pages.length
 ){
-alert(
-'删除出错，请重试。'
-);
-
+alert('删除出错，请重试。');
 closeEditModal();
-
 return
 }
 
-const item=
-pages[editingIndex];
+const item=pages[editingIndex];
 
-if(
-!confirm(
+if(!confirm(
 `确定要删除 "${item.title}" 吗？`
-)
-){
+)){
 return
 }
 
-const removed=
-pages.splice(
+const removed=pages.splice(
 editingIndex,
 1
 )[0];
 
 if(removed?.id){
-upsertTombstone(
-removed.id
-)
+upsertTombstone(removed.id)
 }
 
 closeEditModal();
@@ -3904,35 +3663,21 @@ markLocalChange()
 }
 
 function addPage(){
-const raw=
-pageInput.value.trim(),
-
-note=
-noteInput.value.trim(),
-
-remark=
-remarkPicker.getValues();
+const raw=pageInput.value.trim(),
+note=noteInput.value.trim(),
+remark=remarkPicker.getValues();
 
 if(!raw){
-alert(
-'请填写“标题”字段。'
-);
-
+alert('请填写“标题”字段。');
 pageInput.focus();
-
 return
 }
 
-const parsed=
-parsePageInput(raw);
+const parsed=parsePageInput(raw);
 
 if(!parsed.title){
-alert(
-'请正确填写格式：[标题](链接)'
-);
-
+alert('请正确填写格式：[标题](链接)');
 pageInput.focus();
-
 return
 }
 
@@ -3946,28 +3691,21 @@ remark
 });
 
 rememberRemark(remark);
-
 applySortAndRender();
 markLocalChange();
 
 pageInput.value='';
 noteInput.value='';
-
 remarkPicker.setValues([]);
-
 pageInput.focus()
 }
 
 function getExportSiteName(){
-const raw=
-(
-document.title ||
-document.querySelector('h1')
-?.childNodes?.[0]
-?.textContent ||
+const raw=(
+document.title||
+document.querySelector('h1')?.childNodes?.[0]?.textContent||
 'page'
-)
-.trim();
+).trim();
 
 return raw.replace(
 /[\\/:*?"<>|\s]+/g,
@@ -3976,46 +3714,35 @@ return raw.replace(
 }
 
 function createBackupSnapshot(){
-const snapshot=
-getLocalSnapshot();
+const snapshot=getLocalSnapshot();
 
 return{
 format:'pages-html-backup',
 version:2,
 exportedAt:Date.now(),
-pages:
-structuredClone(snapshot.pages),
-tombstones:
-structuredClone(snapshot.tombstones),
-remarkHistory:[
-...remarkHistory
-],
-remarkHidden:[
-...remarkHidden
-]
+pages:structuredClone(snapshot.pages),
+tombstones:structuredClone(snapshot.tombstones),
+remarkHistory:[...remarkHistory],
+remarkHidden:[...remarkHidden]
 }
 }
 
-function readEmbeddedBackup(
-doc=document
-){
-const node=
-doc.getElementById(
+function readEmbeddedBackup(doc=document){
+const node=doc.getElementById(
 'pagesBackupData'
 );
 
 if(!node)return null;
 
 try{
-const backup=
-JSON.parse(
+const backup=JSON.parse(
 node.textContent||''
 );
 
 if(
-!backup ||
-backup.format!=='pages-html-backup' ||
-![1,2].includes(backup.version) ||
+!backup||
+backup.format!=='pages-html-backup'||
+![1,2].includes(backup.version)||
 !Array.isArray(backup.pages)
 ){
 return null
@@ -4033,31 +3760,19 @@ return null
 }
 
 function buildBackupHtml(){
-const clone=
-document.documentElement
+const clone=document.documentElement
 .cloneNode(true);
 
-clone
-.querySelectorAll(
+clone.querySelectorAll(
 '.remark-tags'
-)
-.forEach(
-node=>node.remove()
-);
+).forEach(node=>node.remove());
 
 [
 'remarkOptions',
 'editRemarkOptions'
-]
-.forEach(id=>{
-const node=
-clone.querySelector(
-'#'+id
-);
-
-if(node){
-node.replaceChildren()
-}
+].forEach(id=>{
+const node=clone.querySelector('#'+id);
+if(node)node.replaceChildren()
 });
 
 [
@@ -4065,69 +3780,42 @@ node.replaceChildren()
 'editRemarkDropdown',
 'editModal',
 'configModal'
-]
-.forEach(id=>{
-clone
-.querySelector(
-'#'+id
-)
-?.classList.add(
-'hidden'
-)
+].forEach(id=>{
+clone.querySelector('#'+id)
+?.classList.add('hidden')
 });
 
-const tokenInput=
-clone.querySelector(
+const tokenInput=clone.querySelector(
 '#cfgToken'
 );
 
 if(tokenInput){
 tokenInput.value='';
-tokenInput.removeAttribute(
-'value'
-)
+tokenInput.removeAttribute('value')
 }
 
-const file=
-clone.querySelector(
+const file=clone.querySelector(
 '#fileInput'
 );
 
-if(file){
-file.value=''
-}
+if(file)file.value='';
 
-clone
-.querySelector(
+clone.querySelector(
 '#pagesBackupData'
-)
-?.remove();
+)?.remove();
 
 const backupScript=
-document.createElement(
-'script'
-);
+document.createElement('script');
 
-backupScript.id=
-'pagesBackupData';
-
-backupScript.type=
-'application/json';
-
+backupScript.id='pagesBackupData';
+backupScript.type='application/json';
 backupScript.textContent=
 JSON.stringify(
 createBackupSnapshot()
-)
-.replace(
-/</g,
-'\\u003c'
-);
+).replace(/</g,'\\u003c');
 
-clone
-.querySelector('body')
-?.appendChild(
-backupScript
-);
+clone.querySelector('body')
+?.appendChild(backupScript);
 
 return'<!DOCTYPE html>\n'+
 clone.outerHTML
@@ -4135,51 +3823,26 @@ clone.outerHTML
 
 function exportData(){
 if(pages.length===0){
-alert(
-'列表为空，没有什么可导出的。'
-);
-
+alert('列表为空，没有什么可导出的。');
 return
 }
 
-const html=
-buildBackupHtml();
-
-const blob=
-new Blob(
+const html=buildBackupHtml(),
+blob=new Blob(
 [html],
-{
-type:
-'text/html;charset=utf-8'
-}
-);
-
-const url=
-URL.createObjectURL(
-blob
-);
-
-const a=
-document.createElement(
-'a'
-);
-
-const unixTime=
-Math.floor(
-Date.now()/1000
-);
+{type:'text/html;charset=utf-8'}
+),
+url=URL.createObjectURL(blob),
+a=document.createElement('a'),
+unixTime=Math.floor(Date.now()/1000);
 
 a.href=url;
-
 a.download=
 `${getExportSiteName()}${unixTime}.html`;
 
 document.body.appendChild(a);
-
 a.click();
-
 document.body.removeChild(a);
-
 URL.revokeObjectURL(url);
 
 showToast(
@@ -4188,65 +3851,51 @@ showToast(
 )
 }
 
-function parseImportPayload(
-text,
-fileName=''
-){
-const trimmed=
-String(text||'')
-.trim();
+function parseImportPayload(text,fileName=''){
+const trimmed=String(text||'').trim();
 
 try{
-const parsed=
-JSON.parse(trimmed);
+const parsed=JSON.parse(trimmed);
 
 if(Array.isArray(parsed)){
 return{
-pages:
-parsed.filter(
+pages:parsed.filter(
 item=>
-item &&
-item.__pagesDeleted!==true &&
+item&&
+item.__pagesDeleted!==true&&
 item.deleted!==true
 ),
-
 remarkHistory:null,
 remarkHidden:null,
-
-tombstones:
-parsed.filter(
+tombstones:parsed.filter(
 item=>
-item &&
+item&&
 (
-item.__pagesDeleted===true ||
+item.__pagesDeleted===true||
 item.deleted===true
 )
 ),
-
 source:'JSON'
 }
 }
 
 if(
-parsed &&
+parsed&&
 Array.isArray(parsed.pages)
 ){
 return{
 pages:parsed.pages,
-remarkHistory:
-parsed.remarkHistory,
-remarkHidden:
-parsed.remarkHidden,
-tombstones:
-parsed.tombstones,
+remarkHistory:parsed.remarkHistory,
+remarkHidden:parsed.remarkHidden,
+tombstones:parsed.tombstones,
 source:'JSON'
 }
 }
 }catch(error){}
 
 const looksLikeHtml=
-/\.html?$/i.test(fileName) ||
-/^<!doctype\s+html/i.test(trimmed) ||
+/\.html?$/i.test(fileName)||
+/^<!doctype\s+html/i.test(trimmed)||
 /<html[\s>]/i.test(trimmed);
 
 if(!looksLikeHtml){
@@ -4260,9 +3909,9 @@ new DOMParser()
 .parseFromString(
 trimmed,
 'text/html'
-);
+),
 
-const backup=
+backup=
 readEmbeddedBackup(doc);
 
 if(!backup){
@@ -4273,30 +3922,23 @@ throw new Error(
 
 return{
 pages:backup.pages,
-remarkHistory:
-backup.remarkHistory,
-remarkHidden:
-backup.remarkHidden,
-tombstones:
-backup.tombstones,
+remarkHistory:backup.remarkHistory,
+remarkHidden:backup.remarkHidden,
+tombstones:backup.tombstones,
 source:'HTML'
 }
 }
 
 function importData(file){
-const reader=
-new FileReader();
+const reader=new FileReader();
 
 reader.onload=function(e){
 try{
-const imported=
-parseImportPayload(
+const imported=parseImportPayload(
 e.target.result,
 file.name
-);
-
-const valid=
-normalizePageArray(
+),
+valid=normalizePageArray(
 imported.pages
 );
 
@@ -4304,12 +3946,11 @@ if(valid.length===0){
 alert(
 '文件中没有找到有效的条目。'
 );
-
 return
 }
 
 if(
-pages.length>0 &&
+pages.length>0&&
 !confirm(
 `当前有 ${pages.length} 个条目，导入将完全替换当前列表。确定继续吗？`
 )
@@ -4317,54 +3958,37 @@ pages.length>0 &&
 return
 }
 
-const importedIds=
-new Set(
+const importedIds=new Set(
 valid.map(item=>item.id)
 );
 
 pages.forEach(item=>{
 if(
-item?.id &&
+item?.id&&
 !importedIds.has(item.id)
 ){
-upsertTombstone(
-item.id
-)
+upsertTombstone(item.id)
 }
 });
 
 pages=valid;
 
-if(
-Array.isArray(
-imported.tombstones
-)
-){
-tombstones=
-normalizeTombstones([
+if(Array.isArray(imported.tombstones)){
+tombstones=normalizeTombstones([
 ...tombstones,
 ...imported.tombstones
 ])
 }
 
-if(
-Array.isArray(
-imported.remarkHistory
-)
-){
+if(Array.isArray(imported.remarkHistory)){
 remarkHistory=
 imported.remarkHistory
 .map(normalizeRemarkValue)
 .filter(Boolean)
 }
 
-if(
-Array.isArray(
-imported.remarkHidden
-)
-){
-remarkHidden=
-new Set(
+if(Array.isArray(imported.remarkHidden)){
+remarkHidden=new Set(
 imported.remarkHidden
 .map(remarkHistoryKey)
 .filter(Boolean)
@@ -4372,7 +3996,6 @@ imported.remarkHidden
 }
 
 applySortAndRender();
-
 saveRemarkHidden();
 saveRemarkHistory();
 
@@ -4401,91 +4024,47 @@ function setCloudStatus(status,text){
 statusDot.className=
 'dot '+status;
 
-statusText.textContent=
-text
+statusText.textContent=text
 }
 
-function showToast(
-message,
-type='info'
-){
-toast.textContent=
-message;
+function showToast(message,type='info'){
+toast.textContent=message;
+toast.className='toast '+type;
+toast.classList.remove('hidden');
 
-toast.className=
-'toast '+type;
+clearTimeout(toastTimer);
 
-toast.classList.remove(
-'hidden'
-);
-
-clearTimeout(
-toastTimer
-);
-
-toastTimer=
-setTimeout(
-()=>{
-toast.classList.add(
-'hidden'
-)
-},
-3000
-)
+toastTimer=setTimeout(()=>{
+toast.classList.add('hidden')
+},3000)
 }
 
 function syncConfigVisualViewport(){
-const vv=
-window.visualViewport;
+const vv=window.visualViewport,
+height=vv?vv.height:window.innerHeight,
+top=vv?vv.offsetTop:0;
 
-const height=
-vv
-?vv.height
-:window.innerHeight;
-
-const top=
-vv
-?vv.offsetTop
-:0;
-
-document.documentElement
-.style
-.setProperty(
+document.documentElement.style.setProperty(
 '--config-vv-height',
 `${Math.max(1,Math.round(height))}px`
 );
 
-document.documentElement
-.style
-.setProperty(
+document.documentElement.style.setProperty(
 '--config-vv-top',
 `${Math.max(0,Math.round(top))}px`
 )
 }
 
 function syncBackToTopPosition(){
-if(
-!tableWrapper ||
-!backToTopBtn
-){
-return
-}
+if(!tableWrapper||!backToTopBtn)return;
 
-const rect=
-tableWrapper.getBoundingClientRect();
-
-const buttonWidth=
-backToTopBtn.offsetWidth||30;
-
-const viewportWidth=
+const rect=tableWrapper.getBoundingClientRect(),
+buttonWidth=backToTopBtn.offsetWidth||30,
+viewportWidth=
 document.documentElement.clientWidth||
-window.innerWidth;
-
-const preferredLeft=
-rect.right+30;
-
-const maxLeft=
-Math.max(
+window.innerWidth,
+preferredLeft=rect.right+30,
+maxLeft=Math.max(
 3,
 viewportWidth-buttonWidth-3
 );
@@ -4501,33 +4080,22 @@ maxLeft
 )
 )}px`;
 
-backToTopBtn.style.right=
-'auto'
+backToTopBtn.style.right='auto'
 }
 
 function isMobileConfigLayout(){
-return window
-.matchMedia(
+return window.matchMedia(
 '(max-width: 700px)'
-)
-.matches
+).matches
 }
 
 function openConfigModal(){
-cfgToken.value=
-config.token||'';
-
+cfgToken.value=config.token||'';
 cfgRememberToken.checked=
 config.rememberToken!==false;
-
-cfgOwner.value=
-config.owner||'';
-
-cfgRepo.value=
-config.repo||'';
-
-cfgFile.value=
-config.file||'pages_data.json';
+cfgOwner.value=config.owner||'';
+cfgRepo.value=config.repo||'';
+cfgFile.value=config.file||'pages_data.json';
 
 syncConfigVisualViewport();
 
@@ -4540,18 +4108,14 @@ configModal.querySelector(
 '.config-scroll'
 );
 
-if(scroll){
-scroll.scrollTop=0
-}
+if(scroll)scroll.scrollTop=0;
 
 if(!isMobileConfigLayout()){
-requestAnimationFrame(
-()=>{
+requestAnimationFrame(()=>{
 cfgToken.focus({
 preventScroll:true
 })
-}
-)
+})
 }
 }
 
@@ -4562,17 +4126,10 @@ configModal.classList.add(
 }
 
 async function saveConfigAndConnect(){
-const token=
-cfgToken.value.trim();
-
-const owner=
-cfgOwner.value.trim();
-
-const repo=
-cfgRepo.value.trim();
-
-const file=
-cfgFile.value.trim()||
+const token=cfgToken.value.trim(),
+owner=cfgOwner.value.trim(),
+repo=cfgRepo.value.trim(),
+file=cfgFile.value.trim()||
 'pages_data.json';
 
 if(!token){
@@ -4580,9 +4137,7 @@ showToast(
 '请输入 GitHub Token',
 'error'
 );
-
 cfgToken.focus();
-
 return
 }
 
@@ -4591,9 +4146,7 @@ showToast(
 '请输入仓库所有者',
 'error'
 );
-
 cfgOwner.focus();
-
 return
 }
 
@@ -4602,9 +4155,7 @@ showToast(
 '请输入仓库名称',
 'error'
 );
-
 cfgRepo.focus();
-
 return
 }
 
@@ -4649,11 +4200,9 @@ addBtn.addEventListener(
 addPage
 );
 
-document
-.querySelectorAll(
+document.querySelectorAll(
 '.add-section .form-group input, .add-section .form-group textarea'
-)
-.forEach(input=>{
+).forEach(input=>{
 if(input===remarkInput)return;
 
 input.addEventListener(
@@ -4661,10 +4210,7 @@ input.addEventListener(
 function(e){
 if(e.key==='Enter'){
 if(this.tagName==='TEXTAREA'){
-if(
-e.ctrlKey ||
-e.shiftKey
-){
+if(e.ctrlKey||e.shiftKey){
 e.preventDefault();
 addPage()
 }
@@ -4684,22 +4230,17 @@ exportData
 
 importBtn.addEventListener(
 'click',
-()=>{
-fileInput.click()
-}
+()=>fileInput.click()
 );
 
 fileInput.addEventListener(
 'change',
 function(){
 if(
-this.files &&
+this.files&&
 this.files.length>0
 ){
-importData(
-this.files[0]
-);
-
+importData(this.files[0]);
 this.value=''
 }
 }
@@ -4709,15 +4250,14 @@ syncBtn.addEventListener(
 'click',
 ()=>{
 if(
-pages.length===0 &&
-tombstones.length===0 &&
+pages.length===0&&
+tombstones.length===0&&
 !syncMeta.dirty
 ){
 showToast(
 '没有数据需要同步',
 'info'
 );
-
 return
 }
 
@@ -4729,14 +4269,12 @@ true
 );
 
 if(window.visualViewport){
-window.visualViewport
-.addEventListener(
+window.visualViewport.addEventListener(
 'resize',
 syncConfigVisualViewport
 );
 
-window.visualViewport
-.addEventListener(
+window.visualViewport.addEventListener(
 'scroll',
 syncConfigVisualViewport
 )
@@ -4774,35 +4312,23 @@ window.pageYOffset||
 
 if(startY<=0)return;
 
-if(
-backToTopAnimationFrame!==null
-){
+if(backToTopAnimationFrame!==null){
 cancelAnimationFrame(
 backToTopAnimationFrame
 );
-
 backToTopAnimationFrame=null
 }
 
-const startTime=
-performance.now();
-
-const easeOutCubic=
-progress=>
-1-Math.pow(
-1-progress,
-3
-);
+const startTime=performance.now(),
+easeOutCubic=progress=>
+1-Math.pow(1-progress,3);
 
 function step(now){
-const progress=
-Math.min(
+const progress=Math.min(
 1,
 (now-startTime)/duration
-);
-
-const eased=
-easeOutCubic(progress);
+),
+eased=easeOutCubic(progress);
 
 window.scrollTo(
 0,
@@ -4877,7 +4403,7 @@ editModal.addEventListener(
 'pointerup',
 function(e){
 const shouldClose=
-editOverlayPointerDown &&
+editOverlayPointerDown&&
 e.target===this;
 
 editOverlayPointerDown=false;
@@ -4895,11 +4421,9 @@ editOverlayPointerDown=false
 }
 );
 
-document
-.querySelectorAll(
+document.querySelectorAll(
 '#editModal .form-group input, #editModal .form-group textarea'
-)
-.forEach(input=>{
+).forEach(input=>{
 if(input===editRemarkInput)return;
 
 input.addEventListener(
@@ -4907,10 +4431,7 @@ input.addEventListener(
 function(e){
 if(e.key==='Enter'){
 if(this.tagName==='TEXTAREA'){
-if(
-e.ctrlKey ||
-e.shiftKey
-){
+if(e.ctrlKey||e.shiftKey){
 e.preventDefault();
 saveEdit()
 }
@@ -4923,8 +4444,7 @@ saveEdit()
 )
 });
 
-const remarkPicker=
-setupRemarkCombo({
+const remarkPicker=setupRemarkCombo({
 input:remarkInput,
 dropdown:remarkDropdown,
 options:remarkOptions,
@@ -4933,8 +4453,7 @@ submit:addPage,
 manageOptions:true
 });
 
-const editRemarkPicker=
-setupRemarkCombo({
+const editRemarkPicker=setupRemarkCombo({
 input:editRemarkInput,
 dropdown:editRemarkDropdown,
 options:editRemarkOptions,
@@ -4970,14 +4489,14 @@ document.addEventListener(
 'visibilitychange',
 ()=>{
 if(
-localStateReady &&
+localStateReady&&
 document.visibilityState==='hidden'
 ){
 void saveWorkingCopy()
 }
 
 if(
-localStateReady &&
+localStateReady&&
 document.visibilityState==='visible'
 ){
 wakePassiveSync()

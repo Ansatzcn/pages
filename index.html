@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -67,6 +68,7 @@ h1{font-size:2.2rem;font-weight:600;color:#1e293b;letter-spacing:-.5px;border-bo
 @media(max-width:700px){
 body{width:100%;max-width:100%;padding:.75rem .5rem;overflow-x:hidden}.container{width:100%;max-width:100%;min-width:0;padding:1.2rem}.table-wrapper{width:100%;max-width:100%;min-width:0;overflow-x:hidden}.page-table{width:100%;max-width:100%;min-width:0;table-layout:fixed}.page-table th,.page-table td,.page-table .col-title{width:100%;max-width:100%;min-width:0}.page-table .col-title{overflow-wrap:anywhere;word-break:break-word}.page-table .col-title>a{display:inline;max-width:100%;overflow-wrap:anywhere;word-break:break-all}.page-table .title-note,.page-table .title-remark{max-width:100%;overflow-wrap:anywhere;word-break:break-word}.page-table .col-title{--edit-reserve:0rem;padding-right:.8rem}.page-table .title-note{width:100%;max-width:100%}.page-table .row-edit-link{right:.8rem;bottom:var(--detail-edge-pad)}.form-grid{grid-template-columns:1fr}.page-table th{padding:.6rem .8rem;font-size:.85rem}.page-table td{padding:.6rem .8rem var(--detail-edge-pad);font-size:.85rem}.toolbar{flex-direction:column;align-items:stretch}.toolbar .left-group,.toolbar .right-group{justify-content:center}.cloud-status{float:none;margin-top:0}.config-overlay{align-items:stretch;padding:max(8px,env(safe-area-inset-top)) 8px max(8px,env(safe-area-inset-bottom))}.config-box{width:100%;max-height:calc(100dvh - max(16px,env(safe-area-inset-top) + env(safe-area-inset-bottom) + 8px));margin:auto 0;padding:1.25rem 1rem .8rem;border-radius:22px}.config-actions{gap:8px}.config-actions .btn-config{flex:1 1 0;min-width:0;padding-left:.75rem;padding-right:.75rem}.back-to-top{right:3px;top:70%;width:24px;height:21px;padding:0}
 }
+
 .config-box{padding:0;display:grid;grid-template-rows:minmax(0,1fr) auto;overflow:hidden}
 .config-scroll{min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-width:auto;scrollbar-color:#94a3b8 #eef2f7;scrollbar-gutter:stable;padding:2rem 2rem 1rem;touch-action:pan-y}
 .config-scroll::-webkit-scrollbar{width:10px}.config-scroll::-webkit-scrollbar-track{background:#eef2f7}.config-scroll::-webkit-scrollbar-thumb{background:#94a3b8;border:2px solid #eef2f7;border-radius:999px}
@@ -74,6 +76,7 @@ body{width:100%;max-width:100%;padding:.75rem .5rem;overflow-x:hidden}.container
 @media(max-width:700px){
 .config-overlay{top:var(--config-vv-top,0px);bottom:auto;height:var(--config-vv-height,100dvh);min-height:0;padding:max(8px,env(safe-area-inset-top)) 8px max(8px,env(safe-area-inset-bottom));align-items:stretch;overflow:hidden}.config-box{width:100%;max-width:none;height:100%;max-height:none;min-height:0;margin:0;border-radius:22px}.config-scroll{min-height:0;padding:1.25rem 1rem 1rem}.config-actions{width:100%;padding:.85rem 1rem max(.85rem,env(safe-area-inset-bottom))}
 }
+
 </style>
 </head>
 <body>
@@ -155,6 +158,7 @@ if(dbPromise)return dbPromise;
 dbPromise=new Promise((resolve,reject)=>{const request=indexedDB.open(DB_NAME,DB_VERSION);request.onupgradeneeded=()=>{const db=request.result;if(!db.objectStoreNames.contains(DB_STORE))db.createObjectStore(DB_STORE)};request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error||new Error('IndexedDB 打开失败'));request.onblocked=()=>console.warn('IndexedDB 升级被其他页面阻塞')});
 return dbPromise
 }
+
 async function idbGet(key){const db=await openDb();return new Promise((resolve,reject)=>{const tx=db.transaction(DB_STORE,'readonly'),req=tx.objectStore(DB_STORE).get(key);req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error||new Error('IndexedDB 读取失败'))})}
 async function idbSet(key,value){const db=await openDb();return new Promise((resolve,reject)=>{const tx=db.transaction(DB_STORE,'readwrite');tx.objectStore(DB_STORE).put(value,key);tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error||new Error('IndexedDB 写入失败'));tx.onabort=()=>reject(tx.error||new Error('IndexedDB 写入中止'))})}
 async function idbDelete(key){const db=await openDb();return new Promise((resolve,reject)=>{const tx=db.transaction(DB_STORE,'readwrite');tx.objectStore(DB_STORE).delete(key);tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error||new Error('IndexedDB 删除失败'));tx.onabort=()=>reject(tx.error||new Error('IndexedDB 写入中止'))})}
@@ -181,6 +185,7 @@ if(/^[A-Za-z]$/.test(first))return{type:2,text,dateKey:null,numberKey:null};
 const nm=text.match(/^[+-]?(?:\d+(?:\.\d+)?|\.\d+)/);if(nm)return{type:3,text,dateKey:null,numberKey:Number(nm[0])};
 return{type:4,text,dateKey:null,numberKey:null}
 }
+
 function compareStructuredText(a0,b0){
 const a=getStructuredSortInfo(a0),b=getStructuredSortInfo(b0);if(a.type!==b.type)return a.type-b.type;if(a.type===0&&a.dateKey!==b.dateKey)return a.dateKey-b.dateKey;
 if(a.type===1){let r=pinyinCollator.compare(a.text,b.text);if(r!==0)return r;r=strokeCollator.compare(a.text,b.text);if(r!==0)return r}
@@ -510,11 +515,18 @@ return a.text<b.text?-1:a.text>b.text?1:0
 return compareStructuredText(a.text,b.text)
 }
 
+/* 总表排序：双标签优先，其次单标签，最后无标签；各组内部保持原规则 */
 function sortPages(){
 pages.sort((a,b)=>{
 const ar=normalizeRemarks(a&&a.remark),br=normalizeRemarks(b&&b.remark),
 a1=ar[0]||'',b1=br[0]||'',a2=ar[1]||'',b2=br[1]||'';
 
+// 双标签条目优先，然后是单标签条目，最后是无标签条目。
+const aGroup=ar.length>=2?0:ar.length===1?1:2;
+const bGroup=br.length>=2?0:br.length===1?1:2;
+if(aGroup!==bGroup)return aGroup-bGroup;
+
+// 同组内部仍按第一标签、第二标签和标题的既有规则排序。
 const r1=compareRemarkLabelText(a1,b1);
 if(r1!==0)return r1;
 
@@ -992,6 +1004,7 @@ setCloudStatus(syncMeta.dirty?'offline':'online',syncMeta.dirty?'待同步':'已
 if(showMessage)showToast(remote.needsMigration?'同步格式已升级，本地与云端已一致':'本地与云端已一致','success');
 return{ok:true,conflict:false}
 }
+
 if(!hadStoredState&&!hasBaseline){
 await finalizeSyncedState(remote.state,remote.sha,localAtStart,mutationAtStart,{applySynced:true});
 setCloudStatus(syncMeta.dirty?'offline':'online',syncMeta.dirty?'待同步':'已连接');

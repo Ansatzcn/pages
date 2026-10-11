@@ -2725,16 +2725,6 @@
     ]
   },
   {
-    "id": "legacy-bdrg9zbe7xjt-2",
-    "title": "一个深度贫困县，打破「县中魔咒」之后",
-    "url": "https://mp.weixin.qq.com/s/knCIWkslF9XDKsV4XSdP2w",
-    "titleMode": "markdown",
-    "note": "",
-    "remark": [
-      "人物【223】"
-    ]
-  },
-  {
     "id": "legacy-1c1un7w1x6xh14-1",
     "title": "长城在召唤",
     "url": "https://mp.weixin.qq.com/s/vHHrdqyrxR5aJixjwjF8Ew",
@@ -12653,5 +12643,10 @@
     "id": "legacy-xjilhc10aslib-2",
     "__pagesDeleted": true,
     "deletedAt": 1791691687086
+  },
+  {
+    "id": "legacy-bdrg9zbe7xjt-2",
+    "__pagesDeleted": true,
+    "deletedAt": 1791691697317
   }
 ]

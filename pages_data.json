@@ -2442,16 +2442,6 @@
     ]
   },
   {
-    "id": "a1ada44c-d4be-4511-9923-e123a86c3795",
-    "title": "东南亚茶饮风云",
-    "url": "https://mp.weixin.qq.com/s/gp4O_WzdRsV7Q20TnVr4hQ",
-    "titleMode": "markdown",
-    "note": "",
-    "remark": [
-      "2025-02-26"
-    ]
-  },
-  {
     "id": "b4382198-8e1f-40a9-a972-cd3b36c8bce0",
     "title": "看完《喜单2》，我们的生活里总算出现新东西了",
     "url": "https://mp.weixin.qq.com/s/L7pLuGObcjRDzJf5_KE5_A",
@@ -12858,6 +12848,11 @@
     "titleMode": "markdown",
     "note": "",
     "remark": []
+  },
+  {
+    "id": "a1ada44c-d4be-4511-9923-e123a86c3795",
+    "__pagesDeleted": true,
+    "deletedAt": 1791900076608
   },
   {
     "id": "legacy-89x4nn1gz4joa-1",

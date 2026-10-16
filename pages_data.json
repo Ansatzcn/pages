@@ -4067,16 +4067,6 @@
     ]
   },
   {
-    "id": "14cbdc40-f127-4174-8dc5-baa76d69939d",
-    "title": "SFC文献笔记|收入分配与经常账户失衡",
-    "url": "https://mp.weixin.qq.com/s/7nS5BY5MYdHw0JLCCzXkwQ",
-    "titleMode": "markdown",
-    "note": "",
-    "remark": [
-      "读点不一样的宏观经济学【142】"
-    ]
-  },
-  {
     "id": "legacy-1paz76z1krmfo7-1",
     "title": "对谈 | 大礼议：嘉靖帝的“孝心”与“野心”",
     "url": "https://mp.weixin.qq.com/s/4-mFpvXMlAVztjmJwT8vNA",
@@ -12979,5 +12969,10 @@
     "id": "legacy-bdrg9zbe7xjt-2",
     "__pagesDeleted": true,
     "deletedAt": 1791691697317
+  },
+  {
+    "id": "14cbdc40-f127-4174-8dc5-baa76d69939d",
+    "__pagesDeleted": true,
+    "deletedAt": 1792167713257
   }
 ]

@@ -8595,14 +8595,6 @@
     "remark": []
   },
   {
-    "id": "legacy-8mc90r1c39po2-1",
-    "title": "当一生都成为考场：“无限竞争社会”的代价",
-    "url": "https://m.thepaper.cn/newsDetail_forward_33958863",
-    "titleMode": "markdown",
-    "note": "",
-    "remark": []
-  },
-  {
     "id": "legacy-hmt7zc17lmcqc-1",
     "title": "当这届年轻人爱上“反向Cityeat”，阿拉善沙漠菜天天飞广东",
     "url": "https://mp.weixin.qq.com/s/OKC46Mxv43xTikuA39KrMg",
@@ -13058,5 +13050,10 @@
     "id": "14cbdc40-f127-4174-8dc5-baa76d69939d",
     "__pagesDeleted": true,
     "deletedAt": 1792167713257
+  },
+  {
+    "id": "legacy-8mc90r1c39po2-1",
+    "__pagesDeleted": true,
+    "deletedAt": 1792321948210
   }
 ]

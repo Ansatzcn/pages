@@ -526,7 +526,7 @@ const bGroup=br.length>=2?0:br.length===1?1:2;
 if(aGroup!==bGroup)return aGroup-bGroup;
 
 // 同组内部仍按第一标签、第二标签和标题的既有规则排序。
-const r1=compareRemarkLabelText(a1,b1);
+const r1=compareRemarkLabelText(a1,b1,aGroup===1);
 if(r1!==0)return r1;
 
 const r2=compareRemarkLabelText(a2,b2,true);
